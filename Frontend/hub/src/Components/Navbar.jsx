@@ -72,13 +72,11 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Mobile Drawer */}
           <div
-            className={`fixed top-0 right-0 h-screen w-64 bg-white shadow-xl z-50 transform transition-transform duration-300 md:hidden ${
-              isOpen ? "translate-x-0" : "translate-x-full"
-            }`}
+            className={`fixed top-[88px] right-0 rounded-l-3xl rounded-tr-3xl w-50 bg-white shadow-xl z-50 transition-all duration-300 transform md:hidden ${isOpen ? "translate-x-0" : "translate-x-full"
+              }`}
           >
-            <div className="flex flex-col items-center gap-6 pt-24">
+            <div className="flex flex-col items-start px-3 gap-5 pt-4">
 
               <Link
                 to="/"
