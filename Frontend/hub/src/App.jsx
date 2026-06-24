@@ -4,6 +4,7 @@ import Navbar from './Components/Navbar'
 import Products from './Components/Products'
 import Login from './Components/Login'
 import Register from './Components/Register'
+import Footer from './Components/Footer'
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>
+        <Footer/>
       </main>
 
     </div>

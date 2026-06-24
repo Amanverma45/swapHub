@@ -37,7 +37,7 @@ const Home = () => {
                         </div>
                     </div>
                     <div className="flex justify-center items-center w-full">
-                        <div className="bg-white shadow-xl rounded-[40px] p-6 md:p-10 w-full max-w-[450px] aspect-square flex items-center justify-center">
+                        <div className="bg-gray-50/50 shadow-xl rounded-[40px] p-6 md:p-10 w-full max-w-[450px] aspect-square flex items-center justify-center">
                             <img src={logo} alt="SwapHub" className="w-full h-full object-contain max-h-[350px]" />
                         </div>
                     </div>
