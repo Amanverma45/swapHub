@@ -15,7 +15,7 @@ const Navbar = () => {
         />
       )}
 
-      <div className="w-full flex justify-center pt-6 px-4">
+      <div className="top-0 w-full flex justify-center pt-6 px-4">
         <nav className="w-[95%] h-16 max-w-6xl bg-white shadow-md border border-gray-100 rounded-full px-12 flex items-center justify-between relative z-50">
 
           {/* Logo */}
