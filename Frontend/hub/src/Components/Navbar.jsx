@@ -18,7 +18,6 @@ const Navbar = () => {
       <div className="top-0 w-full flex justify-center pt-6 px-4">
         <nav className="w-[95%] h-16 max-w-6xl bg-white shadow-md border border-gray-100 rounded-full px-12 flex items-center justify-between relative z-50">
 
-          {/* Logo */}
           <div className="flex items-center justify-between w-full md:w-auto">
             <Link to="/" className="flex items-center gap-2">
               <img
@@ -32,7 +31,6 @@ const Navbar = () => {
               </h1>
             </Link>
 
-            {/* Mobile Menu Button */}
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="md:hidden text-2xl"

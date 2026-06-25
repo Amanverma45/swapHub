@@ -1,6 +1,44 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from 'axios'
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const navigate = useNavigate()
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      if (!name || !email || !password) {
+        alert("Please fill all fields");
+        return;
+      }
+      const response = await axios.post(
+        "https://swaphub-backend-855x.onrender.com/api/saveUser",
+        {
+          name,
+          email,
+          password,
+        }
+
+      );
+      console.log(response.data)
+      alert("Registration Successful");
+      setName("");
+      setEmail("");
+      setPassword("");
+      navigate('/login')
+    } catch (error) {
+      console.log(error)
+      alert(error.response?.data?.message || "Registration Failed");
+    }
+  }
+
   return (
     <section className="min-h-[80vh] flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-white shadow-lg rounded-3xl p-8 border border-gray-100">
@@ -15,14 +53,14 @@ const Register = () => {
           </p>
         </div>
 
-        <form className="space-y-5">
-
+        <form className="space-y-5" onSubmit={handleSubmit}>
           <div>
             <label className="block text-sm font-medium mb-2">
               Full Name
             </label>
 
-            <input
+            <input onChange={(e) => setName(e.target.value)}
+              value={name}
               type="text"
               placeholder="Enter your name"
               className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32]"
@@ -34,7 +72,8 @@ const Register = () => {
               Email
             </label>
 
-            <input
+            <input onChange={(e) => setEmail(e.target.value)}
+              value={email}
               type="email"
               placeholder="Enter your email"
               className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32]"
@@ -46,7 +85,8 @@ const Register = () => {
               Password
             </label>
 
-            <input
+            <input onChange={(e) => setPassword(e.target.value)}
+              value={password}
               type="password"
               placeholder="Enter your password"
               className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32]"
