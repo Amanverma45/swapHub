@@ -1,5 +1,34 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+
 const Login = () => {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const navigate = useNavigate()
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (!email || !password) {
+        alert('Fill the require feild');
+        return;
+      }
+      const response = await axios.post('https://swaphub-backend-855x.onrender.com/api/loginUser', {
+        email,
+        password
+      })
+      console.log(response.data);
+      localStorage.setItem("token", response.data.token);
+      alert("Login Successfully");
+      setEmail("");
+      setPassword("");
+      navigate("/welcome");
+    } catch (error) {
+      console.log(error)
+      alert(error.response?.data?.message || "Login Failed");
+    }
+  }
   return (
     <section className="min-h-[80vh] flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-white shadow-lg rounded-3xl p-8 border border-gray-100">
@@ -14,14 +43,15 @@ const Login = () => {
           </p>
         </div>
 
-        <form className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-5">
 
           <div>
             <label className="block text-sm font-medium mb-2">
               Email
             </label>
 
-            <input
+            <input onChange={(e) => setEmail(e.target.value)}
+              value={email}
               type="email"
               placeholder="Enter your email"
               className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32]"
@@ -33,7 +63,8 @@ const Login = () => {
               Password
             </label>
 
-            <input
+            <input onChange={(e) => setPassword(e.target.value)}
+              value={password}
               type="password"
               placeholder="Enter your password"
               className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32]"
