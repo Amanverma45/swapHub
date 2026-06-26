@@ -3,7 +3,17 @@ const productModel = require('../model/productModel')
 // add product 
 const addProduct = async(req,res)=>{
     try{
-        const product = new productModel(req.body)
+        const {  productName, description,category,exchangeFor,
+            location,}= req.body
+        const product = new productModel({
+          productName,
+          description,
+          category,
+          exchangeFor,
+          location,
+          image: req.file.path,
+          owner: req.user.id,
+        });
         await product.save()
         res.status(201).json({message:"Product Add Successfully"})
     }catch(error){
@@ -46,6 +56,7 @@ const updateProduct = async(req,res)=>{
         return res.status(404).json({message:"Product not found"})
       }
       res.status(200).json({message:"Product Updated Successfully"})
+      updatedProduct
     }catch(error){
       console.log(error.message)
       return res.status(500).json({message:"something went wrong "})

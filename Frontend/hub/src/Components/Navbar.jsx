@@ -83,6 +83,12 @@ const Navbar = () => {
             ) : (
               <>
                 <Link
+                  to="/addProduct"
+                  className="text-gray-700 hover:text-[#F4A261] transition"
+                >
+                  Add Product
+                </Link>
+                <Link
                   to="/welcome"
                   className="text-gray-700 hover:text-[#F4A261] transition"
                 >
@@ -101,10 +107,9 @@ const Navbar = () => {
 
           {/* Mobile Menu */}
           <div
-            className={`fixed top-0 left-0 h-70 w-full bg-white rounded-b-3xl shadow-xl z-50 transition-all duration-300 transform md:hidden ${isOpen ? "translate-y-0" : "-translate-y-full"
+            className={`fixed top-0 left-0 h-80 w-full bg-white rounded-b-3xl shadow-xl z-50 transition-all duration-300 transform md:hidden ${isOpen ? "translate-y-0" : "-translate-y-full"
               }`}
           >
-            {/* Header */}
             <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
 
               <div className="flex items-center gap-2">
@@ -167,6 +172,13 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
+                  <Link
+                    to="/addProduct"
+                    onClick={() => setIsOpen(false)}
+                    className="text-gray-700 hover:text-[#F4A261]"
+                  >
+                    Add Product
+                  </Link>
                   <Link
                     to="/welcome"
                     onClick={() => setIsOpen(false)}

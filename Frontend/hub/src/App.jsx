@@ -6,6 +6,7 @@ import Login from './Components/Login'
 import Register from './Components/Register'
 import Footer from './Components/Footer'
 import Welcome from './Components/Welcome'
+import AddProduct from './Components/AddProduct'
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/welcome" element={<Welcome />} />
+          <Route path="/addProduct" element={<AddProduct />} />
         </Routes>
         <Footer/>
       </main>

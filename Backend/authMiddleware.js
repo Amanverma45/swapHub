@@ -8,7 +8,7 @@ const authMiddleware = (req,res,next)=>{
             return res.status(401).json({message:'Token not found'})
         }
         const verifyToken = jwt.verify(
-        token,"OUR_SECRET_KEY"
+        token,process.env.JWT_SECRET
         )
         req.user = verifyToken
         next()
