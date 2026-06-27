@@ -22,7 +22,7 @@ const upload = multer({
         if(allowedTypes.includes(file.mimetype)){
             cb(null,true);
         }else{
-            cb(new error("only JPG, JPEG, PNG and WEBP images are allowed"),false);
+            cb(new Error("only JPG, JPEG, PNG and WEBP images are allowed"),false);
         }
     },
     limits: {
