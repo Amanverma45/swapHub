@@ -3,7 +3,7 @@ const productModel = require('../model/productModel')
 // add product 
 const addProduct = async(req,res)=>{
     try{
-        const {  productName, description,category,exchangeFor,
+        const {productName, description,category,exchangeFor,
             location,}= req.body
         const product = new productModel({
           productName,
@@ -16,10 +16,20 @@ const addProduct = async(req,res)=>{
         });
         await product.save()
         res.status(201).json({message:"Product Add Successfully"})
-    }catch(error){
-        console.log(error.message)
-        return res.status(500).json({message:"something went wrong"})
-    }
+    }catch (error) {              //remove
+  console.log("ERROR:", error);
+  console.log(req.body);
+console.log(req.file);
+
+  return res.status(500).json({
+    message: error.message,
+    error,
+  });
+}
+    // catch(error){
+    //     console.log(error.message)
+    //     return res.status(500).json({message:"something went wrong"})
+    // }
 }
 
 //  getProduct 

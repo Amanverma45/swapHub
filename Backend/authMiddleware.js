@@ -10,8 +10,13 @@ const authMiddleware = (req,res,next)=>{
         const verifyToken = jwt.verify(
         token,process.env.JWT_SECRET
         )
+        console.log("VERIFY:", verifyToken);      //remove
+        console.log("TOKEN RECEIVED:", token);    //remove
+console.log("JWT_SECRET:", process.env.JWT_SECRET);   //remove
         req.user = verifyToken
         next()
+        console.log("TOKEN:", token);
+console.log("JWT_SECRET:", process.env.JWT_SECRET)
         
     }catch(error){
         console.log(error.message)
