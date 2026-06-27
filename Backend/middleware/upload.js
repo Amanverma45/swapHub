@@ -7,7 +7,7 @@ const storage = new CloudinaryStorage({
     params: async (requestAnimationFrame,file)=>({
         folder:"SwapHubProducts",
         resource_type:"image",
-        public_id:file.originalname.spilit(".")[0] + "_" + Date.now(),
+        public_id: `${file.originalname.split(".")[0]}_${Date.now()}`,
     })
 })
 const upload = multer({
