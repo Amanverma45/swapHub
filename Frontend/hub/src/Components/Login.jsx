@@ -19,10 +19,11 @@ const Login = () => {
         password
       })
       console.log(response.data);
-      console.log("TOKEN:", response.data.token);                  //remove
+      // console.log("TOKEN:", response.data.token);                  //remove
       localStorage.setItem("token", response.data.token);            //remove
-      console.log("LOCAL TOKEN:", localStorage.getItem("token"));      //remove
+      // console.log("LOCAL TOKEN:", localStorage.getItem("token"));      //remove
       alert("Login Successfully");
+      
       setEmail("");
       setPassword("");
       navigate("/welcome");
