@@ -16,20 +16,10 @@ const addProduct = async(req,res)=>{
         });
         await product.save()
         res.status(201).json({message:"Product Add Successfully"})
-    }catch (error) {              //remove
-  console.log("ERROR:", error);
-  console.log(req.body);
-console.log(req.file);
-
-  return res.status(500).json({
-    message: error.message,
-    error,
-  });
-}
-    // catch(error){
-    //     console.log(error.message)
-    //     return res.status(500).json({message:"something went wrong"})
-    // }
+       } catch(error){
+        console.log(error.message)
+        return res.status(500).json({message:"something went wrong"})
+    }
 }
 
 //  getProduct 

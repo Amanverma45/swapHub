@@ -59,6 +59,14 @@ const AddProduct = () => {
 
         } catch (error) {
             console.log(error);
+
+            if (error.response?.status === 401) {
+                alert("Session expired. Please login again.");
+
+                localStorage.removeItem("token");
+                navigate("/login");
+                return;
+            }
             alert(error.response?.data?.message || "Something went wrong");
         } finally {
             setLoading(false);
