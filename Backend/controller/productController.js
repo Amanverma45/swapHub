@@ -62,5 +62,19 @@ const updateProduct = async(req,res)=>{
       return res.status(500).json({message:"something went wrong "})
     }
 }
+// getSingleProduct 
+const getSingleProduct = async(req,res)=>{
+  try{
+    const product = await productModel.findById(req.params.id)
 
-module.exports = {addProduct,getProduct,deleteProduct,updateProduct}
+    if(!product){
+      return res.status(404).json({message:"product not found"})
+    }
+    res.status(200).json(product)
+  }catch(error){
+    console.log(error.message)
+    res.status(500).json({message:"something went wrong"})
+  }
+}
+
+module.exports = {addProduct,getProduct,deleteProduct,updateProduct,getSingleProduct}

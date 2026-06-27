@@ -20,7 +20,7 @@ const Products = () => {
   };
 
   useEffect(() => {
-    getProducts
+    getProducts();
     // getProducts();
   }, []);
   return (

@@ -7,6 +7,7 @@ import Register from './Components/Register'
 import Footer from './Components/Footer'
 import Welcome from './Components/Welcome'
 import AddProduct from './Components/AddProduct'
+import ProductDetails from './Components/ProductDetails'
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/addProduct" element={<AddProduct />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
         </Routes>
         <Footer/>
       </main>

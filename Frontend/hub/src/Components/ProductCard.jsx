@@ -2,7 +2,9 @@ import { Link } from "react-router-dom";
 
 const ProductCard = ({ product }) => {
   return (
-    <div className="group bg-white rounded-3xl overflow-hidden border border-gray-200 shadow-md hover:shadow-2xl hover:-translate-y-3 transition-all duration-500">
+    <div className="group bg-white rounded-3xl overflow-hidden border border-gray-200 shadow-md
+        hover:shadow-xl hover:-translate-y-2 transition-all duration-300
+    ">
 
       {/* Image */}
       <div className="h-60 overflow-hidden">
@@ -43,7 +45,6 @@ const ProductCard = ({ product }) => {
             {product.exchangeFor}
           </p>
         </div>
-
         <Link
           to={`/product/${product._id}`}
           className="mt-6 block text-center bg-[#2E7D32] text-white py-3 rounded-xl hover:bg-[#256728] hover:scale-105 transition-all duration-300"
