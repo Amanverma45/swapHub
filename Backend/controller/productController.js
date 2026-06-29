@@ -94,7 +94,7 @@ const getSingleProduct = async(req,res)=>{
     res.status(500).json({message:"something went wrong"})
   }
 }
-getMyProducts 
+// getMyProducts 
 const getMyProducts = async(req,res)=>{
   try{
     const products = await productModel.find({
