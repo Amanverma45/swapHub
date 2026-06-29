@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-  const MyProductCard = ({ product, handleDelete }) => {
+const MyProductCard = ({ product, handleDelete }) => {
   return (
     <div className="bg-white rounded-3xl shadow-md border overflow-hidden">
 
@@ -29,11 +29,12 @@ import { Link } from "react-router-dom";
             View
           </Link>
 
-          <button
-            className="flex-1 bg-blue-500 text-white py-2 rounded-xl"
+          <Link
+            to={`/editProduct/${product._id}`}
+            className="flex-1 bg-blue-500 text-white text-center py-2 rounded-xl"
           >
             Edit
-          </button>
+          </Link>
 
           <button
             onClick={() => handleDelete(product._id)}

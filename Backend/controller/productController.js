@@ -51,6 +51,9 @@ const deleteProduct = async(req,res)=>{
 // update product 
 const updateProduct = async (req, res) => {
     try {
+       console.log("ID:", req.params.id);
+        console.log("BODY:", req.body);
+        console.log("FILE:", req.file);
         const updateData = {
             productName: req.body.productName,
             category: req.body.category,
@@ -66,7 +69,7 @@ const updateProduct = async (req, res) => {
         const updatedProduct = await productModel.findByIdAndUpdate(req.params.id,updateData,
             { new: true }
         );
-
+        console.log(updatedProduct);
         if (!updatedProduct) {
             return res.status(404).json({message: "Product not found"});
         }

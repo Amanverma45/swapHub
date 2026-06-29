@@ -8,7 +8,7 @@ import Footer from './Components/Footer'
 import Welcome from './Components/Welcome'
 import AddProduct from './Components/AddProduct'
 import ProductDetails from './Components/ProductDetails'
-import MyProducts from "./components/MyProducts";
+import MyProducts from './Components/MyProducts'
 import EditProduct from './Components/EditProduct'
 
 const App = () => {
