@@ -8,6 +8,7 @@ import Footer from './Components/Footer'
 import Welcome from './Components/Welcome'
 import AddProduct from './Components/AddProduct'
 import ProductDetails from './Components/ProductDetails'
+import MyProducts from "./components/MyProducts";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/addProduct" element={<AddProduct />} />
           <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/myProducts" element={<MyProducts />} />
         </Routes>
         <Footer/>
       </main>

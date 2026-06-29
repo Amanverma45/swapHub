@@ -89,6 +89,12 @@ const Navbar = () => {
                   Add Product
                 </Link>
                 <Link
+                  to="/myProducts"
+                  className="text-gray-700 hover:text-[#F4A261] transition"
+                >
+                  My Products
+                </Link>
+                <Link
                   to="/welcome"
                   className="text-gray-700 hover:text-[#F4A261] transition"
                 >
@@ -178,6 +184,12 @@ const Navbar = () => {
                     className="text-gray-700 hover:text-[#F4A261]"
                   >
                     Add Product
+                  </Link>
+                  <Link
+                    to="/myProducts"
+                    className="text-gray-700 hover:text-[#F4A261]"
+                  >
+                    My Products
                   </Link>
                   <Link
                     to="/welcome"

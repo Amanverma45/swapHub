@@ -21,7 +21,6 @@ const Products = () => {
 
   useEffect(() => {
     getProducts();
-    // getProducts();
   }, []);
   return (
     <section className="w-[90%] max-w-7xl mx-auto py-16">
