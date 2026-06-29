@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from '../utils/axiosInstance.js';
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -11,7 +12,7 @@ const Login = () => {
     e.preventDefault();
     try {
       if (!email || !password) {
-        alert('Fill the require feild');
+        toast.error('Fill the require feild');
         return;
       }
       const response = await axios.post('https://swaphub-backend-855x.onrender.com/api/loginUser', {
@@ -20,14 +21,14 @@ const Login = () => {
       })
       console.log(response.data);
       localStorage.setItem("token", response.data.token);
-      alert("Login Successfully");
+      toast.success("Login Successfully");
       
       setEmail("");
       setPassword("");
       navigate("/welcome");
     } catch (error) {
       console.log(error)
-      alert(error.response?.data?.message || "Login Failed");
+      toast.error(error.response?.data?.message || "Login Failed");
     }
   }
   return (

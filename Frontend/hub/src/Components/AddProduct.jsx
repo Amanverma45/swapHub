@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from '../utils/axiosInstance.js';
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const AddProduct = () => {
     const [image, setImage] = useState(null);
@@ -16,12 +17,12 @@ const AddProduct = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!image || !productName || !category || !exchangeFor || !location || !description) {
-            alert("Please fill all fields");
+            toast.error("Please fill all fields");
             return;
         }
 
         if (image.size > 5 * 1024 * 1024) {
-            alert("Image must be less than 5MB");
+            toast.error("Image must be less than 5MB");
             return;
         }
         setLoading(true);
@@ -47,7 +48,7 @@ const AddProduct = () => {
             );
 
             console.log(response.data);
-            alert("Product Added Successfully");
+            toast.success("Product Added Successfully");
 
             setImage(null);
             setProductName("");
@@ -61,13 +62,13 @@ const AddProduct = () => {
             console.log(error);
 
             if (error.response?.status === 401) {
-                alert("Session expired. Please login again.");
+                toast.error("Session expired. Please login again.");
 
                 localStorage.removeItem("token");
                 navigate("/login");
                 return;
             }
-            alert(error.response?.data?.message || "Something went wrong");
+            toast.error(error.response?.data?.message || "Something went wrong");
         } finally {
             setLoading(false);
         }

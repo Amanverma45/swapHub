@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from '../utils/axiosInstance.js';
+import toast from "react-hot-toast";
 
 const ProductDetails = () => {
     const { id } = useParams();
@@ -18,8 +19,8 @@ const ProductDetails = () => {
         } catch (error) {
             console.log(error);
             console.log(error.response);
-            alert(error.response?.data?.message || error.message);
-            alert("Unable to fetch product");
+            toast.error(error.response?.data?.message || error.message);
+            toast.error("Unable to fetch product");
         } finally {
             setLoading(false);
         }

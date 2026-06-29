@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from '../utils/axiosInstance.js';
 import ProductCard from "./ProductCard";
+import toast from "react-hot-toast";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -13,7 +14,7 @@ const Products = () => {
       setProducts(response.data)
     } catch (error) {
       console.log(error)
-      alert('unable to fetch products')
+      toast.error('unable to fetch products')
     } finally {
       setLoading(false);
     }

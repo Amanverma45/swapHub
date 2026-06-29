@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from '../utils/axiosInstance.js';
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const [name, setName] = useState('')
@@ -15,7 +16,7 @@ const Register = () => {
 
     try {
       if (!name || !email || !password) {
-        alert("Please fill all fields");
+        toast.error("Please fill all fields");
         return;
       }
       const response = await axios.post(
@@ -28,14 +29,14 @@ const Register = () => {
 
       );
       console.log(response.data)
-      alert("Registration Successful");
+      toast.success("Registration Successful");
       setName("");
       setEmail("");
       setPassword("");
       navigate('/login')
     } catch (error) {
       console.log(error)
-      alert(error.response?.data?.message || "Registration Failed");
+      toast.error(error.response?.data?.message || "Registration Failed");
     }
   }
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from '../utils/axiosInstance.js';
 import MyProductCard from "./MyProductCard";
+import toast from "react-hot-toast";
 
 const MyProducts = () => {
     const [products, setProducts] = useState([]);
@@ -20,9 +21,25 @@ const MyProducts = () => {
             setProducts(response.data)
         } catch (error) {
             console.log(error.response);
-            alert(error.response?.data?.message || error.message);
+            toast.error(error.response?.data?.message || error.message);
         } finally {
             setLoading(false);
+        }
+    };
+    const handleDelete = async (id) => {
+        try {
+            if (!window.confirm("Are you sure you want to delete this product?")) {
+                return;
+            }
+            await axios.delete(`/deleteProduct/${id}`);
+
+            toast.success("Product deleted successfully");
+
+            setProducts(products.filter((product) => product._id !== id));
+
+        } catch (error) {
+            console.log(error.response);
+            toast.error(error.response?.data?.message || error.message);
         }
     };
 
@@ -56,6 +73,7 @@ const MyProducts = () => {
                         <MyProductCard
                             key={product._id}
                             product={product}
+                            handleDelete={handleDelete}
                         />
                     ))}
                 </div>
