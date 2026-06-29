@@ -4,7 +4,8 @@ const jwt = require('jsonwebtoken')
 
 const saveUser =async (req,res)=>{
     try{
-        const {name,email,password}= req.body
+        let { name, email, password } = req.body;
+        email = email.trim().toLowerCase();
         const existingUser = await userModel.findOne({ email });
 
          if (existingUser) {
@@ -30,7 +31,10 @@ const saveUser =async (req,res)=>{
 }
 const loginUser = async(req,res)=>{
     try{
-        const {email,password} = req.body
+       const { password } = req.body;
+       const email = req.body.email?.trim().toLowerCase();
+console.log("Received:", req.body.email);
+console.log("After Lowercase:", email);
         const user =await userModel.findOne({email})
         if(!user){
          return res.status(404).json({

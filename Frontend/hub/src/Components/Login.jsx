@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from '../utils/axiosInstance.js';
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -19,9 +19,7 @@ const Login = () => {
         password
       })
       console.log(response.data);
-      // console.log("TOKEN:", response.data.token);                  //remove
-      localStorage.setItem("token", response.data.token);            //remove
-      // console.log("LOCAL TOKEN:", localStorage.getItem("token"));      //remove
+      localStorage.setItem("token", response.data.token);
       alert("Login Successfully");
       
       setEmail("");

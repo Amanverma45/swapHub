@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios from '../utils/axiosInstance.js';
 import MyProductCard from "./MyProductCard";
 
 const MyProducts = () => {
@@ -19,12 +19,8 @@ const MyProducts = () => {
 
             setProducts(response.data)
         } catch (error) {
-    console.log(error.response);
-    alert(error.response?.data?.message || error.message);
-
-        // catch (error) {
-        //     console.log(error)
-        //     alert('unable to fetch your products')
+            console.log(error.response);
+            alert(error.response?.data?.message || error.message);
         } finally {
             setLoading(false);
         }
