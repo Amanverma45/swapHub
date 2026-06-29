@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 
-const MyProductCard = ({ product, handleDelete }) => {
+// const MyProductCard = ({ product, handleDelete }) => {
+  const MyProductCard = ({ product, handleDelete }) => {
+  console.log("handleDelete:", handleDelete);
+
   return (
     <div className="bg-white rounded-3xl shadow-md border overflow-hidden">
 
