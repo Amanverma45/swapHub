@@ -1,12 +1,11 @@
 import { Link } from "react-router-dom";
+import { FaLocationDot } from "react-icons/fa6";
 
 const ProductCard = ({ product }) => {
   return (
     <div className="group bg-white rounded-3xl overflow-hidden border border-gray-200 shadow-md
         hover:shadow-xl hover:-translate-y-2 transition-all duration-300
     ">
-
-      {/* Image */}
       <div className="h-60 overflow-hidden">
         <img
           src={product.image}
@@ -15,16 +14,13 @@ const ProductCard = ({ product }) => {
         />
       </div>
 
-      {/* Content */}
       <div className="p-5">
-
         <div className="flex justify-between items-center mb-3">
           <span className="bg-green-100 text-[#2E7D32] px-3 py-1 rounded-full text-sm font-medium">
             {product.category}
           </span>
-
           <span className="text-gray-500 text-sm">
-            📍 {product.location}
+            <FaLocationDot /> {product.location}
           </span>
         </div>
 

@@ -9,6 +9,5 @@ router.get('/getProduct',productController.getProduct)
 router.get("/getProduct/:id", productController.getSingleProduct);
 router.get("/myProducts",authMiddleware,productController.getMyProducts);
 router.delete('/deleteProduct/:id',authMiddleware,productController.deleteProduct)
-router.put('/updateProduct/:id',authMiddleware,productController.updateProduct)
-
+router.put("/updateProduct/:id",authMiddleware,upload.single("image"),productController.updateProduct);
 module.exports = router
