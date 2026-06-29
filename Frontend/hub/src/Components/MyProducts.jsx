@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from '../utils/axiosInstance.js';
-import MyProductCard from "./MyProductCard";
+import MyProductCard from "./MyProductCard.jsx";
 import toast from "react-hot-toast";
 
 const MyProducts = () => {
@@ -46,6 +46,7 @@ const MyProducts = () => {
     useEffect(() => {
         myProducts();
     }, []);
+    console.log("handleDelete in parent:", handleDelete);
     return (
         <section className="w-[90%] max-w-7xl mx-auto py-16">
 
