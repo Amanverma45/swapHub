@@ -33,8 +33,7 @@ const loginUser = async(req,res)=>{
     try{
        const { password } = req.body;
        const email = req.body.email?.trim().toLowerCase();
-console.log("Received:", req.body.email);
-console.log("After Lowercase:", email);
+
         const user =await userModel.findOne({email})
         if(!user){
          return res.status(404).json({
@@ -43,7 +42,7 @@ console.log("After Lowercase:", email);
       }
       const comparePassword = await bcrypt.compare(password,user.password)
       if(!comparePassword){
-        return res.status(401).json({message:'Incorrect password'})
+        return res.status(400).json({message:'Incorrect password'})
       }
       const token = jwt.sign({id:user._id, email:user.email},process.env.JWT_SECRET,{expiresIn: "1d"});
        res.status(200).json({message: "Login Successfully",token,user});
