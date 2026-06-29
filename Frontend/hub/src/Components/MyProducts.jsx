@@ -19,10 +19,9 @@ const MyProducts = () => {
 
             setProducts(response.data)
         } catch (error) {
-    console.log(error);
     console.log(error.response);
-
     alert(error.response?.data?.message || error.message);
+
         // catch (error) {
         //     console.log(error)
         //     alert('unable to fetch your products')
