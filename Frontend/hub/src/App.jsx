@@ -10,6 +10,9 @@ import AddProduct from './Components/AddProduct'
 import ProductDetails from './Components/ProductDetails'
 import MyProducts from './Components/MyProducts'
 import EditProduct from './Components/EditProduct'
+import ProtectedRoute from './Components/ProtectedRoute'
+import Profile from './Components/Profile'
+import SwapRequests from './Components/SwapRequests'
 
 const App = () => {
   return (
@@ -23,10 +26,12 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/welcome" element={<Welcome />} />
-          <Route path="/addProduct" element={<AddProduct />} />
+          <Route path="/addProduct" element={<ProtectedRoute><AddProduct /></ProtectedRoute>} />
           <Route path="/product/:id" element={<ProductDetails />} />
-          <Route path="/myProducts" element={<MyProducts />} />
-          <Route path="/editProduct/:id" element={<EditProduct />} />
+          <Route path="/myProducts" element={<ProtectedRoute><MyProducts /></ProtectedRoute>} />
+          <Route path="/editProduct/:id" element={<ProtectedRoute><EditProduct /></ProtectedRoute>} />
+          <Route path="/swapRequest" element={<ProtectedRoute><SwapRequests /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         </Routes>
         <Footer/>
       </main>

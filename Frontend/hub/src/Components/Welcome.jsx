@@ -1,10 +1,5 @@
 import { Link } from "react-router-dom";
-import {
-  FaBoxOpen,
-  FaExchangeAlt,
-  FaPlusCircle,
-  FaUserCircle,
-} from "react-icons/fa";
+import {FaBoxOpen,FaExchangeAlt,FaPlusCircle,FaUserCircle,} from "react-icons/fa";
 
 const Welcome = () => {
   return (
@@ -35,37 +30,45 @@ const Welcome = () => {
         {/* Dashboard Cards */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
 
-          <div className="bg-white rounded-3xl shadow-md p-6 hover:-translate-y-2 transition">
-            <FaPlusCircle className="text-5xl text-[#2E7D32] mb-5" />
-            <h2 className="text-xl font-bold">Add Product</h2>
-            <p className="text-gray-600 mt-2">
-              Upload a product you want to exchange.
-            </p>
-          </div>
+          <Link to="/addProduct">
+            <div className="bg-white rounded-3xl shadow-md p-6 hover:-translate-y-2 transition">
+              <FaPlusCircle className="text-5xl text-[#2E7D32] mb-5" />
+              <h2 className="text-xl font-bold">Add Product</h2>
+              <p className="text-gray-600 mt-2">
+                Upload a product you want to exchange.
+              </p>
+            </div>
+          </Link>
 
-          <div className="bg-white rounded-3xl shadow-md p-6 hover:-translate-y-2 transition">
-            <FaBoxOpen className="text-5xl text-[#F4A261] mb-5" />
-            <h2 className="text-xl font-bold">My Products</h2>
-            <p className="text-gray-600 mt-2">
-              View and manage your listed products.
-            </p>
-          </div>
+          <Link to='/myProducts'>
+            <div className="bg-white rounded-3xl shadow-md p-6 hover:-translate-y-2 transition">
+              <FaBoxOpen className="text-5xl text-[#F4A261] mb-5" />
+              <h2 className="text-xl font-bold">My Products</h2>
+              <p className="text-gray-600 mt-2">
+                View and manage your listed products.
+              </p>
+            </div>
+          </Link>
 
-          <div className="bg-white rounded-3xl shadow-md p-6 hover:-translate-y-2 transition">
-            <FaExchangeAlt className="text-5xl text-[#2E7D32] mb-5" />
-            <h2 className="text-xl font-bold">Swap Requests</h2>
-            <p className="text-gray-600 mt-2">
-              Check exchange requests from users.
-            </p>
-          </div>
+          <Link to='/swapRequest'>
+            <div className="bg-white rounded-3xl shadow-md p-6 hover:-translate-y-2 transition">
+              <FaExchangeAlt className="text-5xl text-[#2E7D32] mb-5" />
+              <h2 className="text-xl font-bold">Swap Requests</h2>
+              <p className="text-gray-600 mt-2">
+                Check exchange requests from users.
+              </p>
+            </div>
+          </Link>
 
-          <div className="bg-white rounded-3xl shadow-md p-6 hover:-translate-y-2 transition">
-            <FaUserCircle className="text-5xl text-[#F4A261] mb-5" />
-            <h2 className="text-xl font-bold">Profile</h2>
-            <p className="text-gray-600 mt-2">
-              Update your account information.
-            </p>
-          </div>
+          <Link to='/profile'>
+            <div className="bg-white rounded-3xl shadow-md p-6 hover:-translate-y-2 transition">
+              <FaUserCircle className="text-5xl text-[#F4A261] mb-5" />
+              <h2 className="text-xl font-bold">Profile</h2>
+              <p className="text-gray-600 mt-2">
+                Update your account information.
+              </p>
+            </div>
+          </Link>
 
         </div>
 
