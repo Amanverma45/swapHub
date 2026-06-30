@@ -21,9 +21,9 @@ const swapProduct = async (req, res) => {
 const getSwapRequest = async (req, res) => {
     try {
        const request = await swapModel.find({receiver: req.user.id})
-          .populate("sender")
-          .populate("requestedProduct")
-          .populate("offeredProduct");
+          .populate("sender", "name email")
+          .populate("requestedProduct","productName image category location")
+          .populate("offeredProduct","productName image category location")
         return res.status(200).json(request);
     } catch (error) {
         console.log(error.message);
