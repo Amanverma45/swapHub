@@ -20,7 +20,10 @@ const swapProduct = async (req, res) => {
 
 const getSwapRequest = async (req, res) => {
     try {
-        const request = await swapModel.find({receiver: req.user.id});
+       const request = await swapModel.find({receiver: req.user.id})
+          .populate("sender")
+          .populate("requestedProduct")
+          .populate("offeredProduct");
         return res.status(200).json(request);
     } catch (error) {
         console.log(error.message);
