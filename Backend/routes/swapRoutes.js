@@ -1,6 +1,7 @@
 
 const swapController = require('../controller/swapController.js')
 const express = require('express')
+const authMiddleware = require('../authMiddleware.js')
 
 const router = express.Router()
 router.post('/swapProduct',authMiddleware,swapController.swapProduct)
