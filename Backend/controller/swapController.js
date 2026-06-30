@@ -1,6 +1,9 @@
 const swapModel = require('../model/swapModel.js')
 const swapProduct = async (req, res) => {
     try {
+        console.log("BODY:", req.body);
+        console.log("LOGGED IN USER:", req.user.id);
+
         const swapItem = new swapModel({
             sender: req.user.id,
             receiver: req.body.receiver,
