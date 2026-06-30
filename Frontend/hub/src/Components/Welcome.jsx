@@ -6,11 +6,10 @@ const Welcome = () => {
     <section className="min-h-[85vh] bg-gray-50 py-10 px-4">
       <div className="w-[90%] max-w-6xl mx-auto">
 
-        {/* Welcome Banner */}
         <div className="bg-gradient-to-r from-[#2E7D32] to-[#43A047] rounded-3xl p-8 md:p-10 text-white shadow-lg">
 
           <h1 className="text-3xl md:text-5xl font-bold">
-            Welcome to SwapHub 👋
+            Welcome to SwapHub 
           </h1>
 
           <p className="mt-4 text-lg text-green-100 max-w-2xl">
@@ -27,7 +26,6 @@ const Welcome = () => {
 
         </div>
 
-        {/* Dashboard Cards */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
 
           <Link to="/addProduct">
@@ -72,7 +70,6 @@ const Welcome = () => {
 
         </div>
 
-        {/* Quick Stats */}
         <div className="grid md:grid-cols-3 gap-6 mt-10">
 
           <div className="bg-white rounded-3xl shadow-sm p-6 text-center">
