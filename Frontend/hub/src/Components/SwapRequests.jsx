@@ -19,30 +19,30 @@ const SwapRequests = () => {
   };
   const handleAccept = async (id) => {
     try {
-        const response = await axios.put(`/acceptSwapRequest/${id}`);
+      const response = await axios.put(`/acceptSwapRequest/${id}`);
 
-        toast.success(response.data.message);
+      toast.success(response.data.message);
 
-        getSwapRequests();
+      getSwapRequests();
 
     } catch (error) {
-        console.log(error);
-        toast.error(error.response?.data?.message || error.message);
+      console.log(error);
+      toast.error(error.response?.data?.message || error.message);
     }
-};
-const handleReject = async (id) => {
+  };
+  const handleReject = async (id) => {
     try {
-        const response = await axios.put(`/rejectSwapRequest/${id}`);
+      const response = await axios.put(`/rejectSwapRequest/${id}`);
 
-        toast.success(response.data.message);
+      toast.success(response.data.message);
 
-        getSwapRequests();
+      getSwapRequests();
 
     } catch (error) {
-        console.log(error);
-        toast.error(error.response?.data?.message || error.message);
+      console.log(error);
+      toast.error(error.response?.data?.message || error.message);
     }
-};
+  };
   useEffect(() => {
     getSwapRequests();
   }, []);
@@ -84,8 +84,26 @@ const handleReject = async (id) => {
                     {request.sender.email}
                   </p>
                 </div>
-                <span className="px-4 py-2 rounded-full bg-yellow-100 text-yellow-700 font-semibold">
-                  {request.status}
+                <span
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold
+    ${request.status === "accepted"
+                      ? "bg-green-100 text-green-700"
+                      : request.status === "rejected"
+                        ? "bg-red-100 text-red-700"
+                        : "bg-yellow-100 text-yellow-700"
+                    }`}
+                >
+                  <span
+                    className={`w-2.5 h-2.5 rounded-full
+      ${request.status === "accepted"
+                        ? "bg-green-600"
+                        : request.status === "rejected"
+                          ? "bg-red-600"
+                          : "bg-yellow-500"
+                      }`}
+                  ></span>
+
+                  {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
                 </span>
               </div>
 
@@ -142,19 +160,21 @@ const handleReject = async (id) => {
                   </p>
                 </div>
               </div>
-              <div className="flex justify-end gap-4 mt-6">
-              <button
-              onClick={() => handleAccept(request._id)}
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-xl transition">
-                Accept
-              </button>
+              {request.status === "pending" && (
+                <div className="flex justify-end gap-4 mt-6">
+                  <button
+                    onClick={() => handleAccept(request._id)}
+                    className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-xl transition">
+                    Accept
+                  </button>
 
-              <button
-              onClick={() => handleReject(request._id)}
-              className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-xl transition">
-                Reject
-              </button>
-            </div>
+                  <button
+                    onClick={() => handleReject(request._id)}
+                    className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-xl transition">
+                    Reject
+                  </button>
+                </div>
+              )}
             </div>
           ))}
         </div>
