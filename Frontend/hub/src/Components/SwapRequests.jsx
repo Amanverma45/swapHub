@@ -17,6 +17,32 @@ const SwapRequests = () => {
       setLoading(false);
     }
   };
+  const handleAccept = async (id) => {
+    try {
+        const response = await axios.put(`/acceptSwapRequest/${id}`);
+
+        toast.success(response.data.message);
+
+        getSwapRequests();
+
+    } catch (error) {
+        console.log(error);
+        toast.error(error.response?.data?.message || error.message);
+    }
+};
+const handleReject = async (id) => {
+    try {
+        const response = await axios.put(`/rejectSwapRequest/${id}`);
+
+        toast.success(response.data.message);
+
+        getSwapRequests();
+
+    } catch (error) {
+        console.log(error);
+        toast.error(error.response?.data?.message || error.message);
+    }
+};
   useEffect(() => {
     getSwapRequests();
   }, []);
@@ -116,6 +142,19 @@ const SwapRequests = () => {
                   </p>
                 </div>
               </div>
+              <div className="flex justify-end gap-4 mt-6">
+              <button
+              onClick={() => handleAccept(request._id)}
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-xl transition">
+                Accept
+              </button>
+
+              <button
+              onClick={() => handleReject(request._id)}
+              className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-xl transition">
+                Reject
+              </button>
+            </div>
             </div>
           ))}
         </div>
