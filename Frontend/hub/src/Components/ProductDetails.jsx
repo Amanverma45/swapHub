@@ -13,7 +13,7 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true);
   
   const loggedInUser = JSON.parse(localStorage.getItem("user"));
-  const isOwner = product.owner === loggedInUser?._id;
+  const isOwner = product?.owner === loggedInUser?._id;
   const getMyProducts = async () => {
     try {
       const response = await axios.get("/myProducts");
