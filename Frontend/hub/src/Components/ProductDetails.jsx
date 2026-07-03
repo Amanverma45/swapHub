@@ -13,6 +13,9 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true);
   
   const loggedInUser = JSON.parse(localStorage.getItem("user"));
+  console.log("Logged User:", loggedInUser);
+console.log("Product Owner:", product?.owner);
+console.log("Is Owner:", product?.owner === loggedInUser?._id);
   const isOwner = product?.owner === loggedInUser?._id;
   const getMyProducts = async () => {
     try {
