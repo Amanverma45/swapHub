@@ -4,7 +4,6 @@ import axios from '../utils/axiosInstance.js';
 import toast from "react-hot-toast";
 
 const ProductDetails = () => {
-  const loggedInUser = JSON.parse(localStorage.getItem("user"));
   const [myProducts, setMyProducts] = useState([])
   const [selectedProduct, setSelectedProduct] = useState("")
   
@@ -12,7 +11,8 @@ const ProductDetails = () => {
   
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  
+  const loggedInUser = JSON.parse(localStorage.getItem("user"));
   const isOwner = product.owner === loggedInUser?._id;
   const getMyProducts = async () => {
     try {
