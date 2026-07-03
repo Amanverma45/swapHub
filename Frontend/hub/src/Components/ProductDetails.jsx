@@ -4,14 +4,16 @@ import axios from '../utils/axiosInstance.js';
 import toast from "react-hot-toast";
 
 const ProductDetails = () => {
+  const loggedInUser = JSON.parse(localStorage.getItem("user"));
   const [myProducts, setMyProducts] = useState([])
   const [selectedProduct, setSelectedProduct] = useState("")
-
+  
   const { id } = useParams();
-
+  
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const isOwner = product.owner === loggedInUser?._id;
   const getMyProducts = async () => {
     try {
       const response = await axios.get("/myProducts");
@@ -155,14 +157,15 @@ const ProductDetails = () => {
                 </option>
               ))}
             </select>
-
+            
+            {!isOwner && (
             <button
               onClick={sendSwapRequest}
               className="mt-8 w-full bg-[#2E7D32] hover:bg-[#256728] text-white py-4 rounded-2xl transition duration-300"
             >
               Send Swap Request
             </button>
-
+            )}
           </div>
 
         </div>
