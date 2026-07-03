@@ -31,29 +31,57 @@ const getSwapRequest = async (req, res) => {
     }
 };
 
-const acceptSwapRequest = async(req,res)=>{
-    try{
-        const request = await swapModel.findByIdAndUpdate(req.params.id,{status:"accepted"},{ new:true})
-        if(!request){
-            return res.status(404).json({message:"Request not found"})
+const acceptSwapRequest = async (req, res) => {
+    try {
+        const request = await swapModel.findById(req.params.id);
+        if (!request) {
+            return res.status(404).json({message: "Request not found"});
         }
-        return res.status(200).json({message: "Swap request accepted",request,});
-    }catch(error){
-     console.log(error.message)
-     return res.status(500).json({message:"something went wrong "})
+
+        //  Security Check
+        if (request.receiver.toString() !== req.user.id) {
+            return res.status(403).json({ message: "Unauthorized"});
+        }
+
+        request.status = "accepted";
+        await request.save();
+        return res.status(200).json({ message: "Swap request accepted", request,});
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({ message: "Something went wrong"}); 
     }
-}
+};
 
 const rejectSwapRequest = async(req,res)=>{
-    try{
-        const request = await swapModel.findByIdAndUpdate(req.params.id,{status:"rejected"},{ new:true})
-        if(!request){
-            return res.status(404).json({message:"Request not found"})
+    try {
+        const request = await swapModel.findById(req.params.id);
+
+        if (!request) {
+            return res.status(404).json({
+                message: "Request not found"
+            });
         }
-         return res.status(200).json({message: "Swap request rejected",request,});
-    }catch(error){
-     console.log(error.message)
-     return res.status(500).json({message:"something went wrong "})
+
+        // Security Check
+        if (request.receiver.toString() !== req.user.id) {
+            return res.status(403).json({
+                message: "Unauthorized"
+            });
+        }
+
+        request.status = "rejected";
+        await request.save();
+
+        return res.status(200).json({
+            message: "Swap request rejected",
+            request,
+        });
+
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({
+            message: "Something went wrong"
+        });
     }
-}
+};
 module.exports = {swapProduct,getSwapRequest,acceptSwapRequest,rejectSwapRequest}
