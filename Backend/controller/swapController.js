@@ -1,9 +1,18 @@
 const swapModel = require('../model/swapModel.js')
 const swapProduct = async (req, res) => {
     try {
-        console.log("BODY:", req.body);
-        console.log("LOGGED IN USER:", req.user.id);
+      const existingRequest = await swapModel.findOne({
+      sender: req.user.id,
+      requestedProduct: req.body.requestedProduct,
+      offeredProduct: req.body.offeredProduct,
+      status: { $in: ["pending", "accepted"] },
+  });
 
+    if (existingRequest) {
+        return res.status(400).json({
+            message: "Swap request already sent."
+        });
+    }
         const swapItem = new swapModel({
             sender: req.user.id,
             receiver: req.body.receiver,
