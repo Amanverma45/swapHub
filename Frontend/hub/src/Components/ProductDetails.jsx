@@ -13,10 +13,8 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true);
   
   const loggedInUser = JSON.parse(localStorage.getItem("user"));
-  console.log("Logged User:", loggedInUser);
-console.log("Product Owner:", product?.owner);
-console.log("Is Owner:", product?.owner === loggedInUser?._id);
   const isOwner = product?.owner === loggedInUser?._id;
+
   const getMyProducts = async () => {
     try {
       const response = await axios.get("/myProducts");
@@ -143,6 +141,8 @@ console.log("Is Owner:", product?.owner === loggedInUser?._id);
               </div>
 
             </div>
+            {!isOwner && (
+              <>
             <label className="block font-medium mb-2">
               Select Your Product
             </label>
@@ -161,13 +161,14 @@ console.log("Is Owner:", product?.owner === loggedInUser?._id);
               ))}
             </select>
             
-            {!isOwner && (
+            
             <button
               onClick={sendSwapRequest}
               className="mt-8 w-full bg-[#2E7D32] hover:bg-[#256728] text-white py-4 rounded-2xl transition duration-300"
             >
               Send Swap Request
             </button>
+            </>
             )}
           </div>
 
