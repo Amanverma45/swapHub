@@ -8,7 +8,11 @@ const userSchema = new mongoose.Schema({
       lowercase: true,
       trim: true,
     },
-    password:String
+    password:String,
+    profileImage: {
+    type: String,
+    default: ""
+}
 })
 const User = mongoose.model('user',userSchema)
 module.exports = User;

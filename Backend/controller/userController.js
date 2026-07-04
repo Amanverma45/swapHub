@@ -54,4 +54,28 @@ const loginUser = async(req,res)=>{
     })
 }
 }
-module.exports ={saveUser,loginUser}
+
+const updateProfile = async (req, res) => {
+    try {
+        const user = await userModel.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({message: "User not found"});
+        }
+
+        if (req.body.name) {
+            user.name = req.body.name;
+        }
+
+        if (req.file) {
+            user.profileImage = req.file.path;
+        }
+        await user.save();
+        return res.status(200).json({message: "Profile updated successfully",user});
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({
+            message: "Something went wrong"
+        });
+    }
+};
+module.exports ={saveUser,loginUser,updateProfile}
