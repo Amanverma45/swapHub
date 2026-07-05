@@ -13,6 +13,7 @@ import EditProduct from './Components/EditProduct'
 import ProtectedRoute from './Components/ProtectedRoute'
 import Profile from './Components/Profile'
 import SwapRequests from './Components/SwapRequests'
+import MySwapRequests from './Components/MySwapRequests'
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
           <Route path="/editProduct/:id" element={<ProtectedRoute><EditProduct /></ProtectedRoute>} />
           <Route path="/swapRequest" element={<ProtectedRoute><SwapRequests /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/mySwapRequests" element={<ProtectedRoute><MySwapRequests /></ProtectedRoute>} />
         </Routes>
         <Footer/>
       </main>
