@@ -13,6 +13,7 @@ const Profile = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [showPhotoOptions, setShowPhotoOptions] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
 
   const fileInputRef = useRef(null);
   const handleUpdateProfile = async () => {
@@ -69,7 +70,11 @@ const Profile = () => {
 
             <div className="flex flex-col items-center">
 
-              <div className="relative">
+              <div
+                className="relative cursor-pointer"
+                onClick={() => setShowPreview(true)}>
+
+
 
                 {profileImage ? (
                   <img
@@ -88,7 +93,10 @@ const Profile = () => {
                 )}
 
                 <button
-                  onClick={() => setShowPhotoOptions(true)}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setShowPhotoOptions(true);
+                  }}
                   className="absolute bottom-1 right-1 bg-white text-[#2E7D32] p-3 rounded-full shadow-lg hover:bg-gray-100 border"
                 >
                   <FaCamera />
@@ -104,7 +112,7 @@ const Profile = () => {
                 onChange={(e) => setProfileImage(e.target.files[0])}
               />
 
-              {profileImage && (
+             {(profileImage || user?.profileImage) && (
                 <button
                   onClick={() => setProfileImage(null)}
                   className="flex items-center gap-2 mt-4 text-red-500 hover:text-red-700"
@@ -235,6 +243,48 @@ const Profile = () => {
               <FaTimes />
               Cancel
             </button>
+          </div>
+        </div>
+      )}
+
+      {showPreview && (
+        <div
+          onClick={() => setShowPreview(false)}
+          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-5"
+        >
+          <div
+            className="absolute top-5 left-5 flex items-center gap-3 text-white"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button onClick={() => setShowPreview(false)}>
+              <FaArrowLeft className="text-2xl" />
+            </button>
+
+            <h2 className="text-xl font-semibold">
+              Profile Photo
+            </h2>
+          </div>
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="rounded-2xl overflow-hidden shadow-2xl"
+          >
+            {profileImage ? (
+              <img
+                src={URL.createObjectURL(profileImage)}
+                alt="Preview"
+                className="w-[320px] h-[320px] object-cover"
+              />
+            ) : user?.profileImage ? (
+              <img
+                src={user.profileImage}
+                alt="Preview"
+                className="w-[320px] h-[320px] object-cover"
+              />
+            ) : (
+              <div className="w-[320px] h-[320px] flex items-center justify-center">
+                <FaUserCircle className="text-[180px] text-[#2E7D32]" />
+              </div>
+            )}
           </div>
         </div>
       )}
