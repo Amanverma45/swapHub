@@ -8,5 +8,6 @@ router.post('/swapProduct',authMiddleware,swapController.swapProduct)
 router.get('/getSwapRequest',authMiddleware,swapController.getSwapRequest)
 router.put('/acceptSwapRequest/:id',authMiddleware,swapController.acceptSwapRequest)
 router.put('/rejectSwapRequest/:id',authMiddleware,swapController.rejectSwapRequest)
+router.get("/mySwapRequests",authMiddleware,swapController.mySwapRequests);
 
 module.exports = router

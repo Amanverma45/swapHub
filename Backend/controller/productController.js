@@ -25,7 +25,8 @@ const addProduct = async(req,res)=>{
 //  getProduct 
 const getProduct = async(req,res)=>{
     try{
-        const products = await productModel.find().sort({ createdAt: -1 });
+        const products = await productModel.find();
+        // const products = await productModel.find().sort({ createdAt: -1 });
         res.status(200).json(product)
     }catch(error){
         console.log(error.message)

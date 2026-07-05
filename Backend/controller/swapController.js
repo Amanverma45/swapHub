@@ -93,4 +93,23 @@ const rejectSwapRequest = async(req,res)=>{
         });
     }
 };
-module.exports = {swapProduct,getSwapRequest,acceptSwapRequest,rejectSwapRequest}
+
+const mySwapRequests = async (req, res) => {
+    try {
+        const requests = await swapModel.find({
+            sender: req.user.id
+        })
+        .populate("receiver", "name email")
+        .populate("requestedProduct", "productName image")
+        .populate("offeredProduct", "productName image");
+
+        return res.status(200).json(requests);
+
+    } catch (error) {
+        console.log(error.message);
+        return res.status(500).json({
+            message: "Something went wrong"
+        });
+    }
+};
+module.exports = {swapProduct,getSwapRequest,acceptSwapRequest,rejectSwapRequest,mySwapRequests}
