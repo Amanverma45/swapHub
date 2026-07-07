@@ -25,7 +25,6 @@ const addProduct = async(req,res)=>{
 //  getProduct 
 const getProduct = async(req,res)=>{
     try{
-        // const products = await productModel.find();
         const products = await productModel.find().sort({ createdAt: -1 });
         res.status(200).json(products)
     }catch(error){
@@ -96,17 +95,17 @@ const getSingleProduct = async(req,res)=>{
   }
 }
 // getMyProducts 
-const getMyProducts = async(req,res)=>{
-  try{
-    const products = await productModel.find({
-      owner:req.user.id
-    })
-    res.status(200).json(products)
-  }catch(error){
-    console.log(error)
-    res.status(500).json({message:"something went wrong"})
+const getMyProducts = async (req, res) => {
+  try {
+    const products = await productModel.find({owner: req.user.id}).sort({ createdAt: -1 });
+    return res.status(200).json(products);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Something went wrong"
+    });
   }
-}
+};
 
 
 module.exports = {addProduct,getProduct,deleteProduct,updateProduct,getSingleProduct,getMyProducts}

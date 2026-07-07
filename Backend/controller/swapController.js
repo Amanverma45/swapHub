@@ -29,7 +29,7 @@ const swapProduct = async (req, res) => {
 
 const getSwapRequest = async (req, res) => {
     try {
-       const request = await swapModel.find({receiver: req.user.id})
+       const request = await swapModel.find({receiver: req.user.id}).sort({ createdAt: -1 })
           .populate("sender", "name email")
           .populate("requestedProduct","productName image category location")
           .populate("offeredProduct","productName image category location")
