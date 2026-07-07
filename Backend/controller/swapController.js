@@ -98,7 +98,7 @@ const mySwapRequests = async (req, res) => {
     try {
         const requests = await swapModel.find({
             sender: req.user.id
-        })
+        }).sort({ createdAt: -1 })
         .populate("receiver", "name email")
         .populate("requestedProduct", "productName image")
         .populate("offeredProduct", "productName image");
