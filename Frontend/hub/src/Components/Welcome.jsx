@@ -72,7 +72,7 @@ const Welcome = () => {
                 scale: 1.04,
                 boxShadow: "0 20px 35px rgba(0,0,0,0.12)"
               }}
-              className="bg-white rounded-3xl shadow-md p-6 cursor-pointer"
+              className="bg-white rounded-3xl shadow-md p-5 md:p-6 cursor-pointer h-full flex flex-col"
             >
               <FaBoxOpen className="text-5xl text-[#F4A261] mb-5" />
               <h2 className="text-xl font-bold">My Products</h2>
@@ -92,7 +92,7 @@ const Welcome = () => {
                 scale: 1.04,
                 boxShadow: "0 20px 35px rgba(0,0,0,0.12)",
               }}
-              className="bg-white rounded-3xl shadow-md p-6 cursor-pointer"
+              className="bg-white rounded-3xl shadow-md p-5 md:p-6 cursor-pointer h-full flex flex-col"
             >
               <FaExchangeAlt className="text-5xl text-[#2E7D32] mb-5" />
 
@@ -116,7 +116,7 @@ const Welcome = () => {
                 scale: 1.04,
                 boxShadow: "0 20px 35px rgba(0,0,0,0.12)",
               }}
-              className="bg-white rounded-3xl shadow-md p-6 cursor-pointer"
+              className="bg-white rounded-3xl shadow-md p-5 md:p-6 cursor-pointer h-full flex flex-col"
             >
               <FaUserCircle className="text-5xl text-[#F4A261] mb-5" />
 
