@@ -15,7 +15,7 @@ const Welcome = () => {
           className="bg-gradient-to-r from-[#2E7D32] to-[#43A047] rounded-3xl p-8 md:p-10 text-white shadow-lg"
         >
           <h1 className="text-3xl md:text-5xl font-bold">
-            👋 Welcome Back, {user?.name}
+            Welcome Back, {user?.name}
           </h1>
 
           <p className="mt-4 text-lg text-green-100 max-w-2xl">
@@ -105,6 +105,7 @@ const Welcome = () => {
               </p>
             </motion.div>
           </Link>
+
           <Link to="/profile">
             <motion.div
               initial={{ opacity: 0, x: 60 }}
@@ -131,25 +132,62 @@ const Welcome = () => {
 
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 mt-10">
+        <motion.div
+          initial={{ opacity: 0, y: 80 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-12"
+        >
 
-          <div className="bg-white rounded-3xl shadow-sm p-6 text-center">
-            <h3 className="text-4xl font-bold text-[#2E7D32]">0</h3>
-            <p className="text-gray-600 mt-2">Products Listed</p>
+          <div className="bg-white rounded-3xl shadow-md p-6 text-center hover:shadow-xl transition">
+            <FaBoxOpen className="text-5xl text-[#2E7D32] mx-auto mb-4" />
+
+            <h3 className="text-4xl font-bold text-[#2E7D32]">
+              0
+            </h3>
+
+            <p className="mt-2 text-gray-600">
+              Products Listed
+            </p>
           </div>
 
-          <div className="bg-white rounded-3xl shadow-sm p-6 text-center">
-            <h3 className="text-4xl font-bold text-[#F4A261]">0</h3>
-            <p className="text-gray-600 mt-2">Swap Requests</p>
+          <div className="bg-white rounded-3xl shadow-md p-6 text-center hover:shadow-xl transition">
+            <FaExchangeAlt className="text-5xl text-[#F4A261] mx-auto mb-4" />
+
+            <h3 className="text-4xl font-bold text-[#F4A261]">
+              0
+            </h3>
+
+            <p className="mt-2 text-gray-600">
+              Swap Requests
+            </p>
           </div>
 
-          <div className="bg-white rounded-3xl shadow-sm p-6 text-center">
-            <h3 className="text-4xl font-bold text-[#2E7D32]">0</h3>
-            <p className="text-gray-600 mt-2">Completed Swaps</p>
+          <div className="bg-white rounded-3xl shadow-md p-6 text-center hover:shadow-xl transition">
+            <FaCheckCircle className="text-5xl text-green-500 mx-auto mb-4" />
+
+            <h3 className="text-4xl font-bold text-green-600">
+              0
+            </h3>
+
+            <p className="mt-2 text-gray-600">
+              Accepted Swaps
+            </p>
           </div>
 
-        </div>
+          <div className="bg-white rounded-3xl shadow-md p-6 text-center hover:shadow-xl transition">
+            <FaTimesCircle className="text-5xl text-red-500 mx-auto mb-4" />
 
+            <h3 className="text-4xl font-bold text-red-500">
+              0
+            </h3>
+
+            <p className="mt-2 text-gray-600">
+              Rejected Swaps
+            </p>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
