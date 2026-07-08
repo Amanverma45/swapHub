@@ -112,4 +112,22 @@ const mySwapRequests = async (req, res) => {
         });
     }
 };
-module.exports = {swapProduct,getSwapRequest,acceptSwapRequest,rejectSwapRequest,mySwapRequests}
+const notificationCount = async (req, res) => {
+  try {
+
+    const count = await swapModel.countDocuments({
+      sender: req.user.id,
+      status: { $in: ["accepted", "rejected"] }
+    });
+
+    return res.status(200).json({ count });
+
+  } catch (error) {
+    console.log(error.message);
+
+    return res.status(500).json({
+      message: "Something went wrong"
+    });
+  }
+};
+module.exports = {swapProduct,getSwapRequest,acceptSwapRequest,rejectSwapRequest,mySwapRequests,notificationCount}

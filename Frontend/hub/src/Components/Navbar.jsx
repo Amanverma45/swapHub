@@ -1,18 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { AiOutlineLogout } from "react-icons/ai";
+import { FaBell } from "react-icons/fa";
+import axios from "../utils/axiosInstance";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const token = localStorage.getItem("token");
+  const [notificationCount, setNotificationCount] = useState(0);
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/");
-    setIsOpen(false);
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  navigate("/");
+  setIsOpen(false);
+};
+
+  const getNotificationCount = async () => {
+    try {
+      const response = await axios.get("/notificationCount");
+      setNotificationCount(response.data.count);
+    } catch (error) {
+      console.log(error);
+    }
   };
+  useEffect(() => {
+    getNotificationCount();
+  }, []);
 
   return (
     <>
@@ -100,6 +116,18 @@ const Navbar = () => {
                 >
                   Dashboard
                 </Link>
+                <div
+                  onClick={() => navigate("/mySwapRequests")}
+                  className="relative cursor-pointer hover:text-[#F4A261] transition"
+                >
+                  <FaBell className="text-2xl" />
+
+                  {notificationCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                      {notificationCount}
+                    </span>
+                  )}
+                </div>
                 <button
                   onClick={handleLogout}
                   className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-full transition duration-300"
@@ -187,6 +215,7 @@ const Navbar = () => {
                   </Link>
                   <Link
                     to="/myProducts"
+                    onClick={() => setIsOpen(false)}
                     className="text-gray-700 hover:text-[#F4A261]"
                   >
                     My Products
@@ -198,6 +227,23 @@ const Navbar = () => {
                   >
                     Dashboard
                   </Link>
+                  <div
+                    onClick={() => {
+                      navigate("/mySwapRequests");
+                      setIsOpen(false);
+                    }}
+                    className="flex items-center justify-end gap-2 text-gray-700 hover:text-[#F4A261] cursor-pointer"
+                  >
+                    <FaBell className="text-xl" />
+
+                    <span>Notifications</span>
+
+                    {notificationCount > 0 && (
+                      <span className="bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                        {notificationCount}
+                      </span>
+                    )}
+                  </div>
                   <button
                     onClick={handleLogout}
                     className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-full transition duration-300"
