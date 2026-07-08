@@ -40,7 +40,7 @@ const Welcome = () => {
           </div>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mt-10">
 
           <Link to="/addProduct">
             <motion.div
