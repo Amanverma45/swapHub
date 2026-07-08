@@ -42,7 +42,7 @@ const Welcome = () => {
         {/* <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10"> */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mt-10">
 
-          <Link to="/addProduct">
+          <Link to="/addProduct" className="h-full">
             <motion.div
               initial={{ opacity: 0, x: -60 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -52,17 +52,17 @@ const Welcome = () => {
                 scale: 1.04,
                 boxShadow: "0 20px 35px rgba(0,0,0,0.12)"
               }}
-              className="bg-white rounded-3xl shadow-md p-5 md:p-6 cursor-pointer h-full flex flex-col"
+              className="bg-white rounded-3xl shadow-md p-5 md:p-6 cursor-pointer h-full flex flex-col transition-all duration-300"
             >
               <FaPlusCircle className="text-5xl text-[#2E7D32] mb-5" />
               <h2 className="text-xl font-bold">Add Product</h2>
-              <p className="text-gray-600 mt-2">
+              <p className="text-gray-600 mt-2 flex-1">
                 Upload a product you want to exchange.
               </p>
             </motion.div>
           </Link>
 
-          <Link to='/myProducts'>
+          <Link to='/myProducts' className="h-full">
             <motion.div
               initial={{ opacity: 0, x: 60 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -72,17 +72,17 @@ const Welcome = () => {
                 scale: 1.04,
                 boxShadow: "0 20px 35px rgba(0,0,0,0.12)"
               }}
-              className="bg-white rounded-3xl shadow-md p-5 md:p-6 cursor-pointer h-full flex flex-col"
+              className="bg-white rounded-3xl shadow-md p-5 md:p-6 cursor-pointer h-full flex flex-col transition-all duration-300"
             >
               <FaBoxOpen className="text-5xl text-[#F4A261] mb-5" />
               <h2 className="text-xl font-bold">My Products</h2>
-              <p className="text-gray-600 mt-2">
+              <p className="text-gray-600 mt-2 flex-1">
                 View and manage your listed products.
               </p>
             </motion.div>
           </Link>
 
-          <Link to="/swapRequest">
+          <Link to="/swapRequest" className="h-full">
             <motion.div
               initial={{ opacity: 0, x: -60 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -92,7 +92,7 @@ const Welcome = () => {
                 scale: 1.04,
                 boxShadow: "0 20px 35px rgba(0,0,0,0.12)",
               }}
-              className="bg-white rounded-3xl shadow-md p-5 md:p-6 cursor-pointer h-full flex flex-col"
+              className="bg-white rounded-3xl shadow-md p-5 md:p-6 cursor-pointer h-full flex flex-col transition-all duration-300"
             >
               <FaExchangeAlt className="text-5xl text-[#2E7D32] mb-5" />
 
@@ -100,13 +100,13 @@ const Welcome = () => {
                 Swap Requests
               </h2>
 
-              <p className="text-gray-600 mt-2">
+              <p className="text-gray-600 mt-2 flex-1">
                 Check exchange requests from users.
               </p>
             </motion.div>
           </Link>
 
-          <Link to="/profile">
+          <Link to="/profile" className="h-full">
             <motion.div
               initial={{ opacity: 0, x: 60 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -116,7 +116,7 @@ const Welcome = () => {
                 scale: 1.04,
                 boxShadow: "0 20px 35px rgba(0,0,0,0.12)",
               }}
-              className="bg-white rounded-3xl shadow-md p-5 md:p-6 cursor-pointer h-full flex flex-col"
+              className="bg-white rounded-3xl shadow-md p-5 md:p-6 cursor-pointer h-full flex flex-col transition-all duration-300"
             >
               <FaUserCircle className="text-5xl text-[#F4A261] mb-5" />
 
@@ -133,11 +133,11 @@ const Welcome = () => {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 80 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-12"
+          transition={{ delay: 0.1 }}
+          className="bg-white rounded-3xl shadow-md p-6 text-center hover:shadow-xl transition-all duration-300"
         >
 
           <div className="bg-white rounded-3xl shadow-md p-6 text-center hover:shadow-xl transition">
@@ -152,7 +152,13 @@ const Welcome = () => {
             </p>
           </div>
 
-          <div className="bg-white rounded-3xl shadow-md p-6 text-center hover:shadow-xl transition">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="bg-white rounded-3xl shadow-md p-6 text-center hover:shadow-xl transition-all duration-300"
+          >
             <FaExchangeAlt className="text-5xl text-[#F4A261] mx-auto mb-4" />
 
             <h3 className="text-4xl font-bold text-[#F4A261]">
@@ -162,9 +168,15 @@ const Welcome = () => {
             <p className="mt-2 text-gray-600">
               Swap Requests
             </p>
-          </div>
+          </motion.div>
 
-          <div className="bg-white rounded-3xl shadow-md p-6 text-center hover:shadow-xl transition">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className="bg-white rounded-3xl shadow-md p-6 text-center hover:shadow-xl transition-all duration-300"
+          >
             <FaCheckCircle className="text-5xl text-green-500 mx-auto mb-4" />
 
             <h3 className="text-4xl font-bold text-green-600">
@@ -174,9 +186,15 @@ const Welcome = () => {
             <p className="mt-2 text-gray-600">
               Accepted Swaps
             </p>
-          </div>
+          </motion.div>
 
-          <div className="bg-white rounded-3xl shadow-md p-6 text-center hover:shadow-xl transition">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+            className="bg-white rounded-3xl shadow-md p-6 text-center hover:shadow-xl transition-all duration-300"
+          >
             <FaTimesCircle className="text-5xl text-red-500 mx-auto mb-4" />
 
             <h3 className="text-4xl font-bold text-red-500">
@@ -186,7 +204,7 @@ const Welcome = () => {
             <p className="mt-2 text-gray-600">
               Rejected Swaps
             </p>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>
