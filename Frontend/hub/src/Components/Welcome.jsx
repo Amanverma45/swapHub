@@ -1,71 +1,132 @@
 import { Link } from "react-router-dom";
-import {FaBoxOpen,FaExchangeAlt,FaPlusCircle,FaUserCircle,} from "react-icons/fa";
+import { motion } from "framer-motion";
+import { FaBoxOpen, FaExchangeAlt, FaPlusCircle, FaUserCircle, FaCheckCircle, FaTimesCircle, } from "react-icons/fa";
 
 const Welcome = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
   return (
     <section className="min-h-[85vh] bg-gray-50 py-10 px-4">
       <div className="w-[90%] max-w-6xl mx-auto">
 
-        <div className="bg-gradient-to-r from-[#2E7D32] to-[#43A047] rounded-3xl p-8 md:p-10 text-white shadow-lg">
-
+        <motion.div
+          initial={{ opacity: 0, y: -40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="bg-gradient-to-r from-[#2E7D32] to-[#43A047] rounded-3xl p-8 md:p-10 text-white shadow-lg"
+        >
           <h1 className="text-3xl md:text-5xl font-bold">
-            Welcome to SwapHub 
+            👋 Welcome Back, {user?.name}
           </h1>
 
           <p className="mt-4 text-lg text-green-100 max-w-2xl">
-            You have successfully logged in. Manage your products,
-            explore exchanges and connect with other users.
+            Manage your products, swap requests and profile from one
+            beautiful dashboard.
           </p>
 
-          <Link
-            to="/products"
-            className="inline-block mt-8 bg-white text-[#2E7D32] font-semibold px-7 py-3 rounded-full hover:bg-gray-100 transition"
-          >
-            Explore Products
-          </Link>
+          <div className="flex flex-wrap gap-4 mt-8">
+            <Link
+              to="/addProduct"
+              className="bg-white text-[#2E7D32] px-7 py-3 rounded-full font-semibold hover:scale-105 transition"
+            >
+              + Add Product
+            </Link>
 
-        </div>
+            <Link
+              to="/products"
+              className="border border-white px-7 py-3 rounded-full hover:bg-white hover:text-[#2E7D32] transition"
+            >
+              Browse Products
+            </Link>
+          </div>
+        </motion.div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
 
           <Link to="/addProduct">
-            <div className="bg-white rounded-3xl shadow-md p-6 hover:-translate-y-2 transition">
+            <motion.div
+              initial={{ opacity: 0, x: -60 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              whileHover={{
+                scale: 1.04,
+                boxShadow: "0 20px 35px rgba(0,0,0,0.12)"
+              }}
+              className="bg-white rounded-3xl shadow-md p-6 cursor-pointer"
+            >
               <FaPlusCircle className="text-5xl text-[#2E7D32] mb-5" />
               <h2 className="text-xl font-bold">Add Product</h2>
               <p className="text-gray-600 mt-2">
                 Upload a product you want to exchange.
               </p>
-            </div>
+            </motion.div>
           </Link>
 
           <Link to='/myProducts'>
-            <div className="bg-white rounded-3xl shadow-md p-6 hover:-translate-y-2 transition">
+            <motion.div
+              initial={{ opacity: 0, x: 60 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              whileHover={{
+                scale: 1.04,
+                boxShadow: "0 20px 35px rgba(0,0,0,0.12)"
+              }}
+              className="bg-white rounded-3xl shadow-md p-6 cursor-pointer"
+            >
               <FaBoxOpen className="text-5xl text-[#F4A261] mb-5" />
               <h2 className="text-xl font-bold">My Products</h2>
               <p className="text-gray-600 mt-2">
                 View and manage your listed products.
               </p>
-            </div>
+            </motion.div>
           </Link>
 
-          <Link to='/swapRequest'>
-            <div className="bg-white rounded-3xl shadow-md p-6 hover:-translate-y-2 transition">
+          <Link to="/swapRequest">
+            <motion.div
+              initial={{ opacity: 0, x: -60 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              whileHover={{
+                scale: 1.04,
+                boxShadow: "0 20px 35px rgba(0,0,0,0.12)",
+              }}
+              className="bg-white rounded-3xl shadow-md p-6 cursor-pointer"
+            >
               <FaExchangeAlt className="text-5xl text-[#2E7D32] mb-5" />
-              <h2 className="text-xl font-bold">Swap Requests</h2>
+
+              <h2 className="text-xl font-bold">
+                Swap Requests
+              </h2>
+
               <p className="text-gray-600 mt-2">
                 Check exchange requests from users.
               </p>
-            </div>
+            </motion.div>
           </Link>
-
-          <Link to='/profile'>
-            <div className="bg-white rounded-3xl shadow-md p-6 hover:-translate-y-2 transition">
+          <Link to="/profile">
+            <motion.div
+              initial={{ opacity: 0, x: 60 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              whileHover={{
+                scale: 1.04,
+                boxShadow: "0 20px 35px rgba(0,0,0,0.12)",
+              }}
+              className="bg-white rounded-3xl shadow-md p-6 cursor-pointer"
+            >
               <FaUserCircle className="text-5xl text-[#F4A261] mb-5" />
-              <h2 className="text-xl font-bold">Profile</h2>
+
+              <h2 className="text-xl font-bold">
+                Profile
+              </h2>
+
               <p className="text-gray-600 mt-2">
                 Update your account information.
               </p>
-            </div>
+            </motion.div>
           </Link>
 
         </div>
