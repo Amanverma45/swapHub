@@ -39,7 +39,7 @@ const Welcome = () => {
             </Link>
           </div>
         </motion.div>
-
+        {/* <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10"> */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mt-10">
 
           <Link to="/addProduct">
@@ -52,7 +52,7 @@ const Welcome = () => {
                 scale: 1.04,
                 boxShadow: "0 20px 35px rgba(0,0,0,0.12)"
               }}
-              className="bg-white rounded-3xl shadow-md p-6 cursor-pointer"
+              className="bg-white rounded-3xl shadow-md p-5 md:p-6 cursor-pointer h-full flex flex-col"
             >
               <FaPlusCircle className="text-5xl text-[#2E7D32] mb-5" />
               <h2 className="text-xl font-bold">Add Product</h2>
@@ -124,7 +124,7 @@ const Welcome = () => {
                 Profile
               </h2>
 
-              <p className="text-gray-600 mt-2">
+              <p className="text-gray-600 mt-2 flex-1">
                 Update your account information.
               </p>
             </motion.div>
