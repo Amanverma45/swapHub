@@ -27,8 +27,10 @@ const Navbar = () => {
     }
   };
   useEffect(() => {
+  if (token) {
     getNotificationCount();
-  }, []);
+  }
+}, [token]);
 
   return (
     <>

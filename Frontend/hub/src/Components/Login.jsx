@@ -15,15 +15,15 @@ const Login = () => {
         toast.error('Fill the require feild');
         return;
       }
-      const response = await axios.post('https://swaphub-backend-855x.onrender.com/api/loginUser', {
+      const response = await axios.post("/loginUser", {
         email,
-        password
-      })
+        password,
+      });
       console.log(response.data);
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
       toast.success("Login Successfully");
-      
+
       setEmail("");
       setPassword("");
       navigate("/welcome");
