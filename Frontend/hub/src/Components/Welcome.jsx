@@ -10,7 +10,9 @@ const Welcome = () => {
 
         {/* top section  */}
 
-        <motion.div initial={{ opacity: 0, y: -40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
+        <motion.div initial={{ opacity: 0, y: -40 }} animate={{ opacity: 1, y: 0 }} transition={{
+          duration: 0.3
+        }}
           className="bg-gradient-to-r from-[#2E7D32] to-[#43A047] rounded-3xl p-8 md:p-10 text-white shadow-lg">
           <h1 className="text-3xl md:text-5xl font-bold"> Welcome Back, {user?.name} </h1>
           <p className="mt-4 text-lg text-green-100 max-w-2xl">
@@ -41,7 +43,7 @@ const Welcome = () => {
               initial={{ opacity: 0, x: -60 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.3, delay: 0, }}
               whileHover={{
                 scale: 1.03,
                 boxShadow: "0 12px 25px rgba(0,0,0,0.12)",
@@ -68,7 +70,7 @@ const Welcome = () => {
               initial={{ opacity: 0, x: 60 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
+              transition={{ duration: 0.3, delay: 0.05, }}
               whileHover={{
                 scale: 1.03,
                 boxShadow: "0 12px 25px rgba(0,0,0,0.12)",
@@ -91,7 +93,7 @@ const Welcome = () => {
               initial={{ opacity: 0, x: -60 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              transition={{ duration: 0.3, delay: 0.1, }}
               whileHover={{
                 scale: 1.03,
                 boxShadow: "0 12px 25px rgba(0,0,0,0.12)",
@@ -115,7 +117,7 @@ const Welcome = () => {
               initial={{ opacity: 0, x: 60 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
+              transition={{ duration: 0.3, delay: 0.15, }}
               whileHover={{
                 scale: 1.03,
                 boxShadow: "0 12px 25px rgba(0,0,0,0.12)",
@@ -142,7 +144,7 @@ const Welcome = () => {
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+            transition={{ delay: 0 }}
             whileHover={{
               scale: 1.03,
               boxShadow: "0 12px 25px rgba(0,0,0,0.12)",
@@ -164,7 +166,7 @@ const Welcome = () => {
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.05 }}
             whileHover={{
               scale: 1.03,
               boxShadow: "0 12px 25px rgba(0,0,0,0.12)",
@@ -186,7 +188,7 @@ const Welcome = () => {
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 0.1 }}
             whileHover={{
               scale: 1.03,
               boxShadow: "0 12px 25px rgba(0,0,0,0.12)",
@@ -208,7 +210,7 @@ const Welcome = () => {
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.4 }}
+            transition={{ delay: 0.15 }}
             whileHover={{
               scale: 1.03,
               boxShadow: "0 12px 25px rgba(0,0,0,0.12)",
