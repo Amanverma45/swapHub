@@ -125,14 +125,14 @@ const Profile = () => {
                 onChange={(e) => setProfileImage(e.target.files[0])}
               />
 
-              <input
+              {/* <input
                 type="file"
                 accept="image/*"
                 capture="user"
                 hidden
                 ref={cameraInputRef}
                 onChange={(e) => setProfileImage(e.target.files[0])}
-              />
+              /> */}
 
               {(profileImage || profile?.profileImage) && (
                 <button
