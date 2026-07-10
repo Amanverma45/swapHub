@@ -5,11 +5,7 @@ import axios from "../utils/axiosInstance";
 import toast from "react-hot-toast";
 
 const Profile = () => {
-  // const user = JSON.parse(localStorage.getItem("user"));
-
   const navigate = useNavigate();
-
-  // const [name, setName] = useState(profile?.name || "");
   const [name, setName] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const [showPhotoOptions, setShowPhotoOptions] = useState(false);
@@ -20,7 +16,6 @@ const Profile = () => {
   const [profile, setProfile] = useState(null);
 
   const fileInputRef = useRef(null);
-
   const getProfile = async () => {
     try {
       const response = await axios.get("/getProfile");
@@ -63,6 +58,13 @@ const Profile = () => {
   }, []);
 
   if (loading) {
+  return (
+    <section className="min-h-screen flex items-center justify-center">
+      <h2>Loading...</h2>
+    </section>
+  );
+}
+
   return (
     <>
       <section className="min-h-screen bg-gray-100 py-6 px-4">
@@ -302,7 +304,6 @@ const Profile = () => {
       )}
     </>
   );
-};
 }
 
 export default Profile;
