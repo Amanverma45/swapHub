@@ -74,10 +74,10 @@ const updateProfile = async (req, res) => {
         const updatedUser = await userModel.findById(req.user.id).select("-password");
         return res.status(200).json({message: "Profile updated successfully",user: updatedUser});
     } catch (error) {
-         console.log(error);
-    return res.status(500).json({
-        message: error.message
-    });
+        console.log(error.message);
+        return res.status(500).json({
+            message: "Something went wrong"
+        });
     }
 };
 
