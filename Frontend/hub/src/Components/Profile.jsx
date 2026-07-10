@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { FaUserCircle, FaArrowLeft, FaCamera, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "../utils/axiosInstance";
@@ -14,7 +14,7 @@ const Profile = () => {
 
   const [profile, setProfile] = useState(null);
 
-  // const galleryInputRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   const getProfile = async () => {
     try {
@@ -102,16 +102,19 @@ const Profile = () => {
                 ) : (
                   <FaUserCircle onClick={() => setShowPreview(true)} className="text-[140px] text-[#2E7D32] cursor-pointer"/>)}
 
-                <input
+               <input
   id="profileImageInput"
   type="file"
   accept="image/*"
-  hidden
+  ref={fileInputRef}
+  style={{ display: "none" }}
   onChange={(e) => setProfileImage(e.target.files[0])}
 />
 
+{/* लेबल पर क्लिक होते ही यह सीधे इनपुट को क्लिक कर देगा */}
 <label
   htmlFor="profileImageInput"
+  onClick={() => fileInputRef.current.click()}
   className="absolute bottom-1 right-1 bg-white text-[#2E7D32] p-3 rounded-full shadow-lg hover:bg-gray-100 border cursor-pointer"
 >
   <FaCamera />
