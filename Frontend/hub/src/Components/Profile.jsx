@@ -243,9 +243,10 @@ const Profile = () => {
               accept="image/*"
               className="sr-only"
               onChange={(e) => {
-                setProfileImage(e.target.files[0]);
-                setShowPhotoOptions(false);
-              }}
+  console.log("Selected:", e.target.files[0]);
+  setProfileImage(e.target.files[0]);
+  setShowPhotoOptions(false);
+}}
             />
 
             {profileImage && (
