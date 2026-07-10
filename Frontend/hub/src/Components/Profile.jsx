@@ -15,7 +15,9 @@ const Profile = () => {
 
   const [profile, setProfile] = useState(null);
 
-  const fileInputRef = useRef(null);
+  const galleryInputRef = useRef(null);
+  const cameraInputRef = useRef(null);
+
   const getProfile = async () => {
     try {
       const response = await axios.get("/getProfile");
@@ -58,12 +60,12 @@ const Profile = () => {
   }, []);
 
   if (loading) {
-  return (
-    <section className="min-h-screen flex items-center justify-center">
-      <h2>Loading...</h2>
-    </section>
-  );
-}
+    return (
+      <section className="min-h-screen flex items-center justify-center">
+        <h2>Loading...</h2>
+      </section>
+    );
+  }
 
   return (
     <>
@@ -87,8 +89,6 @@ const Profile = () => {
               <div
                 className="relative cursor-pointer"
                 onClick={() => setShowPreview(true)}>
-
-
 
                 {profileImage ? (
                   <img
@@ -117,12 +117,20 @@ const Profile = () => {
                 </button>
               </div>
 
-
               <input
                 type="file"
                 accept="image/*"
                 hidden
-                ref={fileInputRef}
+                ref={galleryInputRef}
+                onChange={(e) => setProfileImage(e.target.files[0])}
+              />
+
+              <input
+                type="file"
+                accept="image/*"
+                capture="user"
+                hidden
+                ref={cameraInputRef}
                 onChange={(e) => setProfileImage(e.target.files[0])}
               />
 
@@ -217,7 +225,7 @@ const Profile = () => {
 
             <button
               onClick={() => {
-                fileInputRef.current.click();
+                cameraInputRef.current.click();
                 setShowPhotoOptions(false);
               }}
               className="w-full flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-gray-100 transition"
@@ -228,7 +236,7 @@ const Profile = () => {
 
             <button
               onClick={() => {
-                fileInputRef.current.click();
+                galleryInputRef.current.click();
                 setShowPhotoOptions(false);
               }}
               className="w-full flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-gray-100 transition"
