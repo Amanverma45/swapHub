@@ -121,7 +121,7 @@ const Profile = () => {
               <input
                 type="file"
                 accept="image/*"
-                hidden
+                // hidden
                 ref={galleryInputRef}
                 onChange={(e) => setProfileImage(e.target.files[0])}
               />
@@ -131,7 +131,7 @@ const Profile = () => {
                 type="file"
                 accept="image/*"
                 capture="user"
-                hidden
+                // hidden
                 ref={cameraInputRef}
                 onChange={(e) => setProfileImage(e.target.files[0])}
 
@@ -231,13 +231,10 @@ const Profile = () => {
             <button
               type="button"
               onClick={(e) => {
-  e.preventDefault();
-  e.stopPropagation();
-
-  console.log(cameraInputRef.current);
-
-  cameraInputRef.current?.click();
-}}
+                e.preventDefault();
+                cameraInputRef.current?.click();
+                setShowPhotoOptions(false);
+              }}
               className="w-full flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-gray-100 transition"
             >
               <FaCamera className="text-2xl text-[#2E7D32]" />
@@ -246,14 +243,11 @@ const Profile = () => {
 
             <button
               type="button"
-             onClick={(e) => {
-  e.preventDefault();
-  e.stopPropagation();
-
-  console.log(galleryInputRef.current);
-
-  galleryInputRef.current?.click();
-}}
+              onClick={(e) => {
+                e.preventDefault();
+                galleryInputRef.current?.click();
+                setShowPhotoOptions(false);
+              }}
               className="w-full flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-gray-100 transition"
             >
               <FaImages className="text-2xl text-[#2E7D32]" />
