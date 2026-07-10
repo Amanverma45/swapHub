@@ -113,7 +113,6 @@ const Profile = () => {
 <label
   htmlFor="profileImageInput"
   className="absolute bottom-1 right-1 bg-white text-[#2E7D32] p-3 rounded-full shadow-lg hover:bg-gray-100 border cursor-pointer"
-  onClick={(e) => e.stopPropagation()}
 >
   <FaCamera />
 </label>
