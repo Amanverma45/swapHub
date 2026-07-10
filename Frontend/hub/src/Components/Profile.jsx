@@ -233,7 +233,7 @@ const Profile = () => {
               onClick={(e) => {
                 e.preventDefault();
                 cameraInputRef.current?.click();
-                setShowPhotoOptions(false);
+                // setShowPhotoOptions(false);
               }}
               className="w-full flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-gray-100 transition"
             >
@@ -246,7 +246,7 @@ const Profile = () => {
               onClick={(e) => {
                 e.preventDefault();
                 galleryInputRef.current?.click();
-                setShowPhotoOptions(false);
+                // setShowPhotoOptions(false);
               }}
               className="w-full flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-gray-100 transition"
             >
