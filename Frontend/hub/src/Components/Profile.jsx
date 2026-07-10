@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { FaUserCircle, FaArrowLeft, FaCamera, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "../utils/axiosInstance";
@@ -14,7 +14,7 @@ const Profile = () => {
 
   const [profile, setProfile] = useState(null);
 
-  const galleryInputRef = useRef(null);
+  // const galleryInputRef = useRef(null);
 
   const getProfile = async () => {
     try {
@@ -103,25 +103,20 @@ const Profile = () => {
                   <FaUserCircle onClick={() => setShowPreview(true)} className="text-[140px] text-[#2E7D32] cursor-pointer"/>)}
 
                 <input
-                  type="file"
-                  accept="image/*"
-                  hidden
-                  ref={galleryInputRef}
-                  onChange={(e) => setProfileImage(e.target.files[0])}
-                />
+  id="profileImageInput"
+  type="file"
+  accept="image/*"
+  hidden
+  onChange={(e) => setProfileImage(e.target.files[0])}
+/>
 
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    galleryInputRef.current?.click();
-                  }}
-                  className="absolute bottom-1 right-1 bg-white text-[#2E7D32] p-3 rounded-full shadow-lg hover:bg-gray-100 border"
-                >
-                  <FaCamera />
-                </button>
+<label
+  htmlFor="profileImageInput"
+  className="absolute bottom-1 right-1 bg-white text-[#2E7D32] p-3 rounded-full shadow-lg hover:bg-gray-100 border cursor-pointer"
+  onClick={(e) => e.stopPropagation()}
+>
+  <FaCamera />
+</label>
               </div>
 
               {(profileImage || profile?.profileImage) && (
