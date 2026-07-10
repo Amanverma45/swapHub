@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { FaUserCircle, FaArrowLeft, FaCamera, FaTrash, FaImages, FaTimes } from "react-icons/fa";
+import { FaUserCircle, FaArrowLeft, FaCamera, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "../utils/axiosInstance";
 import toast from "react-hot-toast";
@@ -8,7 +8,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [profileImage, setProfileImage] = useState(null);
-  const [showPhotoOptions, setShowPhotoOptions] = useState(false);
+  // const [showPhotoOptions, setShowPhotoOptions] = useState(false);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
@@ -16,7 +16,7 @@ const Profile = () => {
   const [profile, setProfile] = useState(null);
 
   const galleryInputRef = useRef(null);
-  const cameraInputRef = useRef(null);
+  // const cameraInputRef = useRef(null);
 
   const getProfile = async () => {
     try {
@@ -106,36 +106,25 @@ const Profile = () => {
                   <FaUserCircle className="text-[140px] text-[#2E7D32]" />
                 )}
 
+                <input
+                  type="file"
+                  accept="image/*"
+                  hidden
+                  ref={galleryInputRef}
+                  onChange={(e) => setProfileImage(e.target.files[0])}
+                />
+
                 <button
                   type="button"
                   onClick={(e) => {
-                    e.stopPropagation()
-                    setShowPhotoOptions(true);
+                    e.stopPropagation();
+                    galleryInputRef.current?.click();
                   }}
                   className="absolute bottom-1 right-1 bg-white text-[#2E7D32] p-3 rounded-full shadow-lg hover:bg-gray-100 border"
                 >
                   <FaCamera />
                 </button>
               </div>
-
-              <input
-                type="file"
-                accept="image/*"
-                // hidden
-                ref={galleryInputRef}
-                onChange={(e) => setProfileImage(e.target.files[0])}
-              />
-
-              <input
-
-                type="file"
-                accept="image/*"
-                capture="user"
-                // hidden
-                ref={cameraInputRef}
-                onChange={(e) => setProfileImage(e.target.files[0])}
-
-              />
 
               {(profileImage || profile?.profileImage) && (
                 <button
@@ -216,7 +205,7 @@ const Profile = () => {
         </div>
       </section>
 
-      {showPhotoOptions && (
+      {/* {showPhotoOptions && (
         <div
           className="fixed inset-0 bg-black/40 flex items-end justify-center z-50"
           onClick={() => setShowPhotoOptions(false)}
@@ -243,10 +232,10 @@ const Profile = () => {
               accept="image/*"
               className="sr-only"
               onChange={(e) => {
-  console.log("Selected:", e.target.files[0]);
-  setProfileImage(e.target.files[0]);
-  setShowPhotoOptions(false);
-}}
+               console.log("Selected:", e.target.files[0]);
+                       setProfileImage(e.target.files[0]);
+                            setShowPhotoOptions(false);
+                 }}
             />
 
             {profileImage && (
@@ -273,7 +262,7 @@ const Profile = () => {
             </button>
           </div>
         </div>
-      )}
+      )} */}
 
       {showPreview && (
         <div
