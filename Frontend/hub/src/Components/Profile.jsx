@@ -102,31 +102,54 @@ const Profile = () => {
                 ) : (
                   <FaUserCircle onClick={() => setShowPreview(true)} className="text-[140px] text-[#2E7D32] cursor-pointer"/>)}
 
-             <input
-  type="file"
-  accept="image/*"
-  ref={fileInputRef}
-  style={{ display: "none" }}
-  onChange={(e) => {
-    if (e.target.files && e.target.files[0]) {
-      setProfileImage(e.target.files[0]);
-    }
-  }}
-/>
+           <div className="flex flex-col items-center">
+  {/* इमेज वाला कंटेनर अलग रखो */}
+  <div 
+    className="relative cursor-pointer" 
+    onClick={() => setShowPreview(true)}
+  >
+    {profileImage ? (
+      <img
+        src={URL.createObjectURL(profileImage)}
+        alt="Profile"
+        className="w-36 h-36 rounded-full object-cover border-4 border-[#2E7D32]"
+      />
+    ) : profile?.profileImage ? (
+      <img
+        src={profile.profileImage}
+        alt="Profile"
+        className="w-36 h-36 rounded-full object-cover border-4 border-[#2E7D32]"
+      />
+    ) : (
+      <FaUserCircle className="text-[140px] text-[#2E7D32]" />
+    )}
+  </div>
 
-{/* बटन का रूप दें, z-index बढ़ाएं और सीधा क्लिक ट्रिगर करें */}
-<button
-  type="button"
-  onClick={(e) => {
-    e.preventDefault();
-    e.stopPropagation(); // पैरेंट div या इमेज के क्लिक को रोकने के लिए
-    fileInputRef.current?.click();
-  }}
-  className="absolute bottom-1 right-1 z-10 bg-white text-[#2E7D32] p-3 rounded-full shadow-lg hover:bg-gray-100 border cursor-pointer flex items-center justify-center"
-  style={{ touchAction: "manipulation" }}
->
-  <FaCamera />
-</button>
+  {/* इनपुट और कैमरे का बटन एकदम अलग और साफ रखो */}
+  <input
+    type="file"
+    accept="image/*"
+    ref={fileInputRef}
+    style={{ display: "none" }}
+    onChange={(e) => {
+      if (e.target.files && e.target.files[0]) {
+        setProfileImage(e.target.files[0]);
+      }
+    }}
+  />
+
+  <button
+    type="button"
+    onClick={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      fileInputRef.current?.click();
+    }}
+    className="mt-3 flex items-center gap-2 bg-white text-[#2E7D32] px-4 py-2 rounded-full shadow border text-sm font-semibold active:scale-95 transition-all"
+  >
+    <FaCamera /> Change Photo
+  </button>
+</div>
               </div>
 
               {(profileImage || profile?.profileImage) && (
