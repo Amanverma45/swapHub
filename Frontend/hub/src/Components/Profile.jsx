@@ -231,10 +231,13 @@ const Profile = () => {
             <button
               type="button"
               onClick={(e) => {
-                e.preventDefault();
-                cameraInputRef.current?.click();
-                // setShowPhotoOptions(false);
-              }}
+  e.preventDefault();
+  e.stopPropagation();
+
+  console.log(cameraInputRef.current);
+
+  cameraInputRef.current?.click();
+}}
               className="w-full flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-gray-100 transition"
             >
               <FaCamera className="text-2xl text-[#2E7D32]" />
@@ -243,11 +246,14 @@ const Profile = () => {
 
             <button
               type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                galleryInputRef.current?.click();
-                // setShowPhotoOptions(false);
-              }}
+             onClick={(e) => {
+  e.preventDefault();
+  e.stopPropagation();
+
+  console.log(galleryInputRef.current);
+
+  galleryInputRef.current?.click();
+}}
               className="w-full flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-gray-100 transition"
             >
               <FaImages className="text-2xl text-[#2E7D32]" />
