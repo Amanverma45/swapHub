@@ -8,7 +8,6 @@ const Profile = () => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [profileImage, setProfileImage] = useState(null);
-  // const [showPhotoOptions, setShowPhotoOptions] = useState(false);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
@@ -16,7 +15,6 @@ const Profile = () => {
   const [profile, setProfile] = useState(null);
 
   const galleryInputRef = useRef(null);
-  // const cameraInputRef = useRef(null);
 
   const getProfile = async () => {
     try {
@@ -87,7 +85,7 @@ const Profile = () => {
             <div className="flex flex-col items-center">
 
               <div
-                className="relative cursor-pointer"
+                className="relative"
                 onClick={() => setShowPreview(true)}>
 
                 {profileImage ? (
@@ -117,7 +115,9 @@ const Profile = () => {
                 <button
                   type="button"
                   onClick={(e) => {
+                    e.preventDefault();
                     e.stopPropagation();
+
                     galleryInputRef.current?.click();
                   }}
                   className="absolute bottom-1 right-1 bg-white text-[#2E7D32] p-3 rounded-full shadow-lg hover:bg-gray-100 border"
@@ -204,65 +204,6 @@ const Profile = () => {
           </div>
         </div>
       </section>
-
-      {/* {showPhotoOptions && (
-        <div
-          className="fixed inset-0 bg-black/40 flex items-end justify-center z-50"
-          onClick={() => setShowPhotoOptions(false)}
-        >
-          <div
-            className="w-full max-w-md bg-white rounded-t-3xl p-6"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 className="text-xl font-bold text-center mb-6">
-              Change Profile Photo
-            </h2>
-
-            <label
-              htmlFor="profileImage"
-              className="w-full flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-gray-100 cursor-pointer select-none"
-            >
-              <FaImages className="text-2xl text-[#2E7D32]" />
-              <span className="text-lg">Choose Photo</span>
-            </label>
-
-            <input
-              id="profileImage"
-              type="file"
-              accept="image/*"
-              className="sr-only"
-              onChange={(e) => {
-               console.log("Selected:", e.target.files[0]);
-                       setProfileImage(e.target.files[0]);
-                            setShowPhotoOptions(false);
-                 }}
-            />
-
-            {profileImage && (
-              <button
-                type="button"
-                onClick={() => {
-                  setProfileImage(null);
-                  setShowPhotoOptions(false);
-                }}
-                className="w-full flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-red-50 transition text-red-500"
-              >
-                <FaTrash className="text-2xl" />
-                <span className="text-lg">Remove Photo</span>
-              </button>
-            )}
-
-            <button
-              type="button"
-              onClick={() => setShowPhotoOptions(false)}
-              className="w-full flex items-center justify-center gap-3 mt-4 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 transition"
-            >
-              <FaTimes />
-              Cancel
-            </button>
-          </div>
-        </div>
-      )} */}
 
       {showPreview && (
         <div
