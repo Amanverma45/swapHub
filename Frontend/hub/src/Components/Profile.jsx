@@ -215,6 +215,11 @@ const Profile = () => {
           </div>
         </div>
       </section>
+      <input
+  type="file"
+  onChange={(e) => console.log(e.target.files)}
+  className="border border-red-500 p-2"
+/>
       {showPhotoOptions && (
         <div
           className="fixed inset-0 bg-black/40 flex items-end justify-center z-50"
@@ -253,12 +258,7 @@ const Profile = () => {
               <FaImages className="text-2xl text-[#2E7D32]" />
               <span className="text-lg">Gallery</span>
             </button>
-            <input
-  type="file"
-  accept="image/*"
-  onChange={(e) => setProfileImage(e.target.files[0])}
-  className="w-full border border-gray-300 rounded-xl p-3 mt-4"
-/>
+    
             {profileImage && (
               <button
                 type="button"
