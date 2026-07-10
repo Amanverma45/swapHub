@@ -8,5 +8,6 @@ const router= express.Router()
 router.post('/saveUser',userController.saveUser)
 router.post('/loginUser',userController.loginUser)
 router.put("/updateProfile",authMiddleware,upload.single("profileImage"),userController.updateProfile);
+router.get("/getProfile", authMiddleware, userController.getProfile);
 
 module.exports = router

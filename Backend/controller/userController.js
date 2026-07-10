@@ -70,7 +70,9 @@ const updateProfile = async (req, res) => {
             user.profileImage = req.file.path;
         }
         await user.save();
-        return res.status(200).json({message: "Profile updated successfully",user});
+
+        const updatedUser = await userModel.findById(req.user.id).select("-password");
+        return res.status(200).json({message: "Profile updated successfully",user: updatedUser});
     } catch (error) {
         console.log(error.message);
         return res.status(500).json({
@@ -78,4 +80,19 @@ const updateProfile = async (req, res) => {
         });
     }
 };
-module.exports ={saveUser,loginUser,updateProfile}
+
+const getProfile = async (req, res) => {
+    try {
+       const profile = await userModel.findById(req.user.id).select("-password");
+       if(!profile){
+        return res.status(404).json({message:"Profile not found"})
+       }
+       return res.status(200).json(profile)
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: "Something went wrong"
+        });
+    }
+};
+module.exports ={saveUser,loginUser,updateProfile,getProfile}

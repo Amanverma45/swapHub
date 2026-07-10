@@ -1,43 +1,50 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { FaUserCircle, FaArrowLeft, FaCamera, FaTrash, FaImages, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "../utils/axiosInstance";
 import toast from "react-hot-toast";
 
 const Profile = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  // const user = JSON.parse(localStorage.getItem("user"));
 
   const navigate = useNavigate();
 
-  const [name, setName] = useState(user?.name || "");
+  // const [name, setName] = useState(profile?.name || "");
+  const [name, setName] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const [showPhotoOptions, setShowPhotoOptions] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [updating, setUpdating] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
 
+  const [profile, setProfile] = useState(null);
+
   const fileInputRef = useRef(null);
+
+  const getProfile = async () => {
+    try {
+      const response = await axios.get("/getProfile");
+      setProfile(response.data);
+      setName(response.data.name);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response?.data?.message || error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleUpdateProfile = async () => {
     try {
-      setLoading(true);
-
+      setUpdating(true);
       const formData = new FormData();
-
       formData.append("name", name);
-
       if (profileImage) {
         formData.append("profileImage", profileImage);
       }
 
-      const response = await axios.put(
-        "/updateProfile",
-        formData
-      );
-
-      localStorage.setItem(
-        "user",
-        JSON.stringify(response.data.user)
-      );
-
+      const response = await axios.put("/updateProfile", formData);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      setProfile(response.data.user);
       toast.success(response.data.message);
 
     } catch (error) {
@@ -48,9 +55,14 @@ const Profile = () => {
       );
 
     } finally {
-      setLoading(false);
+      setUpdating(false);
     }
   };
+  useEffect(() => {
+    getProfile();
+  }, []);
+
+  if (loading) {
   return (
     <>
       <section className="min-h-screen bg-gray-100 py-6 px-4">
@@ -82,9 +94,9 @@ const Profile = () => {
                     alt="Profile"
                     className="w-36 h-36 rounded-full object-cover border-4 border-[#2E7D32]"
                   />
-                ) : user?.profileImage ? (
+                ) : profile?.profileImage ? (
                   <img
-                    src={user.profileImage}
+                    src={profile.profileImage}
                     alt="Profile"
                     className="w-36 h-36 rounded-full object-cover border-4 border-[#2E7D32]"
                   />
@@ -112,7 +124,7 @@ const Profile = () => {
                 onChange={(e) => setProfileImage(e.target.files[0])}
               />
 
-             {(profileImage || user?.profileImage) && (
+              {(profileImage || profile?.profileImage) && (
                 <button
                   onClick={() => setProfileImage(null)}
                   className="flex items-center gap-2 mt-4 text-red-500 hover:text-red-700"
@@ -127,7 +139,7 @@ const Profile = () => {
               </h1>
 
               <p className="text-gray-500 break-all text-center mt-1">
-                {user?.email}
+                {profile?.email}
               </p>
             </div>
 
@@ -152,7 +164,7 @@ const Profile = () => {
                 </h3>
 
                 <p className="font-semibold break-all">
-                  {user?.email}
+                  {profile?.email}
                 </p>
               </div>
 
@@ -180,10 +192,10 @@ const Profile = () => {
 
             <button
               onClick={handleUpdateProfile}
-              disabled={loading}
+              disabled={updating}
               className="w-full mt-8 bg-[#2E7D32] hover:bg-[#256728] text-white py-3 rounded-xl transition disabled:opacity-60"
             >
-              {loading ? "Saving..." : "Save Changes"}
+              {updating ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </div>
@@ -274,9 +286,9 @@ const Profile = () => {
                 alt="Preview"
                 className="w-[320px] h-[320px] object-cover"
               />
-            ) : user?.profileImage ? (
+            ) : profile?.profileImage ? (
               <img
-                src={user.profileImage}
+                src={profile.profileImage}
                 alt="Preview"
                 className="w-[320px] h-[320px] object-cover"
               />
@@ -291,5 +303,6 @@ const Profile = () => {
     </>
   );
 };
+}
 
 export default Profile;
