@@ -84,25 +84,23 @@ const Profile = () => {
 
             <div className="flex flex-col items-center">
 
-              <div
-                className="relative"
-                onClick={() => setShowPreview(true)}>
-
+              <div className="relative">
                 {profileImage ? (
                   <img
                     src={URL.createObjectURL(profileImage)}
                     alt="Profile"
-                    className="w-36 h-36 rounded-full object-cover border-4 border-[#2E7D32]"
+                    onClick={() => setShowPreview(true)}
+                    className="w-36 h-36 rounded-full object-cover border-4 border-[#2E7D32] cursor-pointer"
                   />
                 ) : profile?.profileImage ? (
                   <img
                     src={profile.profileImage}
                     alt="Profile"
-                    className="w-36 h-36 rounded-full object-cover border-4 border-[#2E7D32]"
+                    onClick={() => setShowPreview(true)}
+                    className="w-36 h-36 rounded-full object-cover border-4 border-[#2E7D32] cursor-pointer"
                   />
                 ) : (
-                  <FaUserCircle className="text-[140px] text-[#2E7D32]" />
-                )}
+                  <FaUserCircle onClick={() => setShowPreview(true)} className="text-[140px] text-[#2E7D32] cursor-pointer"/>)}
 
                 <input
                   type="file"
