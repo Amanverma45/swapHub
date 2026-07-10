@@ -231,7 +231,7 @@ const Profile = () => {
 
             <label
               htmlFor="profileImage"
-              className="w-full flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-gray-100 cursor-pointer"
+              className="w-full flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-gray-100 cursor-pointer select-none"
             >
               <FaImages className="text-2xl text-[#2E7D32]" />
               <span className="text-lg">Choose Photo</span>
@@ -241,8 +241,11 @@ const Profile = () => {
               id="profileImage"
               type="file"
               accept="image/*"
-              hidden
-              onChange={(e) => setProfileImage(e.target.files[0])}
+              className="sr-only"
+              onChange={(e) => {
+                setProfileImage(e.target.files[0]);
+                setShowPhotoOptions(false);
+              }}
             />
 
             {profileImage && (
