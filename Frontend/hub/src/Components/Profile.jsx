@@ -215,11 +215,7 @@ const Profile = () => {
           </div>
         </div>
       </section>
-      <input
-  type="file"
-  onChange={(e) => console.log(e.target.files)}
-  className="border border-red-500 p-2"
-/>
+
       {showPhotoOptions && (
         <div
           className="fixed inset-0 bg-black/40 flex items-end justify-center z-50"
@@ -233,32 +229,22 @@ const Profile = () => {
               Change Profile Photo
             </h2>
 
-            <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                cameraInputRef.current?.click();
-                // setShowPhotoOptions(false);
-              }}
-              className="w-full flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-gray-100 transition"
-            >
-              <FaCamera className="text-2xl text-[#2E7D32]" />
-              <span className="text-lg">Camera</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                galleryInputRef.current?.click();
-                // setShowPhotoOptions(false);
-              }}
-              className="w-full flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-gray-100 transition"
+            <label
+              htmlFor="profileImage"
+              className="w-full flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-gray-100 cursor-pointer"
             >
               <FaImages className="text-2xl text-[#2E7D32]" />
-              <span className="text-lg">Gallery</span>
-            </button>
-    
+              <span className="text-lg">Choose Photo</span>
+            </label>
+
+            <input
+              id="profileImage"
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={(e) => setProfileImage(e.target.files[0])}
+            />
+
             {profileImage && (
               <button
                 type="button"
