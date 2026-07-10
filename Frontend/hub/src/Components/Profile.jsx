@@ -259,7 +259,6 @@ const Profile = () => {
   onChange={(e) => setProfileImage(e.target.files[0])}
   className="w-full border border-gray-300 rounded-xl p-3 mt-4"
 />
-
             {profileImage && (
               <button
                 type="button"
