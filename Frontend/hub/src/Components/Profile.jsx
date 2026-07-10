@@ -102,23 +102,31 @@ const Profile = () => {
                 ) : (
                   <FaUserCircle onClick={() => setShowPreview(true)} className="text-[140px] text-[#2E7D32] cursor-pointer"/>)}
 
-               <input
-  id="profileImageInput"
+             <input
   type="file"
   accept="image/*"
   ref={fileInputRef}
   style={{ display: "none" }}
-  onChange={(e) => setProfileImage(e.target.files[0])}
+  onChange={(e) => {
+    if (e.target.files && e.target.files[0]) {
+      setProfileImage(e.target.files[0]);
+    }
+  }}
 />
 
-{/* लेबल पर क्लिक होते ही यह सीधे इनपुट को क्लिक कर देगा */}
-<label
-  htmlFor="profileImageInput"
-  onClick={() => fileInputRef.current.click()}
-  className="absolute bottom-1 right-1 bg-white text-[#2E7D32] p-3 rounded-full shadow-lg hover:bg-gray-100 border cursor-pointer"
+{/* बटन का रूप दें, z-index बढ़ाएं और सीधा क्लिक ट्रिगर करें */}
+<button
+  type="button"
+  onClick={(e) => {
+    e.preventDefault();
+    e.stopPropagation(); // पैरेंट div या इमेज के क्लिक को रोकने के लिए
+    fileInputRef.current?.click();
+  }}
+  className="absolute bottom-1 right-1 z-10 bg-white text-[#2E7D32] p-3 rounded-full shadow-lg hover:bg-gray-100 border cursor-pointer flex items-center justify-center"
+  style={{ touchAction: "manipulation" }}
 >
   <FaCamera />
-</label>
+</button>
               </div>
 
               {(profileImage || profile?.profileImage) && (
