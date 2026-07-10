@@ -107,6 +107,7 @@ const Profile = () => {
                 )}
 
                 <button
+                type="button"
                   onClick={(e) => {
                     e.stopPropagation()
                     setShowPhotoOptions(true);
@@ -125,17 +126,18 @@ const Profile = () => {
                 onChange={(e) => setProfileImage(e.target.files[0])}
               />
 
-              {/* <input
+              <input
                 type="file"
                 accept="image/*"
                 capture="user"
                 hidden
                 ref={cameraInputRef}
                 onChange={(e) => setProfileImage(e.target.files[0])}
-              /> */}
+              />
 
               {(profileImage || profile?.profileImage) && (
                 <button
+                type="button"
                   onClick={() => setProfileImage(null)}
                   className="flex items-center gap-2 mt-4 text-red-500 hover:text-red-700"
                 >
@@ -201,6 +203,7 @@ const Profile = () => {
             </div>
 
             <button
+            type="button"
               onClick={handleUpdateProfile}
               disabled={updating}
               className="w-full mt-8 bg-[#2E7D32] hover:bg-[#256728] text-white py-3 rounded-xl transition disabled:opacity-60"
@@ -224,6 +227,7 @@ const Profile = () => {
             </h2>
 
             <button
+            type="button"
               onClick={() => {
                 cameraInputRef.current.click();
                 setShowPhotoOptions(false);
@@ -235,6 +239,7 @@ const Profile = () => {
             </button>
 
             <button
+            type="button"
               onClick={() => {
                 galleryInputRef.current.click();
                 setShowPhotoOptions(false);
@@ -247,6 +252,7 @@ const Profile = () => {
 
             {profileImage && (
               <button
+              type="button"
                 onClick={() => {
                   setProfileImage(null);
                   setShowPhotoOptions(false);
@@ -259,6 +265,7 @@ const Profile = () => {
             )}
 
             <button
+            type="button"
               onClick={() => setShowPhotoOptions(false)}
               className="w-full flex items-center justify-center gap-3 mt-4 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 transition"
             >
@@ -278,7 +285,7 @@ const Profile = () => {
             className="absolute top-5 left-5 flex items-center gap-3 text-white"
             onClick={(e) => e.stopPropagation()}
           >
-            <button onClick={() => setShowPreview(false)}>
+            <button type="button" onClick={() => setShowPreview(false)}>
               <FaArrowLeft className="text-2xl" />
             </button>
 
