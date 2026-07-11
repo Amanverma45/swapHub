@@ -1,7 +1,7 @@
-import {useState, useEffect } from "react";
-// import {useRef, useState, useEffect } from "react";
-import { FaUserCircle, FaArrowLeft,  FaTrash } from "react-icons/fa";
-// import { FaUserCircle, FaArrowLeft, FaCamera, FaTrash } from "react-icons/fa";
+// import {useState, useEffect } from "react";
+import {useRef, useState, useEffect } from "react";
+// import { FaUserCircle, FaArrowLeft,  FaTrash } from "react-icons/fa";
+import { FaUserCircle, FaArrowLeft, FaCamera, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "../utils/axiosInstance";
 import toast from "react-hot-toast";
@@ -16,7 +16,7 @@ const Profile = () => {
 
   const [profile, setProfile] = useState(null);
 
-  // const fileInputRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   const getProfile = async () => {
     try {
@@ -108,7 +108,7 @@ const Profile = () => {
 
 
 
-                {/* <input
+                <input
                   type="file"
                   accept="image/*"
                   ref={fileInputRef}
@@ -125,8 +125,8 @@ const Profile = () => {
                   className="absolute bottom-1 right-1 z-10 bg-white text-[#2E7D32] p-3 rounded-full shadow-lg border cursor-pointer flex items-center justify-center"
                 >
                   <FaCamera />
-                </label> */}
-{/* 
+                </label> 
+
                 <input
                   id="profile-image"
                   type="file"
@@ -137,8 +137,8 @@ const Profile = () => {
                     }
                   }}
                   className="hidden"
-                /> */}
-<section className="p-10">
+                />
+{/* <section className="p-10">
   <input
     type="file"
     accept="image/*"
@@ -147,7 +147,7 @@ const Profile = () => {
       alert("Selected");
     }}
   />
-</section>
+</section> */}
 
 
 
