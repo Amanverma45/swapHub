@@ -112,7 +112,7 @@ const Profile = () => {
                   type="file"
                   accept="image/*"
                   ref={fileInputRef}
-                  // style={{ display: "none" }}
+                  style={{ display: "none" }}
                   onChange={(e) => {
                     if (e.target.files && e.target.files[0]) {
                       setProfileImage(e.target.files[0]);
@@ -135,7 +135,7 @@ const Profile = () => {
                     }
                   }}
 
-                // className="hidden"
+                className="hidden"
                 />
                 </label>
 
