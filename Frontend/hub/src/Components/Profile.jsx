@@ -108,7 +108,7 @@ const Profile = () => {
 
                 <input
                   type="file"
-                  // accept="image/*"
+                  accept="image/*"
                   ref={fileInputRef}
                   // style={{ display: "none" }}
                   onChange={(e) => {
