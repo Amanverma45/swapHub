@@ -1,5 +1,6 @@
-
-import { useState, useEffect } from "react";
+// import {useState, useEffect } from "react";
+import {  useState, useEffect } from "react";
+// import { FaUserCircle, FaArrowLeft,  FaTrash } from "react-icons/fa";
 import { FaUserCircle, FaArrowLeft, FaCamera, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "../utils/axiosInstance";
@@ -14,6 +15,8 @@ const Profile = () => {
   const [showPreview, setShowPreview] = useState(false);
 
   const [profile, setProfile] = useState(null);
+
+  // const fileInputRef = useRef(null);
 
   const getProfile = async () => {
     try {
@@ -83,49 +86,47 @@ const Profile = () => {
 
             <div className="flex flex-col items-center">
 
-              <div className="flex justify-center">
-                <div className="relative w-36 h-36">
+             <div className="relative w-36 h-36 mx-auto">
 
-                  {profileImage ? (
-                    <img
-                      src={URL.createObjectURL(profileImage)}
-                      alt="Profile"
-                      onClick={() => setShowPreview(true)}
-                      className="w-36 h-36 rounded-full object-cover border-4 border-[#2E7D32] cursor-pointer"
-                    />
-                  ) : profile?.profileImage ? (
-                    <img
-                      src={profile.profileImage}
-                      alt="Profile"
-                      onClick={() => setShowPreview(true)}
-                      className="w-36 h-36 rounded-full object-cover border-4 border-[#2E7D32] cursor-pointer"
-                    />
-                  ) : (
-                    <FaUserCircle
-                      onClick={() => setShowPreview(true)}
-                      className="w-36 h-36 text-[#2E7D32] cursor-pointer"
-                    />
-                  )}
+  {profileImage ? (
+    <img
+      src={URL.createObjectURL(profileImage)}
+      alt="Profile"
+      onClick={() => setShowPreview(true)}
+      className="w-full h-full rounded-full object-cover border-4 border-[#2E7D32]"
+    />
+  ) : profile?.profileImage ? (
+    <img
+      src={profile.profileImage}
+      alt="Profile"
+      onClick={() => setShowPreview(true)}
+      className="w-full h-full rounded-full object-cover border-4 border-[#2E7D32]"
+    />
+  ) : (
+    <FaUserCircle
+      className="w-full h-full text-[#2E7D32]"
+      onClick={() => setShowPreview(true)}
+    />
+  )}
 
-                  <label
-                    className="absolute bottom-1 right-1 w-10 h-10 rounded-full bg-white border shadow-lg cursor-pointer flex items-center justify-center text-[#2E7D32]"
-                  >
-                    <FaCamera />
+  <input
+    id="profileImage"
+    type="file"
+    accept="image/*"
+    capture="environment"
+    className="absolute inset-0 opacity-0 cursor-pointer"
+    onChange={(e) => {
+      if (e.target.files?.[0]) {
+        setProfileImage(e.target.files[0]);
+      }
+    }}
+  />
 
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={(e) => {
-                        if (e.target.files?.[0]) {
-                          setProfileImage(e.target.files[0]);
-                        }
-                      }}
-                    />
-                  </label>
+  <div className="absolute bottom-1 right-1 w-10 h-10 rounded-full bg-white shadow-lg border flex items-center justify-center pointer-events-none">
+    <FaCamera className="text-[#2E7D32]" />
+  </div>
 
-                </div>
-              </div>
+</div>
 
               {(profileImage || profile?.profileImage) && (
                 <button
