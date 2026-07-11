@@ -128,7 +128,7 @@ const Profile = () => {
                 </label> 
 
                 <input
-                  id="profile-image"
+                  // id="profile-image"
                   type="file"
                   // accept="image/*"
                   onChange={(e) => {
