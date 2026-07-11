@@ -100,32 +100,47 @@ const Profile = () => {
                     className="w-36 h-36 rounded-full object-cover border-4 border-[#2E7D32] cursor-pointer"
                   />
                 ) : (
-                  <FaUserCircle onClick={() => setShowPreview(true)} className="text-[140px] text-[#2E7D32] cursor-pointer"/>)}
+                  <FaUserCircle onClick={() => setShowPreview(true)} className="text-[140px] text-[#2E7D32] cursor-pointer" />)}
 
-             <input
-  type="file"
-  accept="image/*"
-  ref={fileInputRef}
-  style={{ display: "none" }}
-  onChange={(e) => {
-    if (e.target.files && e.target.files[0]) {
-      setProfileImage(e.target.files[0]);
-    }
-  }}
-/>
 
-<button
-  type="button"
-  onClick={(e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    fileInputRef.current?.click();
-  }}
-  className="absolute bottom-1 right-1 z-10 bg-white text-[#2E7D32] p-3 rounded-full shadow-lg hover:bg-gray-100 border cursor-pointer flex items-center justify-center"
-  style={{ touchAction: "manipulation" }}
->
-  <FaCamera />
-</button>
+
+
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  style={{ display: "none" }}
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) {
+                      setProfileImage(e.target.files[0]);
+                    }
+                  }}
+                />
+
+                <label
+                  htmlFor="profile-image"
+                  className="absolute bottom-1 right-1 z-10 bg-white text-[#2E7D32] p-3 rounded-full shadow-lg border cursor-pointer flex items-center justify-center"
+                >
+                  <FaCamera />
+                </label>
+
+                <input
+                  id="profile-image"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    if (e.target.files?.[0]) {
+                      setProfileImage(e.target.files[0]);
+                    }
+                  }}
+                  className="hidden"
+                />
+
+
+
+
+
               </div>
 
               {(profileImage || profile?.profileImage) && (
