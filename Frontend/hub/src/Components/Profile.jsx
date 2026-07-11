@@ -124,7 +124,7 @@ const Profile = () => {
                 >
                   <FaCamera />
                 </label>
-
+{/* 
                 <input
                   id="profile-image"
                   type="file"
@@ -135,7 +135,7 @@ const Profile = () => {
                     }
                   }}
                   className="hidden"
-                />
+                /> */}
 
 
 
