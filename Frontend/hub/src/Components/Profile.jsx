@@ -1,5 +1,5 @@
 // import {useState, useEffect } from "react";
-import {useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 // import { FaUserCircle, FaArrowLeft,  FaTrash } from "react-icons/fa";
 import { FaUserCircle, FaArrowLeft, FaCamera, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -125,9 +125,7 @@ const Profile = () => {
                   className="absolute bottom-1 right-1 z-10 bg-white text-[#2E7D32] p-3 rounded-full shadow-lg border cursor-pointer flex items-center justify-center"
                 >
                   <FaCamera />
-                </label> 
-
-                <input
+                  <input
                   // id="profile-image"
                   type="file"
                   // accept="image/*"
@@ -135,17 +133,14 @@ const Profile = () => {
                     if (e.target.files?.[0]) {
                       setProfileImage(e.target.files[0]);
                     }
-                     <label
-                  htmlFor="profile-image"
-                  className="absolute bottom-1 right-1 z-10 bg-white text-[#2E7D32] p-3 rounded-full shadow-lg border cursor-pointer flex items-center justify-center"
-                >
-                  <FaCamera />
-                </label> 
                   }}
-                  
-                  // className="hidden"
+
+                // className="hidden"
                 />
-{/* <section className="p-10">
+                </label>
+
+                
+                {/* <section className="p-10">
   <input
     type="file"
     accept="image/*"
