@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import {useRef, useState, useEffect } from "react";
 import { FaUserCircle, FaArrowLeft, FaCamera, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "../utils/axiosInstance";
@@ -14,7 +14,7 @@ const Profile = () => {
 
   const [profile, setProfile] = useState(null);
 
-  // const fileInputRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   const getProfile = async () => {
     try {
@@ -109,8 +109,8 @@ const Profile = () => {
                 <input
                   type="file"
                   // accept="image/*"
-                  // ref={fileInputRef}
-                  style={{ display: "none" }}
+                  ref={fileInputRef}
+                  // style={{ display: "none" }}
                   onChange={(e) => {
                     if (e.target.files && e.target.files[0]) {
                       setProfileImage(e.target.files[0]);
