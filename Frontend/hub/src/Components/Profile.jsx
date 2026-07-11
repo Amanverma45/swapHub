@@ -130,13 +130,13 @@ const Profile = () => {
                 <input
                   id="profile-image"
                   type="file"
-                  accept="image/*"
+                  // accept="image/*"
                   onChange={(e) => {
                     if (e.target.files?.[0]) {
                       setProfileImage(e.target.files[0]);
                     }
                   }}
-                  className="hidden"
+                  // className="hidden"
                 />
 {/* <section className="p-10">
   <input
