@@ -1,5 +1,5 @@
 // import {useState, useEffect } from "react";
-import {  useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 // import { FaUserCircle, FaArrowLeft,  FaTrash } from "react-icons/fa";
 import { FaUserCircle, FaArrowLeft, FaCamera, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [showPicker, setShowPicker] = useState(false);
 
   const [profile, setProfile] = useState(null);
 
@@ -86,47 +87,54 @@ const Profile = () => {
 
             <div className="flex flex-col items-center">
 
-             <div className="relative w-36 h-36 mx-auto">
+              <div className="relative w-36 h-36 mx-auto">
 
-  {profileImage ? (
-    <img
-      src={URL.createObjectURL(profileImage)}
-      alt="Profile"
-      onClick={() => setShowPreview(true)}
-      className="w-full h-full rounded-full object-cover border-4 border-[#2E7D32]"
-    />
-  ) : profile?.profileImage ? (
-    <img
-      src={profile.profileImage}
-      alt="Profile"
-      onClick={() => setShowPreview(true)}
-      className="w-full h-full rounded-full object-cover border-4 border-[#2E7D32]"
-    />
-  ) : (
-    <FaUserCircle
-      className="w-full h-full text-[#2E7D32]"
-      onClick={() => setShowPreview(true)}
-    />
-  )}
+                {profileImage ? (
+                  <img
+                    src={URL.createObjectURL(profileImage)}
+                    alt="Profile"
+                    onClick={() => setShowPreview(true)}
+                    className="w-full h-full rounded-full object-cover border-4 border-[#2E7D32]"
+                  />
+                ) : profile?.profileImage ? (
+                  <img
+                    src={profile.profileImage}
+                    alt="Profile"
+                    onClick={() => setShowPreview(true)}
+                    className="w-full h-full rounded-full object-cover border-4 border-[#2E7D32]"
+                  />
+                ) : (
+                  <FaUserCircle
+                    className="w-full h-full text-[#2E7D32]"
+                    onClick={() => setShowPreview(true)}
+                  />
+                )}
 
-  <input
-    id="profileImage"
-    type="file"
-    accept="image/*"
-    capture="environment"
-    className="absolute inset-0 opacity-0 cursor-pointer"
-    onChange={(e) => {
-      if (e.target.files?.[0]) {
-        setProfileImage(e.target.files[0]);
-      }
-    }}
-  />
+                <div className="absolute bottom-1 right-1 w-10 h-10">
 
-  <div className="absolute bottom-1 right-1 w-10 h-10 rounded-full bg-white shadow-lg border flex items-center justify-center pointer-events-none">
-    <FaCamera className="text-[#2E7D32]" />
-  </div>
+                  <FaCamera className="absolute inset-0 m-auto text-[#2E7D32] pointer-events-none" />
 
-</div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                    onChange={(e) => {
+                      if (e.target.files?.[0]) {
+                        setProfileImage(e.target.files[0]);
+                      }
+                    }}
+                  />
+
+                </div>
+                <div
+                  onClick={() => setShowPicker(true)}
+                  className="absolute bottom-1 right-1 bg-white text-[#2E7D32] p-3 rounded-full shadow-lg border cursor-pointer"
+                >
+                  <FaCamera />
+                </div>
+
+              </div>
 
               {(profileImage || profile?.profileImage) && (
                 <button
@@ -245,6 +253,60 @@ const Profile = () => {
                 <FaUserCircle className="text-[180px] text-[#2E7D32]" />
               </div>
             )}
+          </div>
+        </div>
+      )}
+      {showPicker && (
+        <div
+          className="fixed inset-0 bg-black/40 z-50 flex items-end"
+          onClick={() => setShowPicker(false)}
+        >
+          <div
+            className="bg-white w-full rounded-t-3xl p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 className="text-lg font-semibold mb-5 text-center">
+              Choose Photo
+            </h2>
+
+            <div className="space-y-4">
+
+              {/* Camera */}
+              <label className="flex items-center justify-center bg-[#2E7D32] text-white py-3 rounded-xl cursor-pointer">
+                📷 Camera
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  className="hidden"
+                  onChange={(e) => {
+                    if (e.target.files?.[0]) {
+                      setProfileImage(e.target.files[0]);
+                    }
+                    setShowPicker(false);
+                  }}
+                />
+              </label>
+
+              {/* Gallery */}
+              <label className="flex items-center justify-center border py-3 rounded-xl cursor-pointer">
+                🖼 Gallery
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    if (e.target.files?.[0]) {
+                      setProfileImage(e.target.files[0]);
+                    }
+                    setShowPicker(false);
+                  }}
+                />
+              </label>
+
+            </div>
           </div>
         </div>
       )}
