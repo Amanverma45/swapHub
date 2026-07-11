@@ -56,6 +56,12 @@ const Profile = () => {
       setUpdating(false);
     }
   };
+  const handleImageChange = (e) => {
+    if (e.target.files?.[0]) {
+      setProfileImage(e.target.files[0]);
+    }
+    setShowPicker(false);
+  };
   useEffect(() => {
     getProfile();
   }, []);
@@ -129,7 +135,7 @@ const Profile = () => {
                 </div>
                 <div
                   onClick={() => setShowPicker(true)}
-                  className="absolute bottom-1 right-1 bg-white text-[#2E7D32] p-3 rounded-full shadow-lg border cursor-pointer"
+                  className="absolute bottom-1 right-1 bg-white text-[#2E7D32] p-3 rounded-full shadow-lg border cursor-pointer flex items-center justify-center"
                 >
                   <FaCamera />
                 </div>
@@ -258,14 +264,14 @@ const Profile = () => {
       )}
       {showPicker && (
         <div
-          className="fixed inset-0 bg-black/40 z-50 flex items-end"
           onClick={() => setShowPicker(false)}
+          className="fixed inset-0 bg-black/40 z-50 flex items-end"
         >
           <div
-            className="bg-white w-full rounded-t-3xl p-6"
             onClick={(e) => e.stopPropagation()}
+            className="bg-white w-full rounded-t-3xl p-6"
           >
-            <h2 className="text-lg font-semibold mb-5 text-center">
+            <h2 className="text-xl font-semibold text-center mb-6">
               Choose Photo
             </h2>
 
@@ -280,33 +286,30 @@ const Profile = () => {
                   accept="image/*"
                   capture="environment"
                   className="hidden"
-                  onChange={(e) => {
-                    if (e.target.files?.[0]) {
-                      setProfileImage(e.target.files[0]);
-                    }
-                    setShowPicker(false);
-                  }}
+                  onChange={handleImageChange}
                 />
               </label>
 
               {/* Gallery */}
-              <label className="flex items-center justify-center border py-3 rounded-xl cursor-pointer">
+              <label className="flex items-center justify-center border border-gray-300 py-3 rounded-xl cursor-pointer">
                 🖼 Gallery
 
                 <input
                   type="file"
                   accept="image/*"
                   className="hidden"
-                  onChange={(e) => {
-                    if (e.target.files?.[0]) {
-                      setProfileImage(e.target.files[0]);
-                    }
-                    setShowPicker(false);
-                  }}
+                  onChange={handleImageChange}
                 />
               </label>
 
             </div>
+
+            <button
+              onClick={() => setShowPicker(false)}
+              className="w-full mt-5 py-3 rounded-xl bg-gray-200 hover:bg-gray-300"
+            >
+              Cancel
+            </button>
           </div>
         </div>
       )}
