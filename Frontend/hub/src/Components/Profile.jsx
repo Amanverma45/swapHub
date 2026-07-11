@@ -135,7 +135,14 @@ const Profile = () => {
                     if (e.target.files?.[0]) {
                       setProfileImage(e.target.files[0]);
                     }
+                     <label
+                  htmlFor="profile-image"
+                  className="absolute bottom-1 right-1 z-10 bg-white text-[#2E7D32] p-3 rounded-full shadow-lg border cursor-pointer flex items-center justify-center"
+                >
+                  <FaCamera />
+                </label> 
                   }}
+                  
                   // className="hidden"
                 />
 {/* <section className="p-10">
