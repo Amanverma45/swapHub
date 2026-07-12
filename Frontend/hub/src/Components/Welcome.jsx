@@ -40,15 +40,11 @@ const Welcome = () => {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mt-8">
           <Link to="/addProduct" className="block">
             <motion.div
-              initial={{ opacity: 0, x: -60 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.3, delay: 0, }}
-              whileHover={{
-                scale: 1.02,
-                y: -4,
-                boxShadow: "0 12px 25px rgba(0,0,0,0.12)",
-              }}
+              initial={{ opacity: 0, y: 20, scale: 0.97 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.35, ease: "easeOut", delay: 0 }}
+              whileHover={{ y: -6, scale: 1.03, transition: { duration: 0.18, ease: "easeOut" } }}
               className="bg-white rounded-2xl border border-gray-100 shadow-sm aspect-square flex flex-col items-center justify-center p-3 lg:p-6 text-center transition-all duration-300"
             >
               <FaPlusCircle className="text-4xl lg:text-6xl text-[#2E7D32] mb-3 lg:mb-5" />
@@ -64,15 +60,11 @@ const Welcome = () => {
 
           <Link to="/myProducts" className="block">
             <motion.div
-              initial={{ opacity: 0, x: 60 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.3, delay: 0.05 }}
-              whileHover={{
-                scale: 1.02,
-                y: -4,
-                boxShadow: "0 12px 25px rgba(0,0,0,0.12)",
-              }}
+              initial={{ opacity: 0, y: 20, scale: 0.97 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.35, ease: "easeOut", delay: 0.05 }}
+              whileHover={{ y: -6, scale: 1.03, transition: { duration: 0.18, ease: "easeOut" } }}
               className="bg-white rounded-2xl border border-gray-100 shadow-sm aspect-square flex flex-col items-center justify-center p-3 lg:p-6 text-center transition-all duration-300"
             >
               <FaBoxOpen className="text-4xl lg:text-6xl text-[#F4A261] mb-3 lg:mb-5" />
@@ -89,15 +81,11 @@ const Welcome = () => {
 
           <Link to="/swapRequest" className="block">
             <motion.div
-              initial={{ opacity: 0, x: -60 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.3, delay: 0.1 }}
-              whileHover={{
-                scale: 1.02,
-                y: -4,
-                boxShadow: "0 12px 25px rgba(0,0,0,0.12)",
-              }}
+              initial={{ opacity: 0, y: 20, scale: 0.97 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.35, ease: "easeOut", delay: 0.1 }}
+              whileHover={{ y: -6, scale: 1.03, transition: { duration: 0.18, ease: "easeOut" } }}
               className="bg-white rounded-2xl border border-gray-100 shadow-sm aspect-square flex flex-col items-center justify-center p-3 lg:p-6 text-center transition-all duration-300"
             >
               <FaExchangeAlt className="text-4xl lg:text-6xl text-[#2E7D32] mb-3 lg:mb-5" />
@@ -114,15 +102,11 @@ const Welcome = () => {
 
           <Link to="/profile" className="block">
             <motion.div
-              initial={{ opacity: 0, x: 60 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.3, delay: 0.15 }}
-              whileHover={{
-                scale: 1.02,
-                y: -4,
-                boxShadow: "0 12px 25px rgba(0,0,0,0.12)",
-              }}
+              initial={{ opacity: 0, y: 20, scale: 0.97 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.35, ease: "easeOut", delay: 0.15 }}
+              whileHover={{ y: -6, scale: 1.03, transition: { duration: 0.18, ease: "easeOut" } }}
               className="bg-white rounded-2xl border border-gray-100 shadow-sm aspect-square flex flex-col items-center justify-center p-3 lg:p-6 text-center transition-all duration-300"
             >
               <FaUserCircle className="text-4xl lg:text-6xl text-[#F4A261] mb-3 lg:mb-5" />
@@ -142,15 +126,11 @@ const Welcome = () => {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mt-8">
 
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0 }}
-            whileHover={{
-              scale: 1.02,
-              y: -4,
-              boxShadow: "0 12px 25px rgba(0,0,0,0.12)",
-            }}
+            initial={{ opacity: 0, y: 20, scale: 0.97 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.35, ease: "easeOut", delay: 0 }}
+            whileHover={{ y: -6, scale: 1.03, transition: { duration: 0.18, ease: "easeOut" } }}
             className="bg-white border border-gray-100 rounded-l-xl aspect-square flex flex-col items-center justify-center p-3 lg:p-6 shadow-sm transition-all duration-300"
           >
             <FaBoxOpen className="text-4xl lg:text-6xl text-[#2E7D32] mb-3 lg:mb-5" />
@@ -165,15 +145,11 @@ const Welcome = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.05 }}
-            whileHover={{
-              scale: 1.02,
-              y: -4,
-              boxShadow: "0 12px 25px rgba(0,0,0,0.12)",
-            }}
+            initial={{ opacity: 0, y: 20, scale: 0.97 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.35, ease: "easeOut", delay: 0.05 }}
+            whileHover={{ y: -6, scale: 1.03, transition: { duration: 0.18, ease: "easeOut" } }}
             className="bg-white border border-gray-100 rounded-r-xl aspect-square flex flex-col items-center justify-center p-3 lg:p-6 shadow-sm transition-all duration-300"
           >
             <FaExchangeAlt className="text-4xl lg:text-6xl text-[#F4A261] mb-3 lg:mb-5" />
@@ -188,15 +164,11 @@ const Welcome = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            whileHover={{
-              scale: 1.02,
-              y: -4,
-              boxShadow: "0 12px 25px rgba(0,0,0,0.12)",
-            }}
+            initial={{ opacity: 0, y: 20, scale: 0.97 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.35, ease: "easeOut", delay: 0.1 }}
+            whileHover={{ y: -6, scale: 1.03, transition: { duration: 0.18, ease: "easeOut" } }}
             className="bg-white border border-gray-100 rounded-l-xl aspect-square flex flex-col items-center justify-center p-3 lg:p-6 shadow-sm transition-all duration-300"
           >
             <FaCheckCircle className="text-4xl lg:text-6xl text-green-500 mb-3 lg:mb-5" />
@@ -211,15 +183,11 @@ const Welcome = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.15 }}
-            whileHover={{
-              scale: 1.02,
-              y: -4,
-              boxShadow: "0 12px 25px rgba(0,0,0,0.12)",
-            }}
+            initial={{ opacity: 0, y: 20, scale: 0.97 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.35, ease: "easeOut", delay: 0.15 }}
+            whileHover={{ y: -6, scale: 1.03, transition: { duration: 0.18, ease: "easeOut" } }}
             className="bg-white border border-gray-100 rounded-r-xl aspect-square flex flex-col items-center justify-center p-3 lg:p-6 shadow-sm transition-all duration-300"
           >
             <FaTimesCircle className="text-4xl lg:text-6xl text-red-500 mb-3 lg:mb-5" />
