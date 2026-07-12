@@ -95,4 +95,36 @@ const getProfile = async (req, res) => {
         });
     }
 };
-module.exports ={saveUser,loginUser,updateProfile,getProfile}
+
+const removeProfilePhoto = async (req, res) => {
+  try {
+    const user = await userModel.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    user.profileImage = "";
+
+    await user.save();
+
+    const updatedUser = await userModel
+      .findById(req.user.id)
+      .select("-password");
+
+    return res.status(200).json({
+      message: "Profile photo removed successfully",
+      user: updatedUser,
+    });
+
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({
+      message: "Something went wrong",
+    });
+  }
+};
+module.exports ={saveUser,loginUser,updateProfile,getProfile,removeProfilePhoto}

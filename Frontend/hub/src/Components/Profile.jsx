@@ -17,8 +17,6 @@ const Profile = () => {
 
   const [profile, setProfile] = useState(null);
 
-  // const fileInputRef = useRef(null);
-
   const getProfile = async () => {
     try {
       const response = await axios.get("/getProfile");
@@ -31,6 +29,7 @@ const Profile = () => {
       setLoading(false);
     }
   };
+
   const handleUpdateProfile = async () => {
     try {
       setUpdating(true);
@@ -56,6 +55,33 @@ const Profile = () => {
       setUpdating(false);
     }
   };
+
+  const handleRemovePhoto = async () => {
+  try {
+
+    const response = await axios.put("/removeProfilePhoto");
+
+    setProfileImage(null);
+
+    setProfile(response.data.user);
+
+    localStorage.setItem(
+      "user",
+      JSON.stringify(response.data.user)
+    );
+
+    toast.success(response.data.message);
+
+  } catch (error) {
+      console.log(error);
+  console.log(error.response);
+    toast.error(
+      error.response?.data?.message || "Unable to remove photo"
+    );
+
+  }
+};
+
   const handleImageChange = (e) => {
     if (e.target.files?.[0]) {
       setProfileImage(e.target.files[0]);
@@ -145,7 +171,7 @@ const Profile = () => {
               {(profileImage || profile?.profileImage) && (
                 <button
                   type="button"
-                  onClick={() => setProfileImage(null)}
+                  onClick={handleRemovePhoto}
                   className="flex items-center gap-2 mt-4 text-red-500 hover:text-red-700"
                 >
                   <FaTrash />
