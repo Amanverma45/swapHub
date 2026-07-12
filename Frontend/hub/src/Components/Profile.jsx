@@ -87,14 +87,14 @@ const Profile = () => {
     }
   };
   const handlePreview = () => {
-  if (profileImage || profile?.profileImage) {
-    setShowPreview(true);
-  } else {
-    toast("Profile photo not available", {
-      icon: "📷",
-    });
-  }
-};
+    if (profileImage || profile?.profileImage) {
+      setShowPreview(true);
+    } else {
+      toast("Profile photo not available", {
+        icon: "📷",
+      });
+    }
+  };
 
   const handleRemovePhoto = async () => {
     try {
@@ -141,7 +141,6 @@ const Profile = () => {
       );
     }
 
-    // Max size 5MB
     if (file.size > 5 * 1024 * 1024) {
       return toast.error("Image size must be less than 5 MB");
     }
