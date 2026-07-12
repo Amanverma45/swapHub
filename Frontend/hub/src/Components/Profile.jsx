@@ -37,6 +37,12 @@ const Profile = () => {
 
   const handleUpdateProfile = async () => {
     try {
+      if (!name.trim()) {
+        return toast.error("Name is required");
+      }
+      if (phone && !/^\d{10}$/.test(phone)) {
+        return toast.error("Phone number must be 10 digits");
+      }
       setUpdating(true);
       const formData = new FormData();
 
@@ -210,34 +216,31 @@ const Profile = () => {
                   Phone Number
                 </h3>
 
-                {/* <p className="text-gray-400"> */}
-                  <input
-                    type="tel"
-                    maxLength={10}
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="Enter phone number"
-                    className="w-full outline-none text-lg font-semibold"
-                  />
-                {/* </p> */}
+                <input
+                  type="tel"
+                  maxLength={10}
+                  value={phone}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, "");
+                    setPhone(value);
+                  }}
+                  placeholder="Enter phone number"
+                  className="w-full outline-none text-lg font-semibold"
+                />
               </div>
 
               <div className="border rounded-2xl p-4">
-
                 <h3 className="text-sm text-gray-500 mb-2">
                   Location
                 </h3>
-
-                {/* <p className="text-gray-400"> */}
-                  <input
-                    type="text"
-                    maxLength={40}
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                    placeholder="Enter location"
-                    className="w-full outline-none text-lg font-semibold"
-                  />
-                {/* </p> */}
+                <input
+                  type="text"
+                  maxLength={40}
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  placeholder="Enter location"
+                  className="w-full outline-none text-lg font-semibold"
+                />
               </div>
             </div>
 
