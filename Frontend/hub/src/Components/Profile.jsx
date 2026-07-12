@@ -1,6 +1,4 @@
-// import {useState, useEffect } from "react";
 import { useState, useEffect } from "react";
-// import { FaUserCircle, FaArrowLeft,  FaTrash } from "react-icons/fa";
 import { FaUserCircle, FaArrowLeft, FaCamera, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "../utils/axiosInstance";
@@ -41,14 +39,32 @@ const Profile = () => {
         return toast.error("Name is required");
       }
       if (phone && !/^\d{10}$/.test(phone)) {
-        return toast.error("Phone number must be 10 digits");
+        return toast.error("Please enter a valid 10-digit phone number");
+      }
+      if (location.trim().length > 50) {
+        return toast.error("Location cannot exceed 50 characters");
+      }
+      const isSameName = name.trim() === profile?.name;
+      const isSamePhone = phone === (profile?.phone || "");
+      const isSameLocation = location.trim() === (profile?.location || "");
+      const isSameImage = !profileImage;
+
+      if (
+        isSameName &&
+        isSamePhone &&
+        isSameLocation &&
+        isSameImage
+      ) {
+        return toast("No changes detected", {
+          icon: "ℹ️",
+        });
       }
       setUpdating(true);
       const formData = new FormData();
 
-      formData.append("name", name);
+      formData.append("name", name.trim());
       formData.append("phone", phone);
-      formData.append("location", location);
+      formData.append("location", location.trim());
 
       if (profileImage) {
         formData.append("profileImage", profileImage);
@@ -98,9 +114,30 @@ const Profile = () => {
   };
 
   const handleImageChange = (e) => {
-    if (e.target.files?.[0]) {
-      setProfileImage(e.target.files[0]);
+    const file = e.target.files?.[0];
+
+    if (!file) return;
+
+    const allowedTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/webp",
+      "image/avif",
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+      return toast.error(
+        "Only JPG, JPEG, PNG, AVIF and WEBP images are allowed"
+      );
     }
+
+    // Max size 5MB
+    if (file.size > 5 * 1024 * 1024) {
+      return toast.error("Image size must be less than 5 MB");
+    }
+
+    setProfileImage(file);
     setShowPicker(false);
   };
   useEffect(() => {
@@ -235,22 +272,28 @@ const Profile = () => {
                 </h3>
                 <input
                   type="text"
-                  maxLength={40}
+                  maxLength={50}
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
                   placeholder="Enter location"
-                  className="w-full outline-none text-lg font-semibold"
+                  className="w-full outline-none text-lg font-semibold text-black"
                 />
               </div>
             </div>
 
             <button
-              type="button"
-              onClick={handleUpdateProfile}
               disabled={updating}
-              className="w-full mt-8 bg-[#2E7D32] hover:bg-[#256728] text-white py-3 rounded-xl transition disabled:opacity-60"
+              onClick={handleUpdateProfile}
+              className="w-full mt-8 bg-[#2E7D32] text-white py-3 rounded-xl flex items-center justify-center gap-2 disabled:opacity-60"
             >
-              {updating ? "Saving..." : "Save Changes"}
+              {updating ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  Saving...
+                </>
+              ) : (
+                "Save Changes"
+              )}
             </button>
           </div>
         </div>
@@ -258,12 +301,12 @@ const Profile = () => {
 
       {showPreview && (
         <div
-          onClick={() => setShowPreview(false)}
-          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-5"
+          onClick={() => setShowPicker(false)}
+          className="fixed inset-0 bg-black/40 z-50 flex items-end justify-center"
         >
           <div
-            className="absolute top-5 left-5 flex items-center gap-3 text-white"
             onClick={(e) => e.stopPropagation()}
+            className="bg-white w-full max-w-3xl rounded-t-3xl p-6"
           >
             <button type="button" onClick={() => setShowPreview(false)}>
               <FaArrowLeft className="text-2xl" />
@@ -313,7 +356,9 @@ const Profile = () => {
             <div className="space-y-4">
 
               {/* Camera */}
-              <label className="flex items-center justify-center bg-[#2E7D32] text-white py-3 rounded-xl cursor-pointer">
+              <label
+                className="max-w-xs mx-auto flex items-center justify-center bg-[#2E7D32] text-white py-3 rounded-xl cursor-pointer hover:bg-[#256728] transition"
+              >
                 📷 Camera
 
                 <input
@@ -326,7 +371,9 @@ const Profile = () => {
               </label>
 
               {/* Gallery */}
-              <label className="flex items-center justify-center border border-gray-300 py-3 rounded-xl cursor-pointer">
+              <label
+                className="max-w-xs mx-auto flex items-center justify-center bg-[#2E7D32] text-white py-3 rounded-xl cursor-pointer hover:bg-[#256728] transition"
+              >
                 🖼 Gallery
 
                 <input
