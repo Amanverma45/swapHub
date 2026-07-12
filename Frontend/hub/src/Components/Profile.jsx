@@ -15,6 +15,9 @@ const Profile = () => {
   const [showPreview, setShowPreview] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
 
+  const [phone, setPhone] = useState("");
+  const [location, setLocation] = useState("");
+
   const [profile, setProfile] = useState(null);
 
   const getProfile = async () => {
@@ -22,6 +25,8 @@ const Profile = () => {
       const response = await axios.get("/getProfile");
       setProfile(response.data);
       setName(response.data.name);
+      setPhone(response.data.phone || "");
+      setLocation(response.data.location || "");
     } catch (error) {
       console.log(error);
       toast.error(error.response?.data?.message || error.message);
@@ -34,7 +39,11 @@ const Profile = () => {
     try {
       setUpdating(true);
       const formData = new FormData();
+
       formData.append("name", name);
+      formData.append("phone", phone);
+      formData.append("location", location);
+
       if (profileImage) {
         formData.append("profileImage", profileImage);
       }
@@ -57,30 +66,30 @@ const Profile = () => {
   };
 
   const handleRemovePhoto = async () => {
-  try {
+    try {
 
-    const response = await axios.put("/removeProfilePhoto");
+      const response = await axios.put("/removeProfilePhoto");
 
-    setProfileImage(null);
+      setProfileImage(null);
 
-    setProfile(response.data.user);
+      setProfile(response.data.user);
 
-    localStorage.setItem(
-      "user",
-      JSON.stringify(response.data.user)
-    );
+      localStorage.setItem(
+        "user",
+        JSON.stringify(response.data.user)
+      );
 
-    toast.success(response.data.message);
+      toast.success(response.data.message);
 
-  } catch (error) {
+    } catch (error) {
       console.log(error);
-  console.log(error.response);
-    toast.error(
-      error.response?.data?.message || "Unable to remove photo"
-    );
+      console.log(error.response);
+      toast.error(
+        error.response?.data?.message || "Unable to remove photo"
+      );
 
-  }
-};
+    }
+  };
 
   const handleImageChange = (e) => {
     if (e.target.files?.[0]) {
@@ -142,23 +151,6 @@ const Profile = () => {
                   />
                 )}
 
-                <div className="absolute bottom-1 right-1 w-10 h-10">
-
-                  <FaCamera className="absolute inset-0 m-auto text-[#2E7D32] pointer-events-none" />
-
-                  <input
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    className="absolute inset-0 opacity-0 cursor-pointer"
-                    onChange={(e) => {
-                      if (e.target.files?.[0]) {
-                        setProfileImage(e.target.files[0]);
-                      }
-                    }}
-                  />
-
-                </div>
                 <div
                   onClick={() => setShowPicker(true)}
                   className="absolute bottom-1 right-1 bg-white text-[#2E7D32] p-3 rounded-full shadow-lg border cursor-pointer flex items-center justify-center"
@@ -218,9 +210,16 @@ const Profile = () => {
                   Phone Number
                 </h3>
 
-                <p className="text-gray-400">
-                  Not Added
-                </p>
+                {/* <p className="text-gray-400"> */}
+                  <input
+                    type="tel"
+                    maxLength={10}
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="Enter phone number"
+                    className="w-full outline-none text-lg font-semibold"
+                  />
+                {/* </p> */}
               </div>
 
               <div className="border rounded-2xl p-4">
@@ -229,9 +228,16 @@ const Profile = () => {
                   Location
                 </h3>
 
-                <p className="text-gray-400">
-                  Not Added
-                </p>
+                {/* <p className="text-gray-400"> */}
+                  <input
+                    type="text"
+                    maxLength={40}
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    placeholder="Enter location"
+                    className="w-full outline-none text-lg font-semibold"
+                  />
+                {/* </p> */}
               </div>
             </div>
 
