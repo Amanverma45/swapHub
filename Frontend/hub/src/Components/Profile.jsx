@@ -301,13 +301,13 @@ const Profile = () => {
 
       {showPreview && (
         <div
-          onClick={() => setShowPicker(false)}
-          className="fixed inset-0 bg-black/40 z-50 flex items-end justify-center"
-        >
+  onClick={() => setShowPicker(false)}
+  className="fixed inset-0 bg-black/40 z-50 flex items-end justify-center"
+>
           <div
-            onClick={(e) => e.stopPropagation()}
-            className="bg-white w-full max-w-3xl rounded-t-3xl p-6"
-          >
+  onClick={(e) => e.stopPropagation()}
+  className="bg-white w-[95%] sm:w-[80%] md:w-[65%] lg:w-[42%] rounded-t-3xl p-6 mb-0"
+>
             <button type="button" onClick={() => setShowPreview(false)}>
               <FaArrowLeft className="text-2xl" />
             </button>
@@ -372,8 +372,7 @@ const Profile = () => {
 
               {/* Gallery */}
               <label
-                className="max-w-xs mx-auto flex items-center justify-center bg-[#2E7D32] text-white py-3 rounded-xl cursor-pointer hover:bg-[#256728] transition"
-              >
+                className="max-w-xs mx-auto flex items-center justify-center bg-[#2E7D32] text-white py-3 rounded-xl cursor-pointer hover:bg-[#256728] transition">
                 🖼 Gallery
 
                 <input
