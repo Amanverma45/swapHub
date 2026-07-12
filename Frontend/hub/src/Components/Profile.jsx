@@ -86,6 +86,15 @@ const Profile = () => {
       setUpdating(false);
     }
   };
+  const handlePreview = () => {
+  if (profileImage || profile?.profileImage) {
+    setShowPreview(true);
+  } else {
+    toast("Profile photo not available", {
+      icon: "📷",
+    });
+  }
+};
 
   const handleRemovePhoto = async () => {
     try {
@@ -136,13 +145,25 @@ const Profile = () => {
     if (file.size > 5 * 1024 * 1024) {
       return toast.error("Image size must be less than 5 MB");
     }
-
     setProfileImage(file);
     setShowPicker(false);
   };
+
   useEffect(() => {
     getProfile();
   }, []);
+
+  useEffect(() => {
+    if (showPicker || showPreview) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [showPicker, showPreview]);
 
   if (loading) {
     return (
@@ -177,20 +198,20 @@ const Profile = () => {
                   <img
                     src={URL.createObjectURL(profileImage)}
                     alt="Profile"
-                    onClick={() => setShowPreview(true)}
+                    onClick={handlePreview}
                     className="w-full h-full rounded-full object-cover border-4 border-[#2E7D32]"
                   />
                 ) : profile?.profileImage ? (
                   <img
                     src={profile.profileImage}
                     alt="Profile"
-                    onClick={() => setShowPreview(true)}
+                    onClick={handlePreview}
                     className="w-full h-full rounded-full object-cover border-4 border-[#2E7D32]"
                   />
                 ) : (
                   <FaUserCircle
                     className="w-full h-full text-[#2E7D32]"
-                    onClick={() => setShowPreview(true)}
+                    onClick={handlePreview}
                   />
                 )}
 
@@ -301,13 +322,13 @@ const Profile = () => {
 
       {showPreview && (
         <div
-  onClick={() => setShowPicker(false)}
-  className="fixed inset-0 bg-black/40 z-50 flex items-end justify-center"
->
+          onClick={() => setShowPreview(false)}
+          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-5"
+        >
           <div
-  onClick={(e) => e.stopPropagation()}
-  className="bg-white w-[95%] sm:w-[80%] md:w-[65%] lg:w-[42%] rounded-t-3xl p-6 mb-0"
->
+            className="absolute top-5 left-5 flex items-center gap-3 text-white"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button type="button" onClick={() => setShowPreview(false)}>
               <FaArrowLeft className="text-2xl" />
             </button>
@@ -343,21 +364,38 @@ const Profile = () => {
       {showPicker && (
         <div
           onClick={() => setShowPicker(false)}
-          className="fixed inset-0 bg-black/40 z-50 flex items-end"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-white w-full rounded-t-3xl p-6"
+            className="bg-white w-full max-w-md rounded-3xl p-8 shadow-2xl"
           >
             <h2 className="text-xl font-semibold text-center mb-6">
               Choose Photo
             </h2>
+            <div className="flex justify-center mb-6">
+              {profileImage ? (
+                <img
+                  src={URL.createObjectURL(profileImage)}
+                  alt="Profile"
+                  className="w-24 h-24 rounded-full object-cover border-4 border-[#2E7D32]"
+                />
+              ) : profile?.profileImage ? (
+                <img
+                  src={profile.profileImage}
+                  alt="Profile"
+                  className="w-24 h-24 rounded-full object-cover border-4 border-[#2E7D32]"
+                />
+              ) : (
+                <FaUserCircle className="w-24 h-24 text-[#2E7D32]" />
+              )}
+            </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
 
               {/* Camera */}
               <label
-                className="max-w-xs mx-auto flex items-center justify-center bg-[#2E7D32] text-white py-3 rounded-xl cursor-pointer hover:bg-[#256728] transition"
+                className="w-full flex items-center justify-center gap-2 bg-[#2E7D32] hover:bg-[#256728] text-white py-3 rounded-xl transition cursor-pointer"
               >
                 📷 Camera
 
@@ -372,7 +410,7 @@ const Profile = () => {
 
               {/* Gallery */}
               <label
-                className="max-w-xs mx-auto flex items-center justify-center bg-[#2E7D32] text-white py-3 rounded-xl cursor-pointer hover:bg-[#256728] transition">
+                className="w-full flex items-center justify-center gap-2 border border-gray-300 hover:bg-gray-100 py-3 rounded-xl transition cursor-pointer">
                 🖼 Gallery
 
                 <input
@@ -387,7 +425,7 @@ const Profile = () => {
 
             <button
               onClick={() => setShowPicker(false)}
-              className="w-full mt-5 py-3 rounded-xl bg-gray-200 hover:bg-gray-300"
+              className="w-full mt-4 py-3 rounded-xl border border-gray-300 hover:bg-gray-100 transition"
             >
               Cancel
             </button>
