@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from '../utils/axiosInstance.js';
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { FaCamera } from "react-icons/fa";
 
 const AddProduct = () => {
     const [image, setImage] = useState(null);
@@ -10,6 +11,9 @@ const AddProduct = () => {
     const [exchangeFor, setExchangeFor] = useState("");
     const [location, setLocation] = useState("");
     const [description, setDescription] = useState("");
+
+    const [showPreview, setShowPreview] = useState(false);
+    const [tempImage, setTempImage] = useState(null);
 
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
@@ -21,8 +25,37 @@ const AddProduct = () => {
             return;
         }
 
-        if (image.size > 5 * 1024 * 1024) {
-            toast.error("Image must be less than 5MB");
+        if (productName.trim().length < 3) {
+            toast.error("Product name must be at least 3 characters");
+            return;
+        }
+
+        if (productName.length > 50) {
+            toast.error("Product name must be less than 50 characters");
+            return;
+        }
+
+        if (location.trim().length > 50) {
+            toast.error("Location must be less than 50 characters");
+            return;
+        }
+
+        if (description.trim().length < 20) {
+            toast.error("Description must be at least 20 characters");
+            return;
+        }
+
+        if (description.length > 500) {
+            toast.error("Description must be less than 500 characters");
+            return;
+        }
+        if (exchangeFor.trim().length < 3) {
+            toast.error("Exchange item must be at least 3 characters");
+            return;
+        }
+
+        if (exchangeFor.trim().length > 50) {
+            toast.error("Exchange item must be less than 50 characters");
             return;
         }
         setLoading(true);
@@ -36,7 +69,7 @@ const AddProduct = () => {
             formData.append("location", location);
             formData.append("description", description);
 
-            const response = await axios.post(
+            await axios.post(
                 "https://swaphub-backend-855x.onrender.com/api/addProduct",
                 formData,
                 {
@@ -46,11 +79,11 @@ const AddProduct = () => {
                     },
                 }
             );
-
-            console.log(response.data);
             toast.success("Product Added Successfully");
 
             setImage(null);
+            setTempImage(null);
+            setShowPreview(false);
             setProductName("");
             setCategory("");
             setExchangeFor("");
@@ -73,6 +106,49 @@ const AddProduct = () => {
             setLoading(false);
         }
     };
+    const handleImageChange = (e) => {
+        const file = e.target.files?.[0];
+
+        if (!file) return;
+
+        // Size Validation
+        if (file.size > 5 * 1024 * 1024) {
+            toast.error("Image must be less than 5MB");
+            e.target.value = "";
+            return;
+        }
+
+        // Type Validation
+        const allowedTypes = [
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+            "image/webp",
+            "image/avif",
+        ];
+
+        if (!allowedTypes.includes(file.type)) {
+            toast.error("Only JPG, PNG, WEBP and AVIF images are allowed");
+            e.target.value = "";
+            return;
+        }
+
+        setTempImage(file);
+        setShowPreview(true);
+
+        e.target.value = "";
+    };
+
+    const handleDone = () => {
+        setImage(tempImage);
+        setTempImage(null);
+        setShowPreview(false);
+    };
+
+    const handleCancel = () => {
+        setTempImage(null);
+        setShowPreview(false);
+    };
     return (
         <section className="min-h-screen bg-gray-50 py-10 px-4">
             <div className="max-w-3xl mx-auto bg-white rounded-3xl shadow-lg border border-gray-100 p-8">
@@ -94,12 +170,53 @@ const AddProduct = () => {
                         <label className="block font-medium mb-2">
                             Product Image
                         </label>
+                        <div className="relative">
+                            <label
+                                htmlFor="productImage"
+                                className="absolute top-3 right-3 w-11 h-11 rounded-full bg-[#2E7D32] text-white flex items-center justify-center cursor-pointer hover:bg-[#256728] transition shadow-lg"
+                            >
+                                <FaCamera className="text-lg" />
+                            </label>
+                            <input
+                                id="productImage"
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                className="hidden"
+                            />
 
-                        <input
-                            type="file"
-                            onChange={(e) => setImage(e.target.files[0])}
-                            className="w-full border border-gray-300 rounded-xl p-3"
-                        />
+                            <label
+                                htmlFor="productImage"
+                                className="w-full h-44 md:h-56 border-2 border-dashed border-gray-300 rounded-2xl cursor-pointer flex flex-col items-center justify-center hover:bg-gray-50 transition"
+                            >
+                                {image ? (
+                                    <>
+                                        <img
+                                            src={URL.createObjectURL(image)}
+                                            alt="Product"
+                                            className="w-full h-full object-contain p-2 bg-white rounded-2xl"
+                                        />
+                                    </>
+                                ) : (
+                                    <>
+                                        <p className="text-5xl mb-2">📷</p>
+
+                                        <p className="font-semibold">
+                                            Upload Product Image
+                                        </p>
+
+                                        <p className="text-sm text-gray-500 mt-1">
+                                            JPG, PNG, WEBP, AVIF (Max 5MB)
+                                        </p>
+                                    </>
+                                )}
+                            </label>
+                            {image && (
+                                <p className="mt-2 text-center text-sm text-gray-500 truncate">
+                                    {image.name}
+                                </p>
+                            )}
+                        </div>
                     </div>
 
                     {/* Product Name */}
@@ -113,7 +230,7 @@ const AddProduct = () => {
                             value={productName}
                             onChange={(e) => setProductName(e.target.value)}
                             placeholder="Enter product name"
-                            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32]"
+                            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20"
                         />
                     </div>
 
@@ -125,7 +242,7 @@ const AddProduct = () => {
 
                         <select
                             value={category}
-                            onChange={(e) => setCategory(e.target.value)} className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32]">
+                            onChange={(e) => setCategory(e.target.value)} className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20">
                             <option value="">Select Category</option>
                             <option value="Books">Books</option>
                             <option value="Mobiles">Mobiles</option>
@@ -147,7 +264,7 @@ const AddProduct = () => {
                             onChange={(e) => setExchangeFor(e.target.value)}
                             type="text"
                             placeholder="Example: Laptop, Books, Mobile"
-                            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32]"
+                            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20"
                         />
                     </div>
 
@@ -162,7 +279,7 @@ const AddProduct = () => {
                             onChange={(e) => setLocation(e.target.value)}
                             type="text"
                             placeholder="Enter your city"
-                            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32]"
+                            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20"
                         />
                     </div>
 
@@ -177,19 +294,79 @@ const AddProduct = () => {
                             onChange={(e) => setDescription(e.target.value)}
                             rows="5"
                             placeholder="Describe your product..."
-                            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none resize-none focus:border-[#2E7D32]"
+                            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none resize-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20"
                         ></textarea>
                     </div>
 
-                    <button disabled={loading}
+                    <button
                         type="submit"
-                        className="w-full bg-[#2E7D32] hover:bg-[#256728] text-white py-3 rounded-xl transition duration-300"
-                    >
-                        {loading ? "Adding..." : "Add Product"}
+                        disabled={loading}
+                        className="w-full bg-[#2E7D32] hover:bg-[#256728] disabled:opacity-70 disabled:cursor-not-allowed text-white py-3 rounded-xl transition-all duration-300">
+                        {loading ? (
+                            <span className="flex items-center justify-center gap-2">
+                                <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                                Adding Product...
+                            </span>
+                        ) : (
+                            "Add Product"
+                        )}
                     </button>
 
                 </form>
             </div>
+            {showPreview && (
+                <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 px-4">
+
+                    <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden">
+
+                        {/* Header */}
+                        <div className="px-6 py-4 border-b flex items-center justify-between">
+                            <h2 className="text-xl font-semibold">
+                                Preview Image
+                            </h2>
+
+                            <button
+                                onClick={handleCancel}
+                                className="text-2xl text-gray-500 hover:text-red-500 transition"
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        {/* Image */}
+                        <div className="bg-gray-100 flex justify-center items-center p-5">
+
+                            <img
+                                src={URL.createObjectURL(tempImage)}
+                                alt="Preview"
+                                className="max-h-[420px] w-full object-contain rounded-2xl bg-white"
+                            />
+
+                        </div>
+
+                        {/* Footer */}
+                        <div className="flex gap-4 p-5">
+
+                            <button
+                                onClick={handleCancel}
+                                className="flex-1 border border-gray-300 rounded-xl py-3 font-medium hover:bg-gray-100 transition"
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                onClick={handleDone}
+                                className="flex-1 bg-[#2E7D32] text-white rounded-xl py-3 font-medium hover:bg-[#256728] transition"
+                            >
+                                Use Image
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            )}
         </section>
     );
 };
