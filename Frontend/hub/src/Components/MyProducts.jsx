@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 const MyProducts = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true)
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [selectedId, setSelectedId] = useState(null);
 
     const myProducts = async () => {
         try {
@@ -27,25 +29,33 @@ const MyProducts = () => {
             setLoading(false);
         }
     };
-    const handleDelete = async (id) => {
+    const handleDelete = (id) => {
+        setSelectedId(id);
+        setShowDeleteModal(true);
+    };
+    const confirmDelete = async () => {
+
         try {
-            if (!window.confirm("Are you sure you want to delete this product?")) {
-                return;
-            }
-            await axios.delete(`/deleteProduct/${id}`);
+            await axios.delete(`/deleteProduct/${selectedId}`);
 
             toast.success("Product deleted successfully");
 
             setProducts((prev) =>
-                prev.filter((product) => product._id !== id)
+                prev.filter((product) => product._id !== selectedId)
             );
 
         } catch (error) {
+
             console.error(error);
             toast.error(error.response?.data?.message || error.message);
+
+        } finally {
+
+            setShowDeleteModal(false);
+            setSelectedId(null);
+
         }
     };
-
     useEffect(() => {
         myProducts();
     }, []);
@@ -101,6 +111,44 @@ const MyProducts = () => {
                             handleDelete={handleDelete}
                         />
                     ))}
+                </div>
+            )}
+            {showDeleteModal && (
+                <div
+                    onClick={() => setShowDeleteModal(false)}
+                    className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4"
+                >
+                    <div
+                        onClick={(e) => e.stopPropagation()}
+                        className="bg-white rounded-3xl p-6 w-full max-w-sm"
+                    >
+                        <h2 className="text-xl font-bold text-center">
+                            Delete Product
+                        </h2>
+
+                        <p className="text-gray-500 text-center mt-3">
+                            Are you sure you want to delete this product?
+                        </p>
+
+                        <div className="flex gap-4 mt-6">
+
+                            <button
+                                onClick={() => setShowDeleteModal(false)}
+                                className="flex-1 border border-gray-300 py-3 rounded-xl"
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                onClick={confirmDelete}
+                                className="flex-1 bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl transition"
+                            >
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </div>
                 </div>
             )}
 
