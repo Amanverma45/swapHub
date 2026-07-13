@@ -66,7 +66,7 @@ const MyProductCard = ({ product, handleDelete }) => {
             className="flex items-center justify-center gap-2 bg-[#2E7D32] hover:bg-[#256728] text-white py-3 rounded-xl transition-all duration-300 text-sm font-medium"
           >
             <FaEye />
-            <span className="hidden md:inline">View</span>
+            <span>View</span>
           </Link>
 
           <Link
@@ -74,7 +74,7 @@ const MyProductCard = ({ product, handleDelete }) => {
             className="flex items-center justify-center gap-2 bg-[#F4A261] hover:bg-[#E6904F] text-white py-3 rounded-xl transition-all duration-300 text-sm font-medium"
           >
             <FaEdit />
-            <span className="hidden md:inline">Edit</span>
+            <span>Edit</span>
           </Link>
 
           <button
@@ -82,7 +82,7 @@ const MyProductCard = ({ product, handleDelete }) => {
             className="flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl transition-all duration-300 text-sm font-medium"
           >
             <FaTrash />
-            <span className="hidden md:inline">Delete</span>
+            <span>Delete</span>
           </button>
 
         </div>
