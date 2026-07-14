@@ -83,7 +83,7 @@ const Home = () => {
 
                         <FaUpload className="text-4xl md:text-5xl text-[#2E7D32] mx-auto mb-4" />
 
-                        <h3 className="text-lg md:text-xl font-bold">
+                        <h3 className="text-m md:text-xl font-bold">
                             Upload Product
                         </h3>
 
