@@ -79,15 +79,15 @@ const Home = () => {
                             scale: 1.02,
                             boxShadow: "0 14px 30px rgba(0,0,0,0.12)"
                         }}
-                        className="bg-white p-5 md:p-8 rounded-3xl border border-gray-100 shadow-sm text-center min-h-[220px] transition-all duration-200">
+                        className="bg-white p-2.5 h-[200px] md:min-h-[220px] md:p-8 rounded-3xl border border-gray-100 shadow-sm text-center  transition-all duration-200">
 
-                        <FaUpload className="text-4xl md:text-5xl text-[#2E7D32] mx-auto mb-4" />
+                        <FaUpload className="text-4xl mt-2 md:text-5xl text-[#2E7D32] mx-auto mb-4" />
 
-                        <h3 className="text-m md:text-xl font-bold">
+                        <h3 className="text-ms md:text-xl font-bold">
                             Upload Product
                         </h3>
 
-                        <p className="text-xs md:text-sm text-gray-500 mt-3 leading-6">
+                        <p className="text-sm ml-3 md:text-sm text-gray-500 mt-3 leading-4 text-left">
                             List your unused product.
                         </p>
 
@@ -102,14 +102,14 @@ const Home = () => {
                             scale: 1.02,
                             boxShadow: "0 14px 30px rgba(0,0,0,0.12)"
                         }}
-                        className="bg-white p-5 md:p-8 rounded-3xl border border-gray-100 shadow-sm text-center min-h-[220px] transition-all duration-200">
-                        <FaSearch className="text-4xl md:text-5xl text-[#F4A261] mx-auto mb-4" />
+                        className="bg-white p-2.5 md:p-8 rounded-3xl border border-gray-100 shadow-sm text-center h-[200px] md:min-h-[220px] transition-all duration-200">
+                        <FaSearch className="text-4xl mt-2 md:text-5xl text-[#2E7D32] mx-auto mb-4" />
 
-                        <h3 className="text-lg md:text-xl font-bold">
+                        <h3 className="text-ms md:text-xl font-bold">
                             Browse Products
                         </h3>
 
-                        <p className="text-xs md:text-sm text-gray-500 mt-3 leading-6">
+                        <p className="text-sm ml-3 md:text-sm text-gray-500 mt-3 leading-4 text-left">
                             Discover products available for exchange.
                         </p>
                     </motion.div>
@@ -123,14 +123,14 @@ const Home = () => {
                             scale: 1.02,
                             boxShadow: "0 14px 30px rgba(0,0,0,0.12)"
                         }}
-                        className="bg-white p-5 md:p-8 rounded-3xl border border-gray-100 shadow-sm text-center min-h-[220px] transition-all duration-200">
-                        <FaExchangeAlt className="text-4xl md:text-5xl text-[#2E7D32] mx-auto mb-4" />
+                        className="bg-white p-3 md:p-8 rounded-3xl border border-gray-100 shadow-sm text-center h-[200px] md:min-h-[220px] transition-all duration-200">
+                        <FaExchangeAlt className="text-4xl mt-2 md:text-5xl text-[#2E7D32] mx-auto mb-4" />
 
-                        <h3 className="text-lg md:text-xl font-bold">
+                        <h3 className="text-ms md:text-xl font-bold">
                             Send Request
                         </h3>
 
-                        <p className="text-xs md:text-sm text-gray-500 mt-3 leading-6">
+                        <p className="text-sm ml-3 md:text-sm text-gray-500 mt-3 leading-4 text-left ">
                             Request an exchange with another user.
                         </p>
                     </motion.div>
@@ -144,14 +144,14 @@ const Home = () => {
                             scale: 1.02,
                             boxShadow: "0 14px 30px rgba(0,0,0,0.12)"
                         }}
-                        className="bg-white p-5 md:p-8 rounded-3xl border border-gray-100 shadow-sm text-center min-h-[220px] transition-all duration-200">
-                        <FaHandshake className="text-4xl md:text-5xl text-[#F4A261] mx-auto mb-4" />
+                        className="bg-white p-3 md:p-8 rounded-3xl border border-gray-100 shadow-sm text-center h-[200px] md:min-h-[220px] transition-all duration-200">
+                        <FaHandshake className="text-4xl mt-2 md:text-5xl text-[#F4A261] mx-auto mb-4" />
 
-                        <h3 className="text-lg md:text-xl font-bold">
+                        <h3 className="text-ms md:text-xl font-bold">
                             Complete Swap
                         </h3>
 
-                        <p className="text-xs md:text-sm text-gray-500 mt-3 leading-6">
+                        <p className="text-sm ml-3 md:text-sm text-gray-500 mt-3 leading-4 text-left">
                             Meet, exchange products and enjoy your new item.
                         </p>
                     </motion.div>
