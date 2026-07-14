@@ -164,30 +164,178 @@ const Home = () => {
                     Popular Categories
                 </h2>
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                    <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 text-center hover:-translate-y-2 hover:shadow-lg transition duration-300">
-                        <img src={books} alt="Books" className="w-20 h-20 mx-auto mb-5 object-contain" />
-                        <h3 className="text-xl font-semibold">Books</h3>
-                    </div>
-                    <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 text-center hover:-translate-y-2 hover:shadow-lg transition duration-300">
-                        <img src={mobile} alt="Mobile" className="w-20 h-20 mx-auto mb-5 object-contain" />
-                        <h3 className="text-xl font-semibold">Mobiles</h3>
-                    </div>
-                    <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 text-center hover:-translate-y-2 hover:shadow-lg transition duration-300">
-                        <img src={electronics} alt="Electronics" className="w-20 h-20 mx-auto mb-5 object-contain" />
-                        <h3 className="text-xl font-semibold">Electronics</h3>
-                    </div>
-                    <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 text-center hover:-translate-y-2 hover:shadow-lg transition duration-300">
-                        <img src={gaming} alt="Gaming" className="w-20 h-20 mx-auto mb-5 object-contain" />
-                        <h3 className="text-xl font-semibold">Gaming</h3>
-                    </div>
-                    <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 text-center hover:-translate-y-2 hover:shadow-lg transition duration-300">
-                        <img src={accessories} alt="Accessories" className="w-20 h-20 mx-auto mb-5 object-contain" />
-                        <h3 className="text-xl font-semibold">Accessories</h3>
-                    </div>
-                    <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 text-center hover:-translate-y-2 hover:shadow-lg transition duration-300">
-                        <img src={homeItems} alt="Home Items" className="w-20 h-20 mx-auto mb-5 object-contain" />
-                        <h3 className="text-xl font-semibold">Home Items</h3>
-                    </div>
+                    <Link to="/products?category=Books">
+                        <motion.div
+                            initial={{ opacity: 0, y: 25 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.3 }}
+                            whileHover={{
+                                y: -6,
+                                scale: 1.02,
+                                boxShadow: "0 14px 30px rgba(0,0,0,0.12)",
+                            }}
+                            className="group bg-white p-5 md:p-8 rounded-3xl border border-gray-100 shadow-sm min-h-[220px] md:min-h-[240px] transition-all duration-200"
+                        >
+                            <img
+                                src={books}
+                                alt="Books"
+                                className="w-24 h-24 md:w-28 md:h-28 mx-auto object-contain transition-transform duration-300 group-hover:scale-110"
+                            />
+
+                            <div className="mt-5 text-left">
+
+                                <h3 className="text-lg md:text-xl font-bold text-gray-800">
+                                    Books
+                                </h3>
+
+                                <p className="text-sm text-gray-500 leading-6 mt-2">
+                                    Exchange books easily.
+                                </p>
+
+                            </div>
+                        </motion.div>
+                    </Link>
+                    <motion.div
+                        initial={{ opacity: 0, y: 25 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.3, delay: 0.05 }}
+                        whileHover={{
+                            y: -6,
+                            scale: 1.02,
+                            boxShadow: "0 14px 30px rgba(0,0,0,0.12)",
+                        }}
+                        className="group bg-white p-5 md:p-8 rounded-3xl border border-gray-100 shadow-sm min-h-[220px] md:min-h-[240px] transition-all duration-200"
+                    >
+                        <img
+                            src={mobile}
+                            alt="Mobile"
+                            className="w-24 h-24 md:w-28 md:h-28 mx-auto object-contain transition-transform duration-300 group-hover:scale-110"
+                        />
+
+                        <div className="mt-5 text-left">
+                            <h3 className="text-lg md:text-xl font-bold text-gray-800">
+                                Mobiles
+                            </h3>
+
+                            <p className="text-sm text-gray-500 leading-6 mt-2">
+                                Exchange smartphones.
+                            </p>
+                        </div>
+                    </motion.div>
+                    <motion.div
+                        initial={{ opacity: 0, y: 25 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.3, delay: 0.1 }}
+                        whileHover={{
+                            y: -6,
+                            scale: 1.02,
+                            boxShadow: "0 14px 30px rgba(0,0,0,0.12)",
+                        }}
+                       className="group bg-white p-5 md:p-8 rounded-3xl border border-gray-100 shadow-sm min-h-[220px] md:min-h-[240px] transition-all duration-200"
+                    >
+                        <img
+                            src={electronics}
+                            alt="Electronics"
+                            className="w-24 h-24 md:w-28 md:h-28 mx-auto object-contain transition-transform duration-300 group-hover:scale-110"
+                        />
+
+                        <div className="mt-5 text-left">
+                            <h3 className="text-lg md:text-xl font-bold text-gray-800">
+                                Electronics
+                            </h3>
+
+                            <p className="text-sm text-gray-500 leading-6 mt-2">
+                                Exchange electronic gadgets.
+                            </p>
+                        </div>
+                    </motion.div>
+                    <motion.div
+                        initial={{ opacity: 0, y: 25 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.3, delay: 0.15 }}
+                        whileHover={{
+                            y: -6,
+                            scale: 1.02,
+                            boxShadow: "0 14px 30px rgba(0,0,0,0.12)",
+                        }}
+                       className="group bg-white p-5 md:p-8 rounded-3xl border border-gray-100 shadow-sm min-h-[220px] md:min-h-[240px] transition-all duration-200"
+                    >
+                        <img
+                            src={gaming}
+                            alt="Gaming"
+                            className="w-24 h-24 md:w-28 md:h-28 mx-auto object-contain transition-transform duration-300 group-hover:scale-110"
+                        />
+
+                        <div className="mt-5 text-left">
+                            <h3 className="text-lg md:text-xl font-bold text-gray-800">
+                                Gaming
+                            </h3>
+
+                            <p className="text-sm text-gray-500 leading-6 mt-2">
+                                Swap games and consoles.
+                            </p>
+                        </div>
+                    </motion.div>
+                    <motion.div
+                        initial={{ opacity: 0, y: 25 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.3, delay: 0.2 }}
+                        whileHover={{
+                            y: -6,
+                            scale: 1.02,
+                            boxShadow: "0 14px 30px rgba(0,0,0,0.12)",
+                        }}
+                       className="group bg-white p-5 md:p-8 rounded-3xl border border-gray-100 shadow-sm min-h-[220px] md:min-h-[240px] transition-all duration-200"
+                    >
+                        <img
+                            src={accessories}
+                            alt="Accessories"
+                            className="w-24 h-24 md:w-28 md:h-28 mx-auto object-contain transition-transform duration-300 group-hover:scale-110"
+                        />
+
+                        <div className="mt-5 text-left">
+                            <h3 className="text-lg md:text-xl font-bold text-gray-800">
+                                Accessories
+                            </h3>
+
+                            <p className="text-sm text-gray-500 leading-6 mt-2">
+                                Exchange accessories.
+                            </p>
+                        </div>
+                    </motion.div>
+                    <motion.div
+                        initial={{ opacity: 0, y: 25 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.3, delay: 0.25 }}
+                        whileHover={{
+                            y: -6,
+                            scale: 1.02,
+                            boxShadow: "0 14px 30px rgba(0,0,0,0.12)",
+                        }}
+                        className="group bg-white p-5 md:p-8 rounded-3xl border border-gray-100 shadow-sm min-h-[220px] md:min-h-[240px] transition-all duration-200"
+                    >
+                        <img
+                            src={homeItems}
+                            alt="Home Items"
+                            className="w-24 h-24 md:w-28 md:h-28 mx-auto object-contain transition-transform duration-300 group-hover:scale-110"
+                        />
+
+                        <div className="mt-5 text-left flex-1">
+                            <h3 className="text-lg md:text-xl font-bold text-gray-800">
+                                Home Items
+                            </h3>
+
+                            <p className="text-sm text-gray-500 leading-6 mt-2">
+                                Exchange home essentials.
+                            </p>
+                        </div>
+                    </motion.div>
                 </div>
             </section>
         </div>
