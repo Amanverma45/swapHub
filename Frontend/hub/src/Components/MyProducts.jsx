@@ -131,27 +131,21 @@ const MyProducts = () => {
                         </p>
 
                         <div className="flex gap-4 mt-6">
-
                             <button
                                 onClick={() => setShowDeleteModal(false)}
-                                className="flex-1 border border-gray-300 py-3 rounded-xl"
-                            >
+                                className="flex-1 border border-gray-300 py-3 rounded-xl">
                                 Cancel
                             </button>
 
                             <button
                                 onClick={confirmDelete}
-                                className="flex-1 bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl transition"
-                            >
+                                className="flex-1 bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl transition">
                                 Delete
                             </button>
-
                         </div>
-
                     </div>
                 </div>
             )}
-
         </section>
     );
 };
