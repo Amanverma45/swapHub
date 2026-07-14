@@ -64,7 +64,7 @@ const Home = () => {
                 </div>
             </section>
 
-            <section className="w-[90%] max-w-6xl mx-auto pt-16 pb-12 w-full">
+            <section className="w-[90%] max-w-6xl mx-auto pt-16 pb-12">
                 <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 md:mb-14 text-gray-800">
                     How SwapHub Works
                 </h2>
@@ -159,7 +159,7 @@ const Home = () => {
             </section>
 
 
-            <section className="w-[90%] max-w-6xl mx-auto pt-12 pb-24 w-full">
+            <section className="w-[90%] max-w-6xl mx-auto pt-12 pb-24">
                 <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12 md:mb-14">
                     Popular Categories
                 </h2>
