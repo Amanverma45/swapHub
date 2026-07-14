@@ -183,7 +183,7 @@ const Home = () => {
                                 className="w-24 h-24 md:w-28 md:h-28 mx-auto object-contain transition-transform duration-300 group-hover:scale-110"
                             />
 
-                            <div className="mt-5 text-left">
+                            <div className="mt-5 text-left md:text-center">
 
                                 <h3 className="text-lg md:text-xl font-bold text-gray-800">
                                     Books
@@ -214,7 +214,7 @@ const Home = () => {
                             className="w-24 h-24 md:w-28 md:h-28 mx-auto object-contain transition-transform duration-300 group-hover:scale-110"
                         />
 
-                        <div className="mt-5 text-left">
+                        <div className="mt-5 text-left md:text-center">
                             <h3 className="text-lg md:text-xl font-bold text-gray-800">
                                 Mobiles
                             </h3>
@@ -242,7 +242,7 @@ const Home = () => {
                             className="w-24 h-24 md:w-28 md:h-28 mx-auto object-contain transition-transform duration-300 group-hover:scale-110"
                         />
 
-                        <div className="mt-5 text-left">
+                        <div className="mt-5 text-left md:text-center">
                             <h3 className="text-lg md:text-xl font-bold text-gray-800">
                                 Electronics
                             </h3>
@@ -270,7 +270,7 @@ const Home = () => {
                             className="w-24 h-24 md:w-28 md:h-28 mx-auto object-contain transition-transform duration-300 group-hover:scale-110"
                         />
 
-                        <div className="mt-5 text-left">
+                        <div className="mt-5 text-left md:text-center">
                             <h3 className="text-lg md:text-xl font-bold text-gray-800">
                                 Gaming
                             </h3>
@@ -298,7 +298,7 @@ const Home = () => {
                             className="w-24 h-24 md:w-28 md:h-28 mx-auto object-contain transition-transform duration-300 group-hover:scale-110"
                         />
 
-                        <div className="mt-5 text-left">
+                        <div className="mt-5 text-left md:text-center">
                             <h3 className="text-lg md:text-xl font-bold text-gray-800">
                                 Accessories
                             </h3>
@@ -326,7 +326,7 @@ const Home = () => {
                             className="w-24 h-24 md:w-28 md:h-28 mx-auto object-contain transition-transform duration-300 group-hover:scale-110"
                         />
 
-                        <div className="mt-5 text-left flex-1">
+                        <div className="mt-5 text-left md:text-center">
                             <h3 className="text-lg md:text-xl font-bold text-gray-800">
                                 Home Items
                             </h3>
