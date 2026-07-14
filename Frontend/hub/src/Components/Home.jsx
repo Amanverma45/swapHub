@@ -83,7 +83,7 @@ const Home = () => {
 
                         <FaUpload className="text-4xl mt-2 md:text-5xl text-[#2E7D32] mx-auto mb-4" />
 
-                        <h3 className="text-ms md:text-xl font-bold">
+                        <h3 className="text-base md:text-xl font-bold">
                             Upload Product
                         </h3>
 
@@ -103,9 +103,9 @@ const Home = () => {
                             boxShadow: "0 14px 30px rgba(0,0,0,0.12)"
                         }}
                         className="bg-white p-2.5 md:p-8 rounded-3xl border border-gray-100 shadow-sm text-center h-[190px] md:min-h-[220px] transition-all duration-200">
-                        <FaSearch className="text-4xl mt-2 md:text-5xl text-[#2E7D32] mx-auto mb-4" />
+                        <FaSearch className="text-4xl mt-2 md:text-5xl text-[#F4A261] mx-auto mb-4" />
 
-                        <h3 className="text-ms md:text-xl font-bold">
+                        <h3 className="text-base md:text-xl font-bold">
                             Browse Products
                         </h3>
 
@@ -126,7 +126,7 @@ const Home = () => {
                         className="bg-white p-3 md:p-8 rounded-3xl border border-gray-100 shadow-sm text-center h-[190px] md:min-h-[220px] transition-all duration-200">
                         <FaExchangeAlt className="text-4xl mt-2 md:text-5xl text-[#2E7D32] mx-auto mb-4" />
 
-                        <h3 className="text-ms md:text-xl font-bold">
+                        <h3 className="text-base md:text-xl font-bold">
                             Send Request
                         </h3>
 
@@ -147,7 +147,7 @@ const Home = () => {
                         className="bg-white p-3 md:p-8 rounded-3xl border border-gray-100 shadow-sm text-center h-[190px] md:min-h-[220px] transition-all duration-200">
                         <FaHandshake className="text-4xl mt-2 md:text-5xl text-[#F4A261] mx-auto mb-4" />
 
-                        <h3 className="text-ms md:text-xl font-bold">
+                        <h3 className="text-base md:text-xl font-bold">
                             Complete Swap
                         </h3>
 
