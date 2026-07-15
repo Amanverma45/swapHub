@@ -21,6 +21,17 @@ const EditProduct = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (
+            !productName.trim() ||
+            !category.trim() ||
+            !exchangeFor.trim() ||
+            !location.trim() ||
+            !description.trim()
+        ) {
+            toast.error("Please fill all required fields.");
+            return;
+        }
+
         if (image && image.size > 5 * 1024 * 1024) {
             toast.error("Image must be less than 5MB");
             return;
