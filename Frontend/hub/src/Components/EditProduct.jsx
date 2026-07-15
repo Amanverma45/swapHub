@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";  //..
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "../utils/axiosInstance";
 import toast from "react-hot-toast";
 
@@ -16,6 +16,7 @@ const EditProduct = () => {
 
     const [loading, setLoading] = useState(true);
     const [updating, setUpdating] = useState(false);
+    const [previewImage, setPreviewImage] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -28,9 +29,6 @@ const EditProduct = () => {
         try {
             const formData = new FormData();
 
-            if (image) {
-                formData.append("image", image);
-            }
             formData.append("productName", productName);
             formData.append("category", category);
             formData.append("exchangeFor", exchangeFor);
@@ -45,7 +43,7 @@ const EditProduct = () => {
                 }
             );
 
-            console.log(response.data);
+            console.error(response.data);
             toast.success("Product Updated Successfully");
 
             setImage(null);
@@ -54,10 +52,10 @@ const EditProduct = () => {
             setExchangeFor("");
             setLocation("");
             setDescription("");
-            navigate("/products");
+            navigate("/myProducts");
 
         } catch (error) {
-            console.log(error);
+            console.error(error);
 
             if (error.response?.status === 401) {
                 toast.error("Session expired. Please login again.");
@@ -82,8 +80,9 @@ const EditProduct = () => {
             setLocation(response.data.location);
             setDescription(response.data.description);
 
+            setPreviewImage(response.data.image);
         } catch (error) {
-            console.log(error);
+            console.error(error);
             toast.error(error.response?.data?.message || error.message);
         } finally {
             setLoading(false);
@@ -94,15 +93,19 @@ const EditProduct = () => {
     }, []);
     if (loading) {
         return (
-            <h2 className="text-center text-2xl mt-10">
-                Loading...
-            </h2>
+            <div className="flex flex-col items-center justify-center py-24">
+                <div className="w-10 h-10 border-4 border-[#2E7D32] border-t-transparent rounded-full animate-spin"></div>
+
+                <p className="mt-4 text-gray-600">
+                    Loading Product...
+                </p>
+            </div>
         );
     }
 
     return (
         <section className="min-h-screen bg-gray-50 py-10 px-4">
-            <div className="max-w-3xl mx-auto bg-white rounded-3xl shadow-lg border border-gray-100 p-8">
+            <div className="max-w-3xl mx-auto bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
 
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold text-[#2E7D32]">
@@ -124,9 +127,35 @@ const EditProduct = () => {
 
                         <input
                             type="file"
+                            accept="image/*"
                             onChange={(e) => setImage(e.target.files[0])}
                             className="w-full border border-gray-300 rounded-xl p-3"
                         />
+
+                        {(image || previewImage) && (
+                            <div className="mt-4">
+
+                                <p
+                                    className={`text-xs mb-2 ${image
+                                        ? "text-[#2E7D32] font-medium"
+                                        : "text-gray-500"
+                                        }`}
+                                >
+                                    {image ? "Selected Image" : "Current Image"}
+                                </p>
+
+                                <img
+                                    src={image ? URL.createObjectURL(image) : previewImage}
+                                    alt="Preview"
+                                    className="w-64 h-44 rounded-2xl object-cover border border-gray-200 shadow-sm"
+                                />
+
+                            </div>
+                        )}
+
+                        <p className="text-sm text-gray-500 mt-2">
+                            Select a new image only if you want to replace the current one.
+                        </p>
                     </div>
 
                     {/* Product Name */}
@@ -140,7 +169,7 @@ const EditProduct = () => {
                             value={productName}
                             onChange={(e) => setProductName(e.target.value)}
                             placeholder="Enter product name"
-                            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32]"
+                            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20"
                         />
                     </div>
 
@@ -152,7 +181,8 @@ const EditProduct = () => {
 
                         <select
                             value={category}
-                            onChange={(e) => setCategory(e.target.value)} className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32]">
+                            onChange={(e) => setCategory(e.target.value)} className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20"
+                        >
                             <option value="">Select Category</option>
                             <option value="Books">Books</option>
                             <option value="Mobiles">Mobiles</option>
@@ -174,7 +204,7 @@ const EditProduct = () => {
                             onChange={(e) => setExchangeFor(e.target.value)}
                             type="text"
                             placeholder="Example: Laptop, Books, Mobile"
-                            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32]"
+                            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20"
                         />
                     </div>
 
@@ -189,7 +219,7 @@ const EditProduct = () => {
                             onChange={(e) => setLocation(e.target.value)}
                             type="text"
                             placeholder="Enter your city"
-                            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32]"
+                            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20"
                         />
                     </div>
 
@@ -204,14 +234,23 @@ const EditProduct = () => {
                             onChange={(e) => setDescription(e.target.value)}
                             rows="5"
                             placeholder="Describe your product..."
-                            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none resize-none focus:border-[#2E7D32]"
+                            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none resize-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20"
                         ></textarea>
                     </div>
 
-                    <button disabled={updating} type="submit"
-                        className="w-full bg-[#2E7D32] hover:bg-[#256728] text-white py-3 rounded-xl transition duration-300"
+                    <button
+                        type="submit"
+                        disabled={updating}
+                        className="w-full bg-[#2E7D32] hover:bg-[#256728] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed text-white py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
                     >
-                        {updating ? "Updating..." : "Update Product"}
+                        {updating ? (
+                            <>
+                                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                Updating...
+                            </>
+                        ) : (
+                            "Update Product"
+                        )}
                     </button>
 
                 </form>

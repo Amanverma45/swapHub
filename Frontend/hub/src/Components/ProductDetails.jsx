@@ -2,16 +2,17 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from '../utils/axiosInstance.js';
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 const ProductDetails = () => {
   const [myProducts, setMyProducts] = useState([])
   const [selectedProduct, setSelectedProduct] = useState("")
-  
+
   const { id } = useParams();
-  
+
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  
+
   const loggedInUser = JSON.parse(localStorage.getItem("user"));
   const isOwner = product?.owner === loggedInUser?._id;
 
@@ -20,7 +21,7 @@ const ProductDetails = () => {
       const response = await axios.get("/myProducts");
       setMyProducts(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -29,10 +30,8 @@ const ProductDetails = () => {
       const response = await axios.get(`/getProduct/${id}`);
       setProduct(response.data);
     } catch (error) {
-      console.log(error);
-      console.log(error.response);
+      console.error(error);
       toast.error(error.response?.data?.message || error.message);
-      toast.error("Unable to fetch product");
     } finally {
       setLoading(false);
     }
@@ -56,7 +55,7 @@ const ProductDetails = () => {
       toast.success(response.data.message);
 
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error(error.response?.data?.message || error.message);
     }
   };
@@ -68,23 +67,26 @@ const ProductDetails = () => {
 
   if (loading) {
     return (
-      <h2 className="text-center text-2xl mt-10">
-        Loading...
-      </h2>
+      <div className="flex flex-col items-center justify-center py-24">
+        <div className="w-10 h-10 border-4 border-[#2E7D32] border-t-transparent rounded-full animate-spin"></div>
+
+        <p className="mt-4 text-gray-600">
+          Loading Product...
+        </p>
+      </div>
     );
   }
-
   return (
-    <section className="min-h-screen bg-gray-100 py-10 px-4">
-      <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-lg overflow-hidden">
+    <section className="min-h-screen bg-gray-50 py-12 px-4">
+      <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
 
         <div className="grid md:grid-cols-2">
 
-          <div className="bg-gray-100 p-6 flex items-center justify-center">
+          <div className="h-[420px] md:h-[500px] bg-gray-50 rounded-2xl flex items-center justify-center p-8">
             <img
               src={product.image}
               alt={product.productName}
-              className="w-full max-h-[500px] object-contain rounded-2xl"
+              className="max-h-full max-w-full object-contain"
             />
           </div>
 
@@ -94,82 +96,113 @@ const ProductDetails = () => {
               {product.category}
             </span>
 
-            <h1 className="text-4xl font-bold mt-4">
+            <h1 className="text-3xl md:text-4xl font-bold mt-4font-bold mt-4">
               {product.productName}
             </h1>
 
             <div className="mt-6 space-y-4">
 
-              <div>
-                <h3 className="font-semibold text-gray-700">
+              <div className="flex items-center">
+                <span className="w-36 font-semibold text-gray-700">
                   Exchange For
-                </h3>
+                </span>
 
-                <p className="text-[#F4A261] font-medium">
+                <span className="text-[#F4A261] font-semibold">
                   {product.exchangeFor}
-                </p>
+                </span>
               </div>
 
-              <div>
-                <h3 className="font-semibold text-gray-700">
+              <div className="flex items-center">
+                <span className="w-36 font-semibold text-gray-700">
                   Location
-                </h3>
+                </span>
 
-                <p className="text-gray-600">
+                <span className="text-gray-600">
                   {product.location}
-                </p>
+                </span>
               </div>
 
-              <div>
-                <h3 className="font-semibold text-gray-700">
+              <div className="flex items-center">
+                <span className="w-36 font-semibold text-gray-700">
+                  Posted On
+                </span>
+
+                <span className="text-gray-600">
+                  {new Date(product.createdAt).toLocaleDateString()}
+                </span>
+              </div>
+              <div className="mt-8">
+
+                <h3 className="font-semibold text-gray-700 mb-3">
                   Description
                 </h3>
 
-                <p className="text-gray-600 leading-7">
+                <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 leading-7 text-gray-600">
                   {product.description}
-                </p>
-              </div>
+                </div>
 
-              <div>
-                <h3 className="font-semibold text-gray-700">
-                  Posted On
-                </h3>
-
-                <p className="text-gray-600">
-                  {new Date(product.createdAt).toLocaleDateString()}
-                </p>
               </div>
 
             </div>
             {!isOwner && (
-              <>
-            <label className="block font-medium mb-2">
-              Select Your Product
-            </label>
+              <div className="mt-8 border-t border-gray-200 pt-8">
 
-            <select
-              value={selectedProduct}
-              onChange={(e) => setSelectedProduct(e.target.value)}
-              className="w-full border rounded-xl p-3"
-            >
-              <option value="">Select Product</option>
+                {myProducts.length === 0 ? (
 
-              {myProducts.map((item) => (
-                <option key={item._id} value={item._id}>
-                  {item.productName}
-                </option>
-              ))}
-            </select>
-            
-            
-            <button
-              onClick={sendSwapRequest}
-              className="mt-8 w-full bg-[#2E7D32] hover:bg-[#256728] text-white py-4 rounded-2xl transition duration-300"
-            >
-              Send Swap Request
-            </button>
-            </>
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-5">
+
+                    <h3 className="font-semibold text-yellow-800">
+                      No Products Available
+                    </h3>
+
+                    <p className="text-sm text-yellow-700 mt-2 leading-6">
+                      You need to add at least one product before sending a swap request.
+                    </p>
+
+                    <Link
+                      to="/addProduct"
+                      className="inline-block mt-4 bg-[#2E7D32] text-white px-5 py-2 rounded-xl hover:bg-[#256728] transition"
+                    >
+                      Add Product
+                    </Link>
+                  </div>
+
+                ) : (
+
+                  <>
+                    <label className="block font-semibold text-gray-700 mb-3">
+                      Choose a Product to Exchange
+                    </label>
+
+                    <select
+                      value={selectedProduct}
+                      onChange={(e) => setSelectedProduct(e.target.value)}
+                      className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20"
+                    >
+                      <option value="">Select Product</option>
+
+                      {myProducts.map((item) => (
+                        <option key={item._id} value={item._id}>
+                          {item.productName}
+                        </option>
+                      ))}
+
+                    </select>
+
+                    <button
+                      onClick={sendSwapRequest}
+                      className="mt-6 w-full bg-[#2E7D32] hover:bg-[#256728] text-white py-3 rounded-xl transition-all duration-300"
+                    >
+                      Send Swap Request
+                    </button>
+
+                  </>
+
+                )}
+
+              </div>
             )}
+
           </div>
 
         </div>
