@@ -140,7 +140,7 @@ const SwapRequests = () => {
                   <div className="flex justify-center gap-2 mt-4 md:gap-8 md:py-2 ">
 
                     {/* Requested Product */}
-                   <div className="border border-gray-200 w-[500px] md:h-[430px] p-4 rounded-xl hover:shadow-xl transition-all duration-300">
+                   <div className="border border-gray-200 w-[500px] md:h-[430px] p-3 rounded-xl hover:shadow-xl transition-all duration-300">
                       <h3 className="font-bold ml-2 mt-1 md:ml-0 text-sm md:text-lg mb-4">
                         Requested Product
                       </h3>
@@ -169,7 +169,7 @@ const SwapRequests = () => {
                     </div>
 
                     {/* Offered Product */}
-                   <div className="border border-gray-200 w-[500px] md:h-[430px] p-4 rounded-xl hover:shadow-xl transition-all duration-300">
+                   <div className="border border-gray-200 w-[500px] md:h-[430px] p-3 rounded-xl hover:shadow-xl transition-all duration-300">
                       <h3 className="font-bold ml-2 mt-1 md:ml-0 text-sm md:text-lg mb-4">
                         Offered Product
                       </h3>
