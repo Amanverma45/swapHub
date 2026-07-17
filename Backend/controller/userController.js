@@ -148,15 +148,23 @@ const forgotPassword = async (req, res) => {
 
         const user = await userModel.findOne({ email });
 
-        if (!user) {
-            return res.status(404).json({
-                message: "User not found"
-            });
-        }
+if (!user) {
+    return res.status(404).json({
+        message: "User not found"
+    });
+}
 
-        return res.status(200).json({
-            message: "User verified successfully"
-        });
+const resetToken = jwt.sign(
+    { id: user._id },
+    process.env.JWT_SECRET,
+    { expiresIn: "15m" }
+);
+
+console.log(resetToken);
+
+return res.status(200).json({
+    message: "User verified successfully"
+,resetToken});
     } catch (error) {
         console.log("ERROR:", error);
         return res.status(500).json({
