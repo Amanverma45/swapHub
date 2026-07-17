@@ -17,9 +17,14 @@ const ForgotPassword = () => {
     try {
         setLoading(true);
 
+        // const response = await axios.post("/forgotPassword", {
+        //     email,
+        // });
         const response = await axios.post("/forgotPassword", {
-            email,
-        });
+    email,
+});
+
+console.log(response.data);
 
         toast.success(response.data.message);
 

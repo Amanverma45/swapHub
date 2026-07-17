@@ -145,26 +145,28 @@ const forgotPassword = async (req, res) => {
                 message: "Email is required"
             });
         }
-
+console.log("Forgot Password API Hit");
+console.log("Email:", email);
         const user = await userModel.findOne({ email });
 
-if (!user) {
-    return res.status(404).json({
-        message: "User not found"
-    });
-}
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
 
-const resetToken = jwt.sign(
-    { id: user._id },
-    process.env.JWT_SECRET,
-    { expiresIn: "15m" }
-);
+        const resetToken = jwt.sign(
+            { id: user._id },
+            process.env.JWT_SECRET,
+            { expiresIn: "15m" }
+        );
 
-console.log(resetToken);
+        console.log(resetToken);
 
-return res.status(200).json({
-    message: "User verified successfully"
-,resetToken});
+        return res.status(200).json({
+            message: "User verified successfully"
+            , resetToken
+        });
     } catch (error) {
         console.log("ERROR:", error);
         return res.status(500).json({
