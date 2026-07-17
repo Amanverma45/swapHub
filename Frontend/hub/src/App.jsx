@@ -14,6 +14,7 @@ import ProtectedRoute from './Components/ProtectedRoute'
 import Profile from './Components/Profile'
 import SwapRequests from './Components/SwapRequests'
 import MySwapRequests from './Components/MySwapRequests'
+import ForgotPassword from './Components/ForgotPassword'
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/welcome" element={<Welcome />} />
+          <Route path="/forgotPassword" element={<ForgotPassword />} />
           <Route path="/addProduct" element={<ProtectedRoute><AddProduct /></ProtectedRoute>} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/myProducts" element={<ProtectedRoute><MyProducts /></ProtectedRoute>} />

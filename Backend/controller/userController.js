@@ -59,27 +59,15 @@ const updateProfile = async (req, res) => {
     try {
         const user = await userModel.findById(req.user.id);
 
-        if (!user) {
-            return res.status(404).json({
-                message: "User not found",
-            });
-        }
+        if (!user) {return res.status(404).json({ message: "User not found",}); }
 
-        if (req.body.name) {
-            user.name = req.body.name;
-        }
+        if (req.body.name) { user.name = req.body.name;}
 
-        if (req.body.phone !== undefined) {
-            user.phone = req.body.phone;
-        }
+        if (req.body.phone !== undefined) {user.phone = req.body.phone;}
 
-        if (req.body.location !== undefined) {
-            user.location = req.body.location;
-        }
+        if (req.body.location !== undefined) { user.location = req.body.location;}
 
-        if (req.file) {
-            user.profileImage = req.file.path;
-        }
+        if (req.file) { user.profileImage = req.file.path;}
 
         await user.save();
 
@@ -147,4 +135,35 @@ const removeProfilePhoto = async (req, res) => {
         });
     }
 };
-module.exports = { saveUser, loginUser, updateProfile, getProfile, removeProfilePhoto }
+
+const forgotPassword = async (req, res) => {
+    try {
+        const email = req.body.email?.trim().toLowerCase();
+
+        if (!email) {
+            return res.status(400).json({
+                message: "Email is required"
+            });
+        }
+
+        const user = await userModel.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        // Next Step:
+        // JWT Token Generate
+        // Send Email
+
+    } catch (error) {
+        console.log("ERROR:", error);
+        return res.status(500).json({
+            error: error.message,
+            fullError: error
+        });
+    }
+};
+module.exports = { saveUser, loginUser, updateProfile, getProfile, removeProfilePhoto, forgotPassword }

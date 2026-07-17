@@ -10,5 +10,5 @@ router.post('/loginUser',userController.loginUser)
 router.put("/updateProfile",authMiddleware,upload.single("profileImage"),userController.updateProfile);
 router.get("/getProfile", authMiddleware, userController.getProfile);
 router.put("/removeProfilePhoto", authMiddleware, userController.removeProfilePhoto);
-
+router.post("/forgotPassword", userController.forgotPassword);
 module.exports = router
