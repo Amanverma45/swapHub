@@ -184,6 +184,9 @@ const forgotPassword = async (req, res) => {
             Reset Password
             </a>
 
+            <p style="margin-top:15px;">Or copy and paste this link in your browser address bar:</p>
+            <p style="word-break:break-all; color:#166534; font-weight:bold;">${resetLink}</p>
+
             <p>This link will expire in 15 minutes.</p>
             <p>If you didn't request this, you can safely ignore this email.</p>
             `
