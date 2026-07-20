@@ -180,7 +180,7 @@ await sendEmail(
 
 console.log("5. After sendEmail");
 
-        const resetLink = `http://localhost:5173/reset-password/${resetToken}`;
+        // const resetLink = `http://localhost:5173/reset-password/${resetToken}`;
 
         await sendEmail(
             user.email,
