@@ -41,7 +41,7 @@ const Home = () => {
                             something valuable without spending money.
                         </p>
 
-                        <div className="flex flex-row items-center gap-3 sm:gap-4 mt-6 sm:mt-8 flex-nowrap">
+                        <div className="flex flex-row items-center justify-center md:justify-start gap-3 sm:gap-4 mt-6 sm:mt-8 flex-nowrap w-full">
                             <Link
                                 to="/products"
                                 className="relative group inline-flex items-center justify-center font-bold text-white px-4 sm:px-7 py-3 rounded-2xl bg-gradient-to-r from-[#2E7D32] via-emerald-600 to-teal-600 border border-emerald-400/40 shadow-xl shadow-[#2E7D32]/25 hover:shadow-2xl hover:shadow-[#2E7D32]/40 hover:-translate-y-1 hover:scale-105 active:scale-95 transition-all duration-300 text-center text-xs sm:text-base whitespace-nowrap"
