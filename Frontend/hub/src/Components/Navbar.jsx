@@ -79,7 +79,7 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Nav Links */}
-          <div className="hidden md:flex items-center gap-6 lg:gap-8 font-semibold text-sm">
+          <div className="hidden md:flex items-center gap-3 lg:gap-4 font-semibold text-sm">
             <Link
               to="/"
               className={`px-3 py-1.5 rounded-full transition-all duration-200 ${
@@ -103,7 +103,7 @@ const Navbar = () => {
             </Link>
 
             {!token ? (
-              <div className="flex items-center gap-3 ml-2">
+              <div className="flex items-center gap-2 ml-1">
                 <Link
                   to="/login"
                   className={`px-4 py-2 rounded-full border border-transparent transition-all duration-200 ${
