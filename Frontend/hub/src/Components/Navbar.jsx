@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { AiOutlineLogout } from "react-icons/ai";
 import { FaBell } from "react-icons/fa";
@@ -10,13 +10,14 @@ const Navbar = () => {
   const token = localStorage.getItem("token");
   const [notificationCount, setNotificationCount] = useState(0);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("user");
-  navigate("/");
-  setIsOpen(false);
-};
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/");
+    setIsOpen(false);
+  };
 
   const getNotificationCount = async () => {
     try {
@@ -26,240 +27,262 @@ const Navbar = () => {
       console.log(error);
     }
   };
+
   useEffect(() => {
-  if (token) {
-    getNotificationCount();
-  }
-}, [token]);
+    if (token) {
+      getNotificationCount();
+    }
+  }, [token]);
+
+  const isActive = (path) => location.pathname === path;
 
   return (
     <>
+      {/* Mobile Backdrop Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/30 md:hidden z-40"
+          className="fixed inset-0 bg-black/40 backdrop-blur-xs md:hidden z-40 transition-opacity"
           onClick={() => setIsOpen(false)}
         />
       )}
 
-      <div className="w-full flex justify-center pt-6 px-4">
-        <nav className="w-[95%] h-16 max-w-6xl bg-white shadow-md border border-gray-100 rounded-full px-12 flex items-center justify-between relative z-50">
-
-          {/* Logo */}
+      {/* Floating Glassmorphic Navbar Container */}
+      <header className="sticky top-3 z-50 w-full flex justify-center px-3 sm:px-4">
+        <nav className="w-[98%] sm:w-[95%] max-w-6xl h-16 bg-white/90 backdrop-blur-md shadow-lg shadow-gray-200/50 border border-gray-100 rounded-full px-5 sm:px-8 md:px-10 flex items-center justify-between transition-all duration-300">
+          
+          {/* Logo Area */}
           <div className="flex items-center justify-between w-full md:w-auto">
-            <Link to="/" className="flex items-center gap-2">
+            <Link to="/" className="flex items-center gap-2.5 group">
               <img
                 src={logo}
                 alt="SwapHub Logo"
-                className="w-10 h-10 object-contain"
+                className="w-9 h-9 sm:w-10 sm:h-10 object-contain group-hover:scale-105 transition-transform duration-300"
               />
-
-              <h1 className="text-2xl font-bold text-[#2E7D32]">
-                SwapHub
+              <h1 className="text-xl sm:text-2xl font-extrabold text-[#2E7D32] tracking-tight">
+                Swap<span className="text-[#F4A261]">Hub</span>
               </h1>
             </Link>
 
+            {/* Mobile Hamburger Button */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden text-2xl"
+              className="md:hidden text-2xl text-gray-700 hover:text-[#2E7D32] focus:outline-none p-1 transition-colors"
+              aria-label="Toggle Menu"
             >
               {isOpen ? "✕" : "☰"}
             </button>
           </div>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-10">
+          {/* Desktop Nav Links */}
+          <div className="hidden md:flex items-center gap-6 lg:gap-8 font-semibold text-sm">
             <Link
               to="/"
-              className="text-gray-700 hover:text-[#F4A261] transition"
+              className={`px-3 py-1.5 rounded-full transition-all duration-200 ${
+                isActive("/")
+                  ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold"
+                  : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60"
+              }`}
             >
               Home
             </Link>
 
             <Link
               to="/products"
-              className="text-gray-700 hover:text-[#F4A261] transition"
+              className={`px-3 py-1.5 rounded-full transition-all duration-200 ${
+                isActive("/products")
+                  ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold"
+                  : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60"
+              }`}
             >
               Products
             </Link>
 
             {!token ? (
-              <>
+              <div className="flex items-center gap-3 ml-2">
                 <Link
                   to="/login"
-                  className="text-gray-700 hover:text-[#F4A261] transition"
+                  className={`px-4 py-2 rounded-full border border-transparent transition-all duration-200 ${
+                    isActive("/login")
+                      ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold border-[#2E7D32]/20"
+                      : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/80"
+                  }`}
                 >
                   Login
                 </Link>
 
                 <Link
                   to="/register"
-                  className="bg-[#2E7D32] hover:bg-[#256728] text-white px-6 py-2 rounded-full transition"
+                  className="bg-[#2E7D32] border-2 border-[#2E7D32] hover:bg-[#236327] hover:border-[#236327] text-white font-bold px-6 py-2 rounded-full shadow-md shadow-[#2E7D32]/25 hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-200 text-sm"
                 >
                   Register
                 </Link>
-              </>
+              </div>
             ) : (
               <>
                 <Link
                   to="/addProduct"
-                  className="text-gray-700 hover:text-[#F4A261] transition"
+                  className={`px-3 py-1.5 rounded-full transition-all duration-200 ${
+                    isActive("/addProduct")
+                      ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold"
+                      : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60"
+                  }`}
                 >
                   Add Product
                 </Link>
+
                 <Link
                   to="/myProducts"
-                  className="text-gray-700 hover:text-[#F4A261] transition"
+                  className={`px-3 py-1.5 rounded-full transition-all duration-200 ${
+                    isActive("/myProducts")
+                      ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold"
+                      : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60"
+                  }`}
                 >
                   My Products
                 </Link>
+
                 <Link
                   to="/welcome"
-                  className="text-gray-700 hover:text-[#F4A261] transition"
+                  className={`px-3 py-1.5 rounded-full transition-all duration-200 ${
+                    isActive("/welcome")
+                      ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold"
+                      : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60"
+                  }`}
                 >
                   Dashboard
                 </Link>
+
                 <div
                   onClick={() => navigate("/mySwapRequests")}
-                  className="relative cursor-pointer hover:text-[#F4A261] transition"
+                  className="relative cursor-pointer p-2 rounded-full text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60 transition-colors"
+                  title="Notifications"
                 >
-                  <FaBell className="text-2xl" />
-
+                  <FaBell className="text-xl" />
                   {notificationCount > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border-2 border-white">
                       {notificationCount}
                     </span>
                   )}
                 </div>
+
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-full transition duration-300"
+                  className="flex items-center gap-1.5 bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-full text-sm font-semibold shadow-sm hover:shadow-md transition duration-200"
                 >
-                  Logout
-                  <AiOutlineLogout className="text-lg" />
+                  <span>Logout</span>
+                  <AiOutlineLogout className="text-base" />
                 </button>
               </>
             )}
           </div>
 
-          {/* Mobile Menu */}
-          <div
-            className={`fixed top-0 left-0 h-90 w-full bg-white rounded-b-3xl shadow-xl z-50 transition-all duration-300 transform md:hidden ${isOpen ? "translate-y-0" : "-translate-y-full"
-              }`}
-          >
-            <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
-
-              <div className="flex items-center gap-2">
-                <img
-                  src={logo}
-                  alt="SwapHub"
-                  className="w-15 h-15 object-contain"
-                />
-
-                <div>
-                  <h1 className="text-xl font-bold text-[#2E7D32]">
-                    SwapHub
-                  </h1>
-                </div>
-              </div>
-
-              <button
-                onClick={() => setIsOpen(false)}
-                className="text-3xl font-bold text-gray-700 hover:text-black transition px-3"
-              >
-                ✕
-              </button>
-
-            </div>
-
-            <div className="flex flex-col items-end px-8 py-0 gap-3">
-              <Link
-                to="/"
-                onClick={() => setIsOpen(false)}
-                className="text-gray-700 hover:text-[#F4A261]"
-              >
-                Home
-              </Link>
-
-              <Link
-                to="/products"
-                onClick={() => setIsOpen(false)}
-                className="text-gray-700 hover:text-[#F4A261]"
-              >
-                Products
-              </Link>
-
-              {!token ? (
-                <>
-                  <Link
-                    to="/login"
-                    onClick={() => setIsOpen(false)}
-                    className="text-gray-700 hover:text-[#F4A261]"
-                  >
-                    Login
-                  </Link>
-
-                  <Link
-                    to="/register"
-                    onClick={() => setIsOpen(false)}
-                    className="bg-[#2E7D32] hover:bg-[#256728] text-white px-6 py-2 rounded-full transition"
-                  >
-                    Register
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <Link
-                    to="/addProduct"
-                    onClick={() => setIsOpen(false)}
-                    className="text-gray-700 hover:text-[#F4A261]"
-                  >
-                    Add Product
-                  </Link>
-                  <Link
-                    to="/myProducts"
-                    onClick={() => setIsOpen(false)}
-                    className="text-gray-700 hover:text-[#F4A261]"
-                  >
-                    My Products
-                  </Link>
-                  <Link
-                    to="/welcome"
-                    onClick={() => setIsOpen(false)}
-                    className="text-gray-700 hover:text-[#F4A261]"
-                  >
-                    Dashboard
-                  </Link>
-                  <div
-                    onClick={() => {
-                      navigate("/mySwapRequests");
-                      setIsOpen(false);
-                    }}
-                    className="flex items-center justify-end gap-2 text-gray-700 hover:text-[#F4A261] cursor-pointer"
-                  >
-                    <FaBell className="text-xl" />
-
-                    <span>Notifications</span>
-
-                    {notificationCount > 0 && (
-                      <span className="bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-                        {notificationCount}
-                      </span>
-                    )}
-                  </div>
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-full transition duration-300"
-                  >
-                    Logout
-                    <AiOutlineLogout className="text-lg" />
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-
         </nav>
-      </div>
+
+        {/* Mobile Dropdown Drawer */}
+        <div
+          className={`fixed top-20 left-4 right-4 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-gray-100 z-50 transition-all duration-300 transform md:hidden overflow-hidden ${
+            isOpen ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 -translate-y-4 pointer-events-none"
+          }`}
+        >
+          <div className="flex flex-col p-5 gap-3 text-center">
+            <Link
+              to="/"
+              onClick={() => setIsOpen(false)}
+              className={`py-2.5 px-4 rounded-2xl font-bold text-sm transition-colors ${
+                isActive("/") ? "bg-[#2E7D32]/10 text-[#2E7D32]" : "text-gray-700 hover:bg-gray-50"
+              }`}
+            >
+              Home
+            </Link>
+
+            <Link
+              to="/products"
+              onClick={() => setIsOpen(false)}
+              className={`py-2.5 px-4 rounded-2xl font-bold text-sm transition-colors ${
+                isActive("/products") ? "bg-[#2E7D32]/10 text-[#2E7D32]" : "text-gray-700 hover:bg-gray-50"
+              }`}
+            >
+              Products
+            </Link>
+
+            {!token ? (
+              <div className="flex flex-col gap-2.5 mt-2 pt-3 border-t border-gray-100">
+                <Link
+                  to="/login"
+                  onClick={() => setIsOpen(false)}
+                  className="py-2.5 px-4 rounded-2xl border border-[#2E7D32] text-[#2E7D32] font-bold text-sm hover:bg-[#2E7D32]/5 transition-colors"
+                >
+                  Login
+                </Link>
+
+                <Link
+                  to="/register"
+                  onClick={() => setIsOpen(false)}
+                  className="py-2.5 px-4 rounded-2xl bg-[#2E7D32] text-white font-bold text-sm shadow-md shadow-[#2E7D32]/20 hover:bg-[#236327] transition-colors"
+                >
+                  Register
+                </Link>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2 pt-2 border-t border-gray-100">
+                <Link
+                  to="/addProduct"
+                  onClick={() => setIsOpen(false)}
+                  className={`py-2.5 px-4 rounded-2xl font-bold text-sm ${
+                    isActive("/addProduct") ? "bg-[#2E7D32]/10 text-[#2E7D32]" : "text-gray-700"
+                  }`}
+                >
+                  Add Product
+                </Link>
+
+                <Link
+                  to="/myProducts"
+                  onClick={() => setIsOpen(false)}
+                  className={`py-2.5 px-4 rounded-2xl font-bold text-sm ${
+                    isActive("/myProducts") ? "bg-[#2E7D32]/10 text-[#2E7D32]" : "text-gray-700"
+                  }`}
+                >
+                  My Products
+                </Link>
+
+                <Link
+                  to="/welcome"
+                  onClick={() => setIsOpen(false)}
+                  className={`py-2.5 px-4 rounded-2xl font-bold text-sm ${
+                    isActive("/welcome") ? "bg-[#2E7D32]/10 text-[#2E7D32]" : "text-gray-700"
+                  }`}
+                >
+                  Dashboard
+                </Link>
+
+                <div
+                  onClick={() => {
+                    navigate("/mySwapRequests");
+                    setIsOpen(false);
+                  }}
+                  className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-2xl text-gray-700 font-bold text-sm hover:bg-gray-50 cursor-pointer"
+                >
+                  <FaBell className="text-lg text-[#2E7D32]" />
+                  <span>Notifications</span>
+                  {notificationCount > 0 && (
+                    <span className="bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                      {notificationCount}
+                    </span>
+                  )}
+                </div>
+
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-2.5 px-4 rounded-2xl font-bold text-sm transition mt-1"
+                >
+                  <span>Logout</span>
+                  <AiOutlineLogout className="text-lg" />
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </header>
     </>
   );
 };
