@@ -41,17 +41,17 @@ const Home = () => {
                             something valuable without spending money.
                         </p>
 
-                        <div className="flex flex-wrap gap-4 mt-8">
+                        <div className="flex flex-row flex-wrap items-center gap-4 mt-8">
                             <Link
                                 to="/products"
-                                className="relative group inline-flex items-center justify-center font-bold text-white px-8 py-3.5 rounded-2xl bg-gradient-to-r from-[#2E7D32] via-emerald-600 to-teal-600 border border-emerald-400/40 shadow-xl shadow-[#2E7D32]/25 hover:shadow-2xl hover:shadow-[#2E7D32]/40 hover:-translate-y-1 hover:scale-105 active:scale-95 transition-all duration-300 text-center text-sm md:text-base min-w-[160px]"
+                                className="relative group flex items-center justify-center font-bold text-white px-8 py-3.5 rounded-2xl bg-gradient-to-r from-[#2E7D32] via-emerald-600 to-teal-600 border border-emerald-400/40 shadow-xl shadow-[#2E7D32]/25 hover:shadow-2xl hover:shadow-[#2E7D32]/40 hover:-translate-y-1 hover:scale-105 active:scale-95 transition-all duration-300 text-center text-sm md:text-base min-w-[160px]"
                             >
                                 <span>Explore Products</span>
                                 <span className="ml-2 group-hover:translate-x-1.5 transition-transform duration-300">&rarr;</span>
                             </Link>
                             <Link
                                 to="/register"
-                                className="relative group inline-flex items-center justify-center font-bold text-[#2E7D32] px-8 py-3.5 rounded-2xl bg-white hover:bg-gradient-to-r hover:from-[#2E7D32] hover:to-emerald-600 hover:text-white border-2 border-[#2E7D32] shadow-md hover:shadow-xl hover:shadow-[#2E7D32]/20 hover:-translate-y-1 hover:scale-105 active:scale-95 transition-all duration-300 text-center text-sm md:text-base min-w-[160px]"
+                                className="relative group flex items-center justify-center font-bold text-[#2E7D32] px-8 py-3.5 rounded-2xl bg-white hover:bg-gradient-to-r hover:from-[#2E7D32] hover:to-emerald-600 hover:text-white border-2 border-[#2E7D32] shadow-md hover:shadow-xl hover:shadow-[#2E7D32]/20 hover:-translate-y-1 hover:scale-105 active:scale-95 transition-all duration-300 text-center text-sm md:text-base min-w-[160px]"
                             >
                                 <span>Join Now</span>
                             </Link>
