@@ -161,7 +161,8 @@ const forgotPassword = async (req, res) => {
             { expiresIn: "15m" }
         );
 
-        const resetLink = `http://localhost:5173/reset-password/${resetToken}`;
+        const clientUrl = req.headers.origin || process.env.CLIENT_URL || "http://localhost:5174";
+        const resetLink = `${clientUrl}/reset-password/${resetToken}`;
 
         // FIX: Duplicate sendEmail calls hata kar single formatted email bhej rahe hain
         await sendEmail(
