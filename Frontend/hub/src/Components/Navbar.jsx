@@ -50,7 +50,7 @@ const Navbar = () => {
       {/* Floating Glassmorphic Navbar Container */}
       <header className="sticky top-2 sm:top-3 z-50 w-full flex justify-center px-2.5 sm:px-4 mb-3 sm:mb-6">
         <nav className="w-[98%] sm:w-[95%] max-w-6xl h-13 sm:h-16 bg-white/90 backdrop-blur-md shadow-lg shadow-gray-200/50 border border-gray-100 rounded-full px-4 sm:px-8 md:px-10 flex items-center justify-between transition-all duration-300">
-          
+
           {/* Logo Area */}
           <div className="flex items-center justify-between w-full md:w-auto">
             <Link to="/" className="flex items-center gap-2.5 group">
@@ -79,25 +79,23 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Nav Links & Action Buttons Together */}
-          <div className="hidden md:flex items-center gap-6 lg:gap-8 font-semibold text-sm">
+          <div className="hidden md:flex items-center gap-6 lg:gap-2 font-semibold text-sm">
             <Link
               to="/"
-              className={`px-3.5 py-1.5 rounded-full transition-all duration-200 ${
-                isActive("/")
-                  ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold"
-                  : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60"
-              }`}
+              className={`px-3.5 py-1.5 rounded-full transition-all duration-200 ${isActive("/")
+                ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold"
+                : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60"
+                }`}
             >
               Home
             </Link>
 
             <Link
               to="/products"
-              className={`px-3.5 py-1.5 rounded-full transition-all duration-200 ${
-                isActive("/products")
-                  ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold"
-                  : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60"
-              }`}
+              className={`px-3.5 py-1.5 rounded-full transition-all duration-200 ${isActive("/products")
+                ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold"
+                : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60"
+                }`}
             >
               Products
             </Link>
@@ -106,11 +104,10 @@ const Navbar = () => {
               <>
                 <Link
                   to="/login"
-                  className={`px-4 py-2 rounded-full border border-transparent transition-all duration-200 ${
-                    isActive("/login")
-                      ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold border-[#2E7D32]/20"
-                      : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/80"
-                  }`}
+                  className={`px-4 py-2 rounded-full border border-transparent transition-all duration-200 ${isActive("/login")
+                    ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold border-[#2E7D32]/20"
+                    : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/80"
+                    }`}
                 >
                   Login
                 </Link>
@@ -126,31 +123,28 @@ const Navbar = () => {
               <>
                 <Link
                   to="/addProduct"
-                  className={`px-3.5 py-1.5 rounded-full transition-all duration-200 ${
-                    isActive("/addProduct")
-                      ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold"
-                      : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60"
-                  }`}
+                  className={`px-3.5 py-1.5 rounded-full transition-all duration-200 ${isActive("/addProduct")
+                    ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold"
+                    : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60"
+                    }`}
                 >
                   Add Product
                 </Link>
                 <Link
                   to="/myProducts"
-                  className={`px-3.5 py-1.5 rounded-full transition-all duration-200 ${
-                    isActive("/myProducts")
-                      ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold"
-                      : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60"
-                  }`}
+                  className={`px-3.5 py-1.5 rounded-full transition-all duration-200 ${isActive("/myProducts")
+                    ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold"
+                    : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60"
+                    }`}
                 >
                   My Products
                 </Link>
                 <Link
                   to="/welcome"
-                  className={`px-3.5 py-1.5 rounded-full transition-all duration-200 ${
-                    isActive("/welcome")
-                      ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold"
-                      : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60"
-                  }`}
+                  className={`px-3.5 py-1.5 rounded-full transition-all duration-200 ${isActive("/welcome")
+                    ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold"
+                    : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60"
+                    }`}
                 >
                   Dashboard
                 </Link>
@@ -183,22 +177,20 @@ const Navbar = () => {
 
         {/* Mobile Dropdown Drawer */}
         <div
-          className={`fixed top-18 left-4 right-4 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-gray-100 z-50 transition-all duration-300 transform md:hidden overflow-hidden ${
-            isOpen ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 -translate-y-4 pointer-events-none"
-          }`}
+          className={`fixed top-18 left-4 right-4 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-gray-100 z-50 transition-all duration-300 transform md:hidden overflow-hidden ${isOpen ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 -translate-y-4 pointer-events-none"
+            }`}
         >
           <div className="flex flex-col p-5 gap-3">
-            
+
             {/* Home & Products Side-by-Side in Flex Row */}
             <div className="flex flex-row items-center justify-center gap-3 w-full">
               <Link
                 to="/"
                 onClick={() => setIsOpen(false)}
-                className={`flex-1 py-2.5 px-4 rounded-2xl border font-bold text-sm text-center transition-colors ${
-                  isActive("/")
-                    ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]"
-                    : "border-gray-200 text-gray-700 hover:border-[#2E7D32]/30"
-                }`}
+                className={`flex-1 py-2.5 px-4 rounded-2xl border font-bold text-sm text-center transition-colors ${isActive("/")
+                  ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]"
+                  : "border-gray-200 text-gray-700 hover:border-[#2E7D32]/30"
+                  }`}
               >
                 Home
               </Link>
@@ -206,11 +198,10 @@ const Navbar = () => {
               <Link
                 to="/products"
                 onClick={() => setIsOpen(false)}
-                className={`flex-1 py-2.5 px-4 rounded-2xl border font-bold text-sm text-center transition-colors ${
-                  isActive("/products")
-                    ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]"
-                    : "border-gray-200 text-gray-700 hover:border-[#2E7D32]/30"
-                }`}
+                className={`flex-1 py-2.5 px-4 rounded-2xl border font-bold text-sm text-center transition-colors ${isActive("/products")
+                  ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]"
+                  : "border-gray-200 text-gray-700 hover:border-[#2E7D32]/30"
+                  }`}
               >
                 Products
               </Link>
@@ -241,9 +232,8 @@ const Navbar = () => {
                 <Link
                   to="/addProduct"
                   onClick={() => setIsOpen(false)}
-                  className={`py-2.5 px-4 rounded-2xl font-bold text-sm text-center border ${
-                    isActive("/addProduct") ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]" : "border-gray-200 text-gray-700"
-                  }`}
+                  className={`py-2.5 px-4 rounded-2xl font-bold text-sm text-center border ${isActive("/addProduct") ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]" : "border-gray-200 text-gray-700"
+                    }`}
                 >
                   Add Product
                 </Link>
@@ -251,9 +241,8 @@ const Navbar = () => {
                 <Link
                   to="/myProducts"
                   onClick={() => setIsOpen(false)}
-                  className={`py-2.5 px-4 rounded-2xl font-bold text-sm text-center border ${
-                    isActive("/myProducts") ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]" : "border-gray-200 text-gray-700"
-                  }`}
+                  className={`py-2.5 px-4 rounded-2xl font-bold text-sm text-center border ${isActive("/myProducts") ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]" : "border-gray-200 text-gray-700"
+                    }`}
                 >
                   My Products
                 </Link>
@@ -261,9 +250,8 @@ const Navbar = () => {
                 <Link
                   to="/welcome"
                   onClick={() => setIsOpen(false)}
-                  className={`py-2.5 px-4 rounded-2xl font-bold text-sm text-center border ${
-                    isActive("/welcome") ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]" : "border-gray-200 text-gray-700"
-                  }`}
+                  className={`py-2.5 px-4 rounded-2xl font-bold text-sm text-center border ${isActive("/welcome") ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]" : "border-gray-200 text-gray-700"
+                    }`}
                 >
                   Dashboard
                 </Link>
