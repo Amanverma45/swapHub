@@ -1,7 +1,7 @@
 const userModel = require('../model/userModel.js')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-import sendEmail from "../utils/sendEmail.js";
+const sendEmail = require("../utils/sendEmail");
 
 const saveUser = async (req, res) => {
     try {
