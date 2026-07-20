@@ -11,4 +11,6 @@ router.put("/updateProfile",authMiddleware,upload.single("profileImage"),userCon
 router.get("/getProfile", authMiddleware, userController.getProfile);
 router.put("/removeProfilePhoto", authMiddleware, userController.removeProfilePhoto);
 router.post("/forgotPassword", userController.forgotPassword);
+// NAYA CHANGE: Password Reset URL se aane wali request ko handle karne ke liye route
+router.post("/resetPassword", userController.resetPassword);
 module.exports = router

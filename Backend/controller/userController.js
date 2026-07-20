@@ -154,57 +154,46 @@ const forgotPassword = async (req, res) => {
             });
         }
 
-       console.log("1. User found");
+        // Token generate kar rahe hain jo 15 minute me expire ho jayega
+        const resetToken = jwt.sign(
+            { id: user._id },
+            process.env.JWT_SECRET,
+            { expiresIn: "15m" }
+        );
 
-const resetToken = jwt.sign(
-    { id: user._id },
-    process.env.JWT_SECRET,
-    { expiresIn: "15m" }
-);
+        const resetLink = `http://localhost:5173/reset-password/${resetToken}`;
 
-console.log("2. Token generated");
-
-const resetLink = `http://localhost:5173/reset-password/${resetToken}`;
-
-console.log("3. Reset link created");
-
-console.log("4. Before sendEmail");
-
-await sendEmail(
-    user.email,
-    "SwapHub Password Reset",
-    `
-    <a href="${resetLink}">Reset Password</a>
-    `
-);
-
-console.log("5. After sendEmail");
-
-        // const resetLink = `http://localhost:5173/reset-password/${resetToken}`;
-
+        // FIX: Duplicate sendEmail calls hata kar single formatted email bhej rahe hain
         await sendEmail(
             user.email,
             "SwapHub Password Reset",
             `
             <h2>Reset Your Password</h2>
-             <p>Hello ${user.name},</p>
-             <p>Click the button below to reset your password.</p>
+            <p>Hello ${user.name},</p>
+            <p>Click the button below to reset your password.</p>
 
             <a href="${resetLink}" style="
                display:inline-block;
                padding:10px 18px;
                background:#2E7D32;
-                color:white;
+               color:white;
                text-decoration:none;
                border-radius:6px;
             ">
             Reset Password
             </a>
 
-    <p>This link will expire in 15 minutes.</p>
-    <p>If you didn't request this, you can safely ignore this email.</p>
-    `
+            <p>This link will expire in 15 minutes.</p>
+            <p>If you didn't request this, you can safely ignore this email.</p>
+            `
         );
+
+        // FIX: Pehle res.status response missing tha jisse request hang ho rahi thi.
+        // Ab hum frontend ko response bhej rahe hain ki email send ho gaya hai.
+        return res.status(200).json({
+            message: "Password reset link sent to your email"
+        });
+
     } catch (error) {
         console.log("ERROR:", error);
         return res.status(500).json({
@@ -213,4 +202,46 @@ console.log("5. After sendEmail");
         });
     }
 };
-module.exports = { saveUser, loginUser, updateProfile, getProfile, removeProfilePhoto, forgotPassword }
+
+// NAYA CHANGE: User jab email ke link par click karke naya password enter karega, 
+// tab ye function token verify karega aur Naya Password Hash karke Database me save karega.
+const resetPassword = async (req, res) => {
+    try {
+        const { token, newPassword } = req.body;
+
+        if (!token || !newPassword) {
+            return res.status(400).json({
+                message: "Token and new password are required"
+            });
+        }
+
+        // Token verify kar rahe hain (agar expire ho gaya hoga ya galat hoga to catch block me chalega)
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        const user = await userModel.findById(decoded.id);
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        // Naye password ko bcrypt se hash karke database me save kar rahe hain
+        const hashPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashPassword;
+        await user.save();
+
+        return res.status(200).json({
+            message: "Password reset successfully"
+        });
+
+    } catch (error) {
+        console.log("Reset Password Error:", error.message);
+        if (error.name === "TokenExpiredError") {
+            return res.status(400).json({ message: "Password reset link has expired" });
+        }
+        return res.status(400).json({ message: "Invalid or expired token" });
+    }
+};
+
+module.exports = { saveUser, loginUser, updateProfile, getProfile, removeProfilePhoto, forgotPassword, resetPassword }

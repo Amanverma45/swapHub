@@ -15,6 +15,8 @@ import Profile from './Components/Profile'
 import SwapRequests from './Components/SwapRequests'
 import MySwapRequests from './Components/MySwapRequests'
 import ForgotPassword from './Components/ForgotPassword'
+// NAYA IMPORT: Reset password page ka component
+import ResetPassword from './Components/ResetPassword'
 
 const App = () => {
   return (
@@ -29,6 +31,8 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/forgotPassword" element={<ForgotPassword />} />
+          {/* NAYA ROUTE: Email se aane wale link (/reset-password/:token) ko handle karne ke liye */}
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/addProduct" element={<ProtectedRoute><AddProduct /></ProtectedRoute>} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/myProducts" element={<ProtectedRoute><MyProducts /></ProtectedRoute>} />
