@@ -63,279 +63,329 @@ const Home = () => {
                     </motion.div>
                 </div>
             </section>
+            {/* How SwapHub Works */}
+            <section className="w-[90%] max-w-6xl mx-auto py-10 md:py-16">
+                <div className="text-center mb-10 md:mb-14">
+                    <span className="bg-emerald-100 text-[#2E7D32] px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider">
+                        Simple 4-Step Process
+                    </span>
+                    <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mt-3">
+                        How SwapHub Works
+                    </h2>
+                </div>
 
-            <section className="w-[90%] max-w-6xl mx-auto pt-16 pb-12">
-                <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 md:mb-14 text-gray-800">
-                    How SwapHub Works
-                </h2>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                    {/* Step 1 */}
                     <motion.div
                         initial={{ opacity: 0, y: 25 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.3 }}
-                        whileHover={{
-                            y: -6,
-                            scale: 1.02,
-                            boxShadow: "0 14px 30px rgba(0,0,0,0.12)"
-                        }}
-                        className="bg-white p-2.5 h-[190px] md:min-h-[220px] md:p-8 rounded-3xl border border-gray-100 shadow-sm text-center  transition-all duration-200">
-
-                        <FaUpload className="text-4xl mt-2 md:text-5xl text-[#2E7D32] mx-auto mb-4" />
-
-                        <h3 className="text-base md:text-xl font-bold">
-                            Upload Product
-                        </h3>
-
-                        <p className="text-sm ml-3 md:text-sm text-gray-500 mt-3 leading-4 text-left">
-                            List your unused product.
-                        </p>
-
+                        whileHover={{ y: -8, scale: 1.02 }}
+                        className="relative group bg-gradient-to-b from-white via-emerald-50/40 to-white border border-emerald-100 shadow-md hover:shadow-2xl hover:shadow-emerald-500/15 p-6 rounded-3xl flex flex-col justify-between items-center text-center transition-all duration-300"
+                    >
+                        <div className="absolute top-4 right-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-xs font-bold w-7 h-7 rounded-full flex items-center justify-center shadow-md">
+                            01
+                        </div>
+                        <div className="p-4 rounded-2xl bg-gradient-to-tr from-[#2E7D32] to-emerald-500 text-white shadow-lg shadow-emerald-600/30 group-hover:scale-110 transition-transform duration-300 mt-2 mb-4">
+                            <FaUpload className="text-3xl" />
+                        </div>
+                        <div>
+                            <h3 className="text-lg md:text-xl font-bold text-gray-800 group-hover:text-[#2E7D32] transition-colors">
+                                Upload Product
+                            </h3>
+                            <p className="text-xs md:text-sm text-gray-500 mt-2 leading-relaxed">
+                                List your unused items easily with images and details.
+                            </p>
+                        </div>
                     </motion.div>
+
+                    {/* Step 2 */}
                     <motion.div
                         initial={{ opacity: 0, y: 25 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.3, delay: 0.05 }}
-                        whileHover={{
-                            y: -6,
-                            scale: 1.02,
-                            boxShadow: "0 14px 30px rgba(0,0,0,0.12)"
-                        }}
-                        className="bg-white p-2.5 md:p-8 rounded-3xl border border-gray-100 shadow-sm text-center h-[190px] md:min-h-[220px] transition-all duration-200">
-                        <FaSearch className="text-4xl mt-2 md:text-5xl text-[#F4A261] mx-auto mb-4" />
-
-                        <h3 className="text-base md:text-xl font-bold">
-                            Browse Products
-                        </h3>
-
-                        <p className="text-sm ml-3 md:text-sm text-gray-500 mt-3 leading-4 text-left">
-                            Discover products available for exchange.
-                        </p>
+                        whileHover={{ y: -8, scale: 1.02 }}
+                        className="relative group bg-gradient-to-b from-white via-amber-50/40 to-white border border-amber-100 shadow-md hover:shadow-2xl hover:shadow-amber-500/15 p-6 rounded-3xl flex flex-col justify-between items-center text-center transition-all duration-300"
+                    >
+                        <div className="absolute top-4 right-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold w-7 h-7 rounded-full flex items-center justify-center shadow-md">
+                            02
+                        </div>
+                        <div className="p-4 rounded-2xl bg-gradient-to-tr from-[#F4A261] to-amber-400 text-white shadow-lg shadow-amber-500/30 group-hover:scale-110 transition-transform duration-300 mt-2 mb-4">
+                            <FaSearch className="text-3xl" />
+                        </div>
+                        <div>
+                            <h3 className="text-lg md:text-xl font-bold text-gray-800 group-hover:text-[#F4A261] transition-colors">
+                                Browse Products
+                            </h3>
+                            <p className="text-xs md:text-sm text-gray-500 mt-2 leading-relaxed">
+                                Discover items around you available for direct swap.
+                            </p>
+                        </div>
                     </motion.div>
+
+                    {/* Step 3 */}
                     <motion.div
                         initial={{ opacity: 0, y: 25 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.3, delay: 0.1 }}
-                        whileHover={{
-                            y: -6,
-                            scale: 1.02,
-                            boxShadow: "0 14px 30px rgba(0,0,0,0.12)"
-                        }}
-                        className="bg-white p-3 md:p-8 rounded-3xl border border-gray-100 shadow-sm text-center h-[190px] md:min-h-[220px] transition-all duration-200">
-                        <FaExchangeAlt className="text-4xl mt-2 md:text-5xl text-[#2E7D32] mx-auto mb-4" />
-
-                        <h3 className="text-base md:text-xl font-bold">
-                            Send Request
-                        </h3>
-
-                        <p className="text-sm ml-3 md:text-sm text-gray-500 mt-3 leading-4 text-left ">
-                            Request an exchange with another user.
-                        </p>
+                        whileHover={{ y: -8, scale: 1.02 }}
+                        className="relative group bg-gradient-to-b from-white via-teal-50/40 to-white border border-teal-100 shadow-md hover:shadow-2xl hover:shadow-teal-500/15 p-6 rounded-3xl flex flex-col justify-between items-center text-center transition-all duration-300"
+                    >
+                        <div className="absolute top-4 right-4 bg-gradient-to-r from-teal-600 to-emerald-600 text-white text-xs font-bold w-7 h-7 rounded-full flex items-center justify-center shadow-md">
+                            03
+                        </div>
+                        <div className="p-4 rounded-2xl bg-gradient-to-tr from-teal-600 to-emerald-500 text-white shadow-lg shadow-teal-600/30 group-hover:scale-110 transition-transform duration-300 mt-2 mb-4">
+                            <FaExchangeAlt className="text-3xl" />
+                        </div>
+                        <div>
+                            <h3 className="text-lg md:text-xl font-bold text-gray-800 group-hover:text-teal-600 transition-colors">
+                                Send Request
+                            </h3>
+                            <p className="text-xs md:text-sm text-gray-500 mt-2 leading-relaxed">
+                                Offer your item in exchange with a single click.
+                            </p>
+                        </div>
                     </motion.div>
+
+                    {/* Step 4 */}
                     <motion.div
                         initial={{ opacity: 0, y: 25 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.3, delay: 0.15 }}
-                        whileHover={{
-                            y: -6,
-                            scale: 1.02,
-                            boxShadow: "0 14px 30px rgba(0,0,0,0.12)"
-                        }}
-                        className="bg-white p-3 md:p-8 rounded-3xl border border-gray-100 shadow-sm text-center h-[190px] md:min-h-[220px] transition-all duration-200">
-                        <FaHandshake className="text-4xl mt-2 md:text-5xl text-[#F4A261] mx-auto mb-4" />
-
-                        <h3 className="text-base md:text-xl font-bold">
-                            Complete Swap
-                        </h3>
-
-                        <p className="text-sm ml-3 md:text-sm text-gray-500 mt-3 leading-4 text-left">
-                            Meet, exchange products and enjoy your new item.
-                        </p>
+                        whileHover={{ y: -8, scale: 1.02 }}
+                        className="relative group bg-gradient-to-b from-white via-orange-50/40 to-white border border-orange-100 shadow-md hover:shadow-2xl hover:shadow-orange-500/15 p-6 rounded-3xl flex flex-col justify-between items-center text-center transition-all duration-300"
+                    >
+                        <div className="absolute top-4 right-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold w-7 h-7 rounded-full flex items-center justify-center shadow-md">
+                            04
+                        </div>
+                        <div className="p-4 rounded-2xl bg-gradient-to-tr from-orange-500 to-amber-400 text-white shadow-lg shadow-orange-500/30 group-hover:scale-110 transition-transform duration-300 mt-2 mb-4">
+                            <FaHandshake className="text-3xl" />
+                        </div>
+                        <div>
+                            <h3 className="text-lg md:text-xl font-bold text-gray-800 group-hover:text-orange-500 transition-colors">
+                                Complete Swap
+                            </h3>
+                            <p className="text-xs md:text-sm text-gray-500 mt-2 leading-relaxed">
+                                Connect with the owner and complete your product exchange.
+                            </p>
+                        </div>
                     </motion.div>
                 </div>
             </section>
 
+            {/* Popular Categories */}
+            <section className="w-[90%] max-w-6xl mx-auto py-10 md:py-16">
+                <div className="text-center mb-10 md:mb-14">
+                    <span className="bg-emerald-100 text-[#2E7D32] px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider">
+                        Curated Collections
+                    </span>
+                    <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mt-3">
+                        Popular Categories
+                    </h2>
+                </div>
 
-            <section className="w-[90%] max-w-6xl mx-auto pt-12 pb-24">
-                <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12 md:mb-14">
-                    Popular Categories
-                </h2>
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                    <Link to="/products?category=Books">
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 md:gap-8">
+                    {/* Books */}
+                    <Link to="/products?category=Books" className="h-full flex flex-col">
                         <motion.div
                             initial={{ opacity: 0, y: 25 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.3 }}
-                            whileHover={{
-                                y: -6,
-                                scale: 1.02,
-                                boxShadow: "0 14px 30px rgba(0,0,0,0.12)",
-                            }}
-                            className="group bg-white p-5 md:p-8 rounded-3xl border border-gray-100 shadow-sm min-h-[220px] md:min-h-[240px] transition-all duration-200"
+                            whileHover={{ y: -8, scale: 1.02 }}
+                            className="group relative bg-gradient-to-br from-amber-500/10 via-white to-emerald-500/10 hover:from-amber-500/20 hover:to-emerald-500/20 border border-amber-200/60 hover:border-emerald-400/60 shadow-lg hover:shadow-2xl hover:shadow-emerald-500/20 p-6 rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[250px] transition-all duration-300 overflow-hidden"
                         >
-                            <img
-                                src={books}
-                                alt="Books"
-                                className="w-24 h-24 md:w-28 md:h-28 mx-auto object-contain transition-transform duration-300 group-hover:scale-110"
-                            />
+                            <div className="w-24 h-24 md:w-28 md:h-28 flex items-center justify-center p-2 bg-white/80 rounded-2xl shadow-inner backdrop-blur-sm border border-white/60">
+                                <img
+                                    src={books}
+                                    alt="Books"
+                                    className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-110 drop-shadow-md"
+                                />
+                            </div>
 
-                            <div className="mt-5 text-left md:text-center">
-
-                                <h3 className="text-lg md:text-xl font-bold text-gray-800">
+                            <div className="mt-4 text-center w-full">
+                                <h3 className="text-lg md:text-xl font-bold text-gray-900 group-hover:text-[#2E7D32] transition-colors">
                                     Books
                                 </h3>
-
-                                <p className="text-sm text-gray-500 leading-6 mt-2">
-                                    Exchange books easily.
+                                <p className="text-xs md:text-sm text-gray-500 mt-1 leading-relaxed">
+                                    Exchange novels & textbooks.
                                 </p>
-
                             </div>
+
+                            <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-[#2E7D32] group-hover:translate-x-1 transition-transform">
+                                Explore Books &rarr;
+                            </span>
                         </motion.div>
                     </Link>
-                    <motion.div
-                        initial={{ opacity: 0, y: 25 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.3, delay: 0.05 }}
-                        whileHover={{
-                            y: -6,
-                            scale: 1.02,
-                            boxShadow: "0 14px 30px rgba(0,0,0,0.12)",
-                        }}
-                        className="group bg-white p-5 md:p-8 rounded-3xl border border-gray-100 shadow-sm min-h-[220px] md:min-h-[240px] transition-all duration-200"
-                    >
-                        <img
-                            src={mobile}
-                            alt="Mobile"
-                            className="w-24 h-24 md:w-28 md:h-28 mx-auto object-contain transition-transform duration-300 group-hover:scale-110"
-                        />
 
-                        <div className="mt-5 text-left md:text-center">
-                            <h3 className="text-lg md:text-xl font-bold text-gray-800">
-                                Mobiles
-                            </h3>
+                    {/* Mobiles */}
+                    <Link to="/products?category=Mobiles" className="h-full flex flex-col">
+                        <motion.div
+                            initial={{ opacity: 0, y: 25 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.3, delay: 0.05 }}
+                            whileHover={{ y: -8, scale: 1.02 }}
+                            className="group relative bg-gradient-to-br from-blue-500/10 via-white to-indigo-500/10 hover:from-blue-500/20 hover:to-indigo-500/20 border border-blue-200/60 hover:border-blue-400/60 shadow-lg hover:shadow-2xl hover:shadow-blue-500/20 p-6 rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[250px] transition-all duration-300 overflow-hidden"
+                        >
+                            <div className="w-24 h-24 md:w-28 md:h-28 flex items-center justify-center p-2 bg-white/80 rounded-2xl shadow-inner backdrop-blur-sm border border-white/60">
+                                <img
+                                    src={mobile}
+                                    alt="Mobiles"
+                                    className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-110 drop-shadow-md"
+                                />
+                            </div>
 
-                            <p className="text-sm text-gray-500 leading-6 mt-2">
-                                Exchange smartphones.
-                            </p>
-                        </div>
-                    </motion.div>
-                    <motion.div
-                        initial={{ opacity: 0, y: 25 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.3, delay: 0.1 }}
-                        whileHover={{
-                            y: -6,
-                            scale: 1.02,
-                            boxShadow: "0 14px 30px rgba(0,0,0,0.12)",
-                        }}
-                       className="group bg-white p-5 md:p-8 rounded-3xl border border-gray-100 shadow-sm min-h-[220px] md:min-h-[240px] transition-all duration-200"
-                    >
-                        <img
-                            src={electronics}
-                            alt="Electronics"
-                            className="w-24 h-24 md:w-28 md:h-28 mx-auto object-contain transition-transform duration-300 group-hover:scale-110"
-                        />
+                            <div className="mt-4 text-center w-full">
+                                <h3 className="text-lg md:text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                                    Mobiles
+                                </h3>
+                                <p className="text-xs md:text-sm text-gray-500 mt-1 leading-relaxed">
+                                    Exchange smartphones.
+                                </p>
+                            </div>
 
-                        <div className="mt-5 text-left md:text-center">
-                            <h3 className="text-lg md:text-xl font-bold text-gray-800">
-                                Electronics
-                            </h3>
+                            <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-blue-600 group-hover:translate-x-1 transition-transform">
+                                Explore Mobiles &rarr;
+                            </span>
+                        </motion.div>
+                    </Link>
 
-                            <p className="text-sm text-gray-500 leading-6 mt-2">
-                                Exchange electronic gadgets.
-                            </p>
-                        </div>
-                    </motion.div>
-                    <motion.div
-                        initial={{ opacity: 0, y: 25 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.3, delay: 0.15 }}
-                        whileHover={{
-                            y: -6,
-                            scale: 1.02,
-                            boxShadow: "0 14px 30px rgba(0,0,0,0.12)",
-                        }}
-                       className="group bg-white p-5 md:p-8 rounded-3xl border border-gray-100 shadow-sm min-h-[220px] md:min-h-[240px] transition-all duration-200"
-                    >
-                        <img
-                            src={gaming}
-                            alt="Gaming"
-                            className="w-24 h-24 md:w-28 md:h-28 mx-auto object-contain transition-transform duration-300 group-hover:scale-110"
-                        />
+                    {/* Electronics */}
+                    <Link to="/products?category=Electronics" className="h-full flex flex-col">
+                        <motion.div
+                            initial={{ opacity: 0, y: 25 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.3, delay: 0.1 }}
+                            whileHover={{ y: -8, scale: 1.02 }}
+                            className="group relative bg-gradient-to-br from-purple-500/10 via-white to-violet-500/10 hover:from-purple-500/20 hover:to-violet-500/20 border border-purple-200/60 hover:border-purple-400/60 shadow-lg hover:shadow-2xl hover:shadow-purple-500/20 p-6 rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[250px] transition-all duration-300 overflow-hidden"
+                        >
+                            <div className="w-24 h-24 md:w-28 md:h-28 flex items-center justify-center p-2 bg-white/80 rounded-2xl shadow-inner backdrop-blur-sm border border-white/60">
+                                <img
+                                    src={electronics}
+                                    alt="Electronics"
+                                    className="w-full h-full object-cover rounded-xl transition-transform duration-300 group-hover:scale-110 drop-shadow-md"
+                                />
+                            </div>
 
-                        <div className="mt-5 text-left md:text-center">
-                            <h3 className="text-lg md:text-xl font-bold text-gray-800">
-                                Gaming
-                            </h3>
+                            <div className="mt-4 text-center w-full">
+                                <h3 className="text-lg md:text-xl font-bold text-gray-900 group-hover:text-purple-600 transition-colors">
+                                    Electronics
+                                </h3>
+                                <p className="text-xs md:text-sm text-gray-500 mt-1 leading-relaxed">
+                                    Exchange electronic gadgets.
+                                </p>
+                            </div>
 
-                            <p className="text-sm text-gray-500 leading-6 mt-2">
-                                Swap games and consoles.
-                            </p>
-                        </div>
-                    </motion.div>
-                    <motion.div
-                        initial={{ opacity: 0, y: 25 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.3, delay: 0.2 }}
-                        whileHover={{
-                            y: -6,
-                            scale: 1.02,
-                            boxShadow: "0 14px 30px rgba(0,0,0,0.12)",
-                        }}
-                       className="group bg-white p-5 md:p-8 rounded-3xl border border-gray-100 shadow-sm min-h-[220px] md:min-h-[240px] transition-all duration-200"
-                    >
-                        <img
-                            src={accessories}
-                            alt="Accessories"
-                            className="w-24 h-24 md:w-28 md:h-28 mx-auto object-contain transition-transform duration-300 group-hover:scale-110"
-                        />
+                            <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-purple-600 group-hover:translate-x-1 transition-transform">
+                                Explore Electronics &rarr;
+                            </span>
+                        </motion.div>
+                    </Link>
 
-                        <div className="mt-5 text-left md:text-center">
-                            <h3 className="text-lg md:text-xl font-bold text-gray-800">
-                                Accessories
-                            </h3>
+                    {/* Gaming */}
+                    <Link to="/products?category=Gaming" className="h-full flex flex-col">
+                        <motion.div
+                            initial={{ opacity: 0, y: 25 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.3, delay: 0.15 }}
+                            whileHover={{ y: -8, scale: 1.02 }}
+                            className="group relative bg-gradient-to-br from-rose-500/10 via-white to-pink-500/10 hover:from-rose-500/20 hover:to-pink-500/20 border border-rose-200/60 hover:border-rose-400/60 shadow-lg hover:shadow-2xl hover:shadow-rose-500/20 p-6 rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[250px] transition-all duration-300 overflow-hidden"
+                        >
+                            <div className="w-24 h-24 md:w-28 md:h-28 flex items-center justify-center p-2 bg-white/80 rounded-2xl shadow-inner backdrop-blur-sm border border-white/60">
+                                <img
+                                    src={gaming}
+                                    alt="Gaming"
+                                    className="w-full h-full object-cover rounded-xl transition-transform duration-300 group-hover:scale-110 drop-shadow-md"
+                                />
+                            </div>
 
-                            <p className="text-sm text-gray-500 leading-6 mt-2">
-                                Exchange accessories.
-                            </p>
-                        </div>
-                    </motion.div>
-                    <motion.div
-                        initial={{ opacity: 0, y: 25 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.3, delay: 0.25 }}
-                        whileHover={{
-                            y: -6,
-                            scale: 1.02,
-                            boxShadow: "0 14px 30px rgba(0,0,0,0.12)",
-                        }}
-                        className="group bg-white p-5 md:p-8 rounded-3xl border border-gray-100 shadow-sm min-h-[220px] md:min-h-[240px] transition-all duration-200"
-                    >
-                        <img
-                            src={homeItems}
-                            alt="Home Items"
-                            className="w-24 h-24 md:w-28 md:h-28 mx-auto object-contain transition-transform duration-300 group-hover:scale-110"
-                        />
+                            <div className="mt-4 text-center w-full">
+                                <h3 className="text-lg md:text-xl font-bold text-gray-900 group-hover:text-rose-600 transition-colors">
+                                    Gaming
+                                </h3>
+                                <p className="text-xs md:text-sm text-gray-500 mt-1 leading-relaxed">
+                                    Swap games and consoles.
+                                </p>
+                            </div>
 
-                        <div className="mt-5 text-left md:text-center">
-                            <h3 className="text-lg md:text-xl font-bold text-gray-800">
-                                Home Items
-                            </h3>
+                            <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-rose-600 group-hover:translate-x-1 transition-transform">
+                                Explore Gaming &rarr;
+                            </span>
+                        </motion.div>
+                    </Link>
 
-                            <p className="text-sm text-gray-500 leading-6 mt-2">
-                                Exchange home essentials.
-                            </p>
-                        </div>
-                    </motion.div>
+                    {/* Accessories */}
+                    <Link to="/products?category=Accessories" className="h-full flex flex-col">
+                        <motion.div
+                            initial={{ opacity: 0, y: 25 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.3, delay: 0.2 }}
+                            whileHover={{ y: -8, scale: 1.02 }}
+                            className="group relative bg-gradient-to-br from-orange-500/10 via-white to-amber-500/10 hover:from-orange-500/20 hover:to-amber-500/20 border border-orange-200/60 hover:border-orange-400/60 shadow-lg hover:shadow-2xl hover:shadow-orange-500/20 p-6 rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[250px] transition-all duration-300 overflow-hidden"
+                        >
+                            <div className="w-24 h-24 md:w-28 md:h-28 flex items-center justify-center p-2 bg-white/80 rounded-2xl shadow-inner backdrop-blur-sm border border-white/60">
+                                <img
+                                    src={accessories}
+                                    alt="Accessories"
+                                    className="w-full h-full object-cover rounded-xl transition-transform duration-300 group-hover:scale-110 drop-shadow-md"
+                                />
+                            </div>
+
+                            <div className="mt-4 text-center w-full">
+                                <h3 className="text-lg md:text-xl font-bold text-gray-900 group-hover:text-orange-600 transition-colors">
+                                    Accessories
+                                </h3>
+                                <p className="text-xs md:text-sm text-gray-500 mt-1 leading-relaxed">
+                                    Exchange fashion & gear.
+                                </p>
+                            </div>
+
+                            <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-orange-600 group-hover:translate-x-1 transition-transform">
+                                Explore Accessories &rarr;
+                            </span>
+                        </motion.div>
+                    </Link>
+
+                    {/* Home Items */}
+                    <Link to="/products?category=Home%20Items" className="h-full flex flex-col">
+                        <motion.div
+                            initial={{ opacity: 0, y: 25 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.3, delay: 0.25 }}
+                            whileHover={{ y: -8, scale: 1.02 }}
+                            className="group relative bg-gradient-to-br from-teal-500/10 via-white to-cyan-500/10 hover:from-teal-500/20 hover:to-cyan-500/20 border border-teal-200/60 hover:border-teal-400/60 shadow-lg hover:shadow-2xl hover:shadow-teal-500/20 p-6 rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[250px] transition-all duration-300 overflow-hidden"
+                        >
+                            <div className="w-24 h-24 md:w-28 md:h-28 flex items-center justify-center p-2 bg-white/80 rounded-2xl shadow-inner backdrop-blur-sm border border-white/60">
+                                <img
+                                    src={homeItems}
+                                    alt="Home Items"
+                                    className="w-full h-full object-cover rounded-xl transition-transform duration-300 group-hover:scale-110 drop-shadow-md"
+                                />
+                            </div>
+
+                            <div className="mt-4 text-center w-full">
+                                <h3 className="text-lg md:text-xl font-bold text-gray-900 group-hover:text-teal-600 transition-colors">
+                                    Home Items
+                                </h3>
+                                <p className="text-xs md:text-sm text-gray-500 mt-1 leading-relaxed">
+                                    Exchange home essentials.
+                                </p>
+                            </div>
+
+                            <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-teal-600 group-hover:translate-x-1 transition-transform">
+                                Explore Home Items &rarr;
+                            </span>
+                        </motion.div>
+                    </Link>
                 </div>
             </section>
         </div>
