@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import axios from '../utils/axiosInstance.js';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "../utils/axiosInstance";
 import toast from "react-hot-toast";
 
 const Register = () => {
@@ -20,7 +19,7 @@ const Register = () => {
         return;
       }
       const response = await axios.post(
-        "https://swaphub-backend-855x.onrender.com/api/saveUser",
+        "/saveUser",
         {
           name,
           email,

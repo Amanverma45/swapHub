@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from '../utils/axiosInstance.js';
+import axios from "../utils/axiosInstance.js";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FaCamera } from "react-icons/fa";
@@ -70,7 +70,7 @@ const AddProduct = () => {
             formData.append("description", description);
 
             await axios.post(
-                "https://swaphub-backend-855x.onrender.com/api/addProduct",
+                "/addProduct",
                 formData,
                 {
                     headers: {

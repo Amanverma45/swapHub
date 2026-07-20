@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from '../utils/axiosInstance.js';
+import axios from "../utils/axiosInstance";
 import MyProductCard from "./MyProductCard.jsx";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
@@ -13,7 +13,7 @@ const MyProducts = () => {
     const myProducts = async () => {
         try {
             const response = await axios.get(
-                "https://swaphub-backend-855x.onrender.com/api/myProducts",
+                "/myProducts",
                 {
                     headers: {
                         Authorization: localStorage.getItem("token"),
