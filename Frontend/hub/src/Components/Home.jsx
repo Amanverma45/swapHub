@@ -202,7 +202,7 @@ const Home = () => {
             </section>
 
             {/* Popular Categories */}
-            <section className="w-[92%] max-w-6xl mx-auto py-10 md:py-16">
+            <section className="w-[92%] max-w-6xl mx-auto pt-6 md:pt-10 pb-4 md:pb-6">
                 <div className="text-center mb-10 md:mb-14">
                     <span className="bg-[#2E7D32]/10 text-[#2E7D32] border border-[#2E7D32]/25 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider">
                         Curated Collections
