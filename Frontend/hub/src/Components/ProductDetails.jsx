@@ -117,11 +117,11 @@ const ProductDetails = () => {
           <div className="grid md:grid-cols-2 gap-8 p-6 sm:p-8 md:p-10 items-center">
             
             {/* Left Image View */}
-            <div className="h-[320px] sm:h-[400px] md:h-[450px] bg-gray-50/80 rounded-2xl border border-gray-100 p-6 flex items-center justify-center overflow-hidden">
+            <div className="h-[280px] sm:h-[360px] md:h-[420px] bg-gray-50/80 rounded-2xl border border-gray-100 overflow-hidden shadow-sm flex items-center justify-center">
               <img
                 src={product.image}
                 alt={product.productName}
-                className="max-h-full max-w-full object-contain rounded-xl shadow-xs"
+                className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
               />
             </div>
 
