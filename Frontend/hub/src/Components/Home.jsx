@@ -44,13 +44,13 @@ const Home = () => {
                         <div className="flex flex-wrap gap-4 mt-8">
                             <Link
                                 to="/products"
-                                className="bg-gradient-to-r from-[#2E7D32] via-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-[#1b5e20] text-white font-semibold px-7 py-3.5 rounded-full hover:scale-105 active:scale-95 transition-all duration-300 shadow-lg shadow-emerald-600/25 text-center text-sm md:text-base min-w-[150px]"
+                                className="bg-[#2E7D32] border-2 border-[#2E7D32] hover:bg-[#236327] hover:border-[#236327] text-white font-semibold px-7 py-3 rounded-full hover:scale-105 active:scale-95 transition-all duration-300 shadow-lg shadow-[#2E7D32]/25 text-center text-sm md:text-base min-w-[150px]"
                             >
                                 Explore Products &rarr;
                             </Link>
                             <Link
                                 to="/register"
-                                className="bg-white hover:bg-emerald-50/80 text-[#2E7D32] border-2 border-[#2E7D32] font-semibold px-7 py-3.5 rounded-full hover:scale-105 active:scale-95 transition-all duration-300 text-center text-sm md:text-base min-w-[150px] shadow-md"
+                                className="bg-white border-2 border-[#2E7D32] text-[#2E7D32] hover:bg-[#2E7D32] hover:text-white font-semibold px-7 py-3 rounded-full hover:scale-105 active:scale-95 transition-all duration-300 text-center text-sm md:text-base min-w-[150px] shadow-sm"
                             >
                                 Join Now
                             </Link>
@@ -88,7 +88,7 @@ const Home = () => {
             {/* How SwapHub Works */}
             <section className="w-[92%] max-w-6xl mx-auto py-10 md:py-16">
                 <div className="text-center mb-10 md:mb-14">
-                    <span className="bg-gradient-to-r from-emerald-500/10 to-teal-500/10 text-[#2E7D32] border border-[#2E7D32]/25 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider">
+                    <span className="bg-[#2E7D32]/10 text-[#2E7D32] border border-[#2E7D32]/25 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider">
                         Simple 4-Step Process
                     </span>
                     <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mt-3">
@@ -105,12 +105,12 @@ const Home = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.3 }}
                         whileHover={{ y: -6, scale: 1.02 }}
-                        className="relative group bg-gradient-to-b from-white via-emerald-50/40 to-white border border-emerald-100 hover:border-emerald-400 shadow-md hover:shadow-xl hover:shadow-emerald-500/15 p-4 sm:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center transition-all duration-300"
+                        className="relative group bg-gradient-to-b from-white via-emerald-50/40 to-white border border-emerald-100 hover:border-[#2E7D32]/40 shadow-md hover:shadow-xl hover:shadow-emerald-500/15 p-4 sm:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center transition-all duration-300"
                     >
                         <div className="absolute top-2.5 right-2.5 sm:top-4 sm:right-4 bg-gradient-to-r from-[#2E7D32] to-emerald-600 text-white text-[10px] sm:text-xs font-bold w-5 h-5 sm:w-7 sm:h-7 rounded-full flex items-center justify-center shadow-md">
                             01
                         </div>
-                        <div className="p-3 sm:p-4 rounded-2xl bg-gradient-to-tr from-[#2E7D32] to-emerald-500 text-white shadow-md shadow-emerald-600/25 group-hover:scale-110 transition-transform duration-300 mt-2 mb-3">
+                        <div className="p-3 sm:p-4 rounded-2xl bg-[#2E7D32]/10 border border-[#2E7D32]/20 text-[#2E7D32] group-hover:bg-[#2E7D32] group-hover:text-white transition-colors duration-300 mt-2 mb-3">
                             <FaUpload className="text-2xl sm:text-3xl" />
                         </div>
                         <div>
@@ -130,12 +130,12 @@ const Home = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.3, delay: 0.05 }}
                         whileHover={{ y: -6, scale: 1.02 }}
-                        className="relative group bg-gradient-to-b from-white via-amber-50/40 to-white border border-amber-100 hover:border-amber-400 shadow-md hover:shadow-xl hover:shadow-amber-500/15 p-4 sm:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center transition-all duration-300"
+                        className="relative group bg-gradient-to-b from-white via-amber-50/40 to-white border border-amber-100 hover:border-[#F4A261]/40 shadow-md hover:shadow-xl hover:shadow-amber-500/15 p-4 sm:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center transition-all duration-300"
                     >
                         <div className="absolute top-2.5 right-2.5 sm:top-4 sm:right-4 bg-gradient-to-r from-[#F4A261] to-amber-500 text-white text-[10px] sm:text-xs font-bold w-5 h-5 sm:w-7 sm:h-7 rounded-full flex items-center justify-center shadow-md">
                             02
                         </div>
-                        <div className="p-3 sm:p-4 rounded-2xl bg-gradient-to-tr from-[#F4A261] to-amber-400 text-white shadow-md shadow-amber-500/25 group-hover:scale-110 transition-transform duration-300 mt-2 mb-3">
+                        <div className="p-3 sm:p-4 rounded-2xl bg-[#F4A261]/15 border border-[#F4A261]/30 text-[#F4A261] group-hover:bg-[#F4A261] group-hover:text-white transition-colors duration-300 mt-2 mb-3">
                             <FaSearch className="text-2xl sm:text-3xl" />
                         </div>
                         <div>
@@ -160,7 +160,7 @@ const Home = () => {
                         <div className="absolute top-2.5 right-2.5 sm:top-4 sm:right-4 bg-gradient-to-r from-teal-600 to-emerald-600 text-white text-[10px] sm:text-xs font-bold w-5 h-5 sm:w-7 sm:h-7 rounded-full flex items-center justify-center shadow-md">
                             03
                         </div>
-                        <div className="p-3 sm:p-4 rounded-2xl bg-gradient-to-tr from-teal-600 to-emerald-500 text-white shadow-md shadow-teal-600/25 group-hover:scale-110 transition-transform duration-300 mt-2 mb-3">
+                        <div className="p-3 sm:p-4 rounded-2xl bg-teal-500/10 border border-teal-500/20 text-teal-600 group-hover:bg-teal-600 group-hover:text-white transition-colors duration-300 mt-2 mb-3">
                             <FaExchangeAlt className="text-2xl sm:text-3xl" />
                         </div>
                         <div>
@@ -180,12 +180,12 @@ const Home = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.3, delay: 0.15 }}
                         whileHover={{ y: -6, scale: 1.02 }}
-                        className="relative group bg-gradient-to-b from-white via-emerald-50/40 to-white border border-emerald-100 hover:border-emerald-400 shadow-md hover:shadow-xl hover:shadow-emerald-500/15 p-4 sm:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center transition-all duration-300"
+                        className="relative group bg-gradient-to-b from-white via-emerald-50/40 to-white border border-emerald-100 hover:border-[#2E7D32]/40 shadow-md hover:shadow-xl hover:shadow-emerald-500/15 p-4 sm:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center transition-all duration-300"
                     >
                         <div className="absolute top-2.5 right-2.5 sm:top-4 sm:right-4 bg-gradient-to-r from-[#2E7D32] to-emerald-600 text-white text-[10px] sm:text-xs font-bold w-5 h-5 sm:w-7 sm:h-7 rounded-full flex items-center justify-center shadow-md">
                             04
                         </div>
-                        <div className="p-3 sm:p-4 rounded-2xl bg-gradient-to-tr from-[#2E7D32] to-emerald-500 text-white shadow-md shadow-emerald-600/25 group-hover:scale-110 transition-transform duration-300 mt-2 mb-3">
+                        <div className="p-3 sm:p-4 rounded-2xl bg-[#2E7D32]/10 border border-[#2E7D32]/20 text-[#2E7D32] group-hover:bg-[#2E7D32] group-hover:text-white transition-colors duration-300 mt-2 mb-3">
                             <FaHandshake className="text-2xl sm:text-3xl" />
                         </div>
                         <div>
@@ -223,7 +223,7 @@ const Home = () => {
                             whileHover={{ y: -6, scale: 1.02 }}
                             className="group relative bg-gradient-to-br from-emerald-500/10 via-white to-teal-500/10 hover:from-emerald-500/20 hover:to-teal-500/20 border border-emerald-200/80 hover:border-[#2E7D32] shadow-md hover:shadow-2xl hover:shadow-emerald-500/20 p-3.5 sm:p-5 md:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[180px] sm:min-h-[220px] md:min-h-[250px] transition-all duration-300 overflow-hidden"
                         >
-                            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 flex items-center justify-center p-1.5 sm:p-2 bg-white/90 rounded-xl sm:rounded-2xl shadow-inner backdrop-blur-sm border border-white">
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 flex items-center justify-center p-1.5 sm:p-2 bg-white/90 rounded-xl sm:rounded-2xl shadow-inner backdrop-blur-sm border border-emerald-100">
                                 <img
                                     src={books}
                                     alt="Books"
@@ -240,7 +240,7 @@ const Home = () => {
                                 </p>
                             </div>
 
-                            <span className="mt-2 sm:mt-4 inline-flex items-center gap-1 text-[11px] sm:text-xs font-semibold text-[#2E7D32] group-hover:translate-x-1 transition-transform">
+                            <span className="mt-2 sm:mt-4 inline-flex items-center justify-center px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold text-[#2E7D32] bg-[#2E7D32]/10 border border-[#2E7D32]/30 group-hover:bg-[#2E7D32] group-hover:text-white transition-all duration-300">
                                 Explore Books &rarr;
                             </span>
                         </motion.div>
@@ -256,7 +256,7 @@ const Home = () => {
                             whileHover={{ y: -6, scale: 1.02 }}
                             className="group relative bg-gradient-to-br from-teal-500/10 via-white to-emerald-500/10 hover:from-teal-500/20 hover:to-emerald-500/20 border border-teal-200/80 hover:border-teal-600 shadow-md hover:shadow-2xl hover:shadow-teal-500/20 p-3.5 sm:p-5 md:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[180px] sm:min-h-[220px] md:min-h-[250px] transition-all duration-300 overflow-hidden"
                         >
-                            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 flex items-center justify-center p-1.5 sm:p-2 bg-white/90 rounded-xl sm:rounded-2xl shadow-inner backdrop-blur-sm border border-white">
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 flex items-center justify-center p-1.5 sm:p-2 bg-white/90 rounded-xl sm:rounded-2xl shadow-inner backdrop-blur-sm border border-teal-100">
                                 <img
                                     src={mobile}
                                     alt="Mobiles"
@@ -273,7 +273,7 @@ const Home = () => {
                                 </p>
                             </div>
 
-                            <span className="mt-2 sm:mt-4 inline-flex items-center gap-1 text-[11px] sm:text-xs font-semibold text-teal-600 group-hover:translate-x-1 transition-transform">
+                            <span className="mt-2 sm:mt-4 inline-flex items-center justify-center px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold text-teal-700 bg-teal-500/10 border border-teal-500/30 group-hover:bg-teal-600 group-hover:text-white transition-all duration-300">
                                 Explore Mobiles &rarr;
                             </span>
                         </motion.div>
@@ -289,7 +289,7 @@ const Home = () => {
                             whileHover={{ y: -6, scale: 1.02 }}
                             className="group relative bg-gradient-to-br from-emerald-600/10 via-white to-emerald-400/10 hover:from-emerald-600/20 hover:to-emerald-400/20 border border-emerald-200/80 hover:border-emerald-500 shadow-md hover:shadow-2xl hover:shadow-emerald-500/20 p-3.5 sm:p-5 md:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[180px] sm:min-h-[220px] md:min-h-[250px] transition-all duration-300 overflow-hidden"
                         >
-                            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 flex items-center justify-center p-1.5 sm:p-2 bg-white/90 rounded-xl sm:rounded-2xl shadow-inner backdrop-blur-sm border border-white">
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 flex items-center justify-center p-1.5 sm:p-2 bg-white/90 rounded-xl sm:rounded-2xl shadow-inner backdrop-blur-sm border border-emerald-100">
                                 <img
                                     src={electronics}
                                     alt="Electronics"
@@ -302,11 +302,11 @@ const Home = () => {
                                     Electronics
                                 </h3>
                                 <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-0.5 sm:mt-1 leading-tight sm:leading-relaxed">
-                                    Exchange electronic gadgets.
+                                    Exchange gadgets.
                                 </p>
                             </div>
 
-                            <span className="mt-2 sm:mt-4 inline-flex items-center gap-1 text-[11px] sm:text-xs font-semibold text-emerald-600 group-hover:translate-x-1 transition-transform">
+                            <span className="mt-2 sm:mt-4 inline-flex items-center justify-center px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold text-emerald-700 bg-emerald-500/10 border border-emerald-500/30 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
                                 Explore Electronics &rarr;
                             </span>
                         </motion.div>
@@ -322,7 +322,7 @@ const Home = () => {
                             whileHover={{ y: -6, scale: 1.02 }}
                             className="group relative bg-gradient-to-br from-amber-500/10 via-white to-emerald-500/10 hover:from-amber-500/20 hover:to-emerald-500/20 border border-amber-200/80 hover:border-[#F4A261] shadow-md hover:shadow-2xl hover:shadow-amber-500/20 p-3.5 sm:p-5 md:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[180px] sm:min-h-[220px] md:min-h-[250px] transition-all duration-300 overflow-hidden"
                         >
-                            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 flex items-center justify-center p-1.5 sm:p-2 bg-white/90 rounded-xl sm:rounded-2xl shadow-inner backdrop-blur-sm border border-white">
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 flex items-center justify-center p-1.5 sm:p-2 bg-white/90 rounded-xl sm:rounded-2xl shadow-inner backdrop-blur-sm border border-amber-100">
                                 <img
                                     src={gaming}
                                     alt="Gaming"
@@ -339,7 +339,7 @@ const Home = () => {
                                 </p>
                             </div>
 
-                            <span className="mt-2 sm:mt-4 inline-flex items-center gap-1 text-[11px] sm:text-xs font-semibold text-[#F4A261] group-hover:translate-x-1 transition-transform">
+                            <span className="mt-2 sm:mt-4 inline-flex items-center justify-center px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold text-[#F4A261] bg-[#F4A261]/10 border border-[#F4A261]/30 group-hover:bg-[#F4A261] group-hover:text-white transition-all duration-300">
                                 Explore Gaming &rarr;
                             </span>
                         </motion.div>
@@ -355,7 +355,7 @@ const Home = () => {
                             whileHover={{ y: -6, scale: 1.02 }}
                             className="group relative bg-gradient-to-br from-teal-600/10 via-white to-emerald-500/10 hover:from-teal-600/20 hover:to-emerald-500/20 border border-teal-200/80 hover:border-teal-600 shadow-md hover:shadow-2xl hover:shadow-teal-500/20 p-3.5 sm:p-5 md:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[180px] sm:min-h-[220px] md:min-h-[250px] transition-all duration-300 overflow-hidden"
                         >
-                            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 flex items-center justify-center p-1.5 sm:p-2 bg-white/90 rounded-xl sm:rounded-2xl shadow-inner backdrop-blur-sm border border-white">
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 flex items-center justify-center p-1.5 sm:p-2 bg-white/90 rounded-xl sm:rounded-2xl shadow-inner backdrop-blur-sm border border-teal-100">
                                 <img
                                     src={accessories}
                                     alt="Accessories"
@@ -372,7 +372,7 @@ const Home = () => {
                                 </p>
                             </div>
 
-                            <span className="mt-2 sm:mt-4 inline-flex items-center gap-1 text-[11px] sm:text-xs font-semibold text-teal-600 group-hover:translate-x-1 transition-transform">
+                            <span className="mt-2 sm:mt-4 inline-flex items-center justify-center px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold text-teal-700 bg-teal-500/10 border border-teal-500/30 group-hover:bg-teal-600 group-hover:text-white transition-all duration-300">
                                 Explore Accessories &rarr;
                             </span>
                         </motion.div>
@@ -388,7 +388,7 @@ const Home = () => {
                             whileHover={{ y: -6, scale: 1.02 }}
                             className="group relative bg-gradient-to-br from-emerald-500/10 via-white to-green-500/10 hover:from-emerald-500/20 hover:to-green-500/20 border border-emerald-200/80 hover:border-[#2E7D32] shadow-md hover:shadow-2xl hover:shadow-emerald-500/20 p-3.5 sm:p-5 md:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[180px] sm:min-h-[220px] md:min-h-[250px] transition-all duration-300 overflow-hidden"
                         >
-                            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 flex items-center justify-center p-1.5 sm:p-2 bg-white/90 rounded-xl sm:rounded-2xl shadow-inner backdrop-blur-sm border border-white">
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 flex items-center justify-center p-1.5 sm:p-2 bg-white/90 rounded-xl sm:rounded-2xl shadow-inner backdrop-blur-sm border border-emerald-100">
                                 <img
                                     src={homeItems}
                                     alt="Home Items"
@@ -405,7 +405,7 @@ const Home = () => {
                                 </p>
                             </div>
 
-                            <span className="mt-2 sm:mt-4 inline-flex items-center gap-1 text-[11px] sm:text-xs font-semibold text-[#2E7D32] group-hover:translate-x-1 transition-transform">
+                            <span className="mt-2 sm:mt-4 inline-flex items-center justify-center px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold text-[#2E7D32] bg-[#2E7D32]/10 border border-[#2E7D32]/30 group-hover:bg-[#2E7D32] group-hover:text-white transition-all duration-300">
                                 Explore Home Items &rarr;
                             </span>
                         </motion.div>
