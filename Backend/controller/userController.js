@@ -154,11 +154,31 @@ const forgotPassword = async (req, res) => {
             });
         }
 
-        const resetToken = jwt.sign(
-            { id: user._id },
-            process.env.JWT_SECRET,
-            { expiresIn: "15m" }
-        );
+       console.log("1. User found");
+
+const resetToken = jwt.sign(
+    { id: user._id },
+    process.env.JWT_SECRET,
+    { expiresIn: "15m" }
+);
+
+console.log("2. Token generated");
+
+const resetLink = `http://localhost:5173/reset-password/${resetToken}`;
+
+console.log("3. Reset link created");
+
+console.log("4. Before sendEmail");
+
+await sendEmail(
+    user.email,
+    "SwapHub Password Reset",
+    `
+    <a href="${resetLink}">Reset Password</a>
+    `
+);
+
+console.log("5. After sendEmail");
 
         const resetLink = `http://localhost:5173/reset-password/${resetToken}`;
 
