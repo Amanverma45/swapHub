@@ -51,7 +51,7 @@ const Navbar = () => {
       <header className="sticky top-2 sm:top-3 z-50 w-full flex justify-center px-2.5 sm:px-4 mb-3 sm:mb-6">
         <nav className="w-[98%] sm:w-[95%] max-w-6xl h-13 sm:h-16 bg-white/90 backdrop-blur-md shadow-lg shadow-gray-200/50 border border-gray-100 rounded-full px-4 sm:px-8 md:px-10 flex items-center justify-between transition-all duration-300">
           
-          {/* Left: Logo Area */}
+          {/* Logo Area */}
           <div className="flex items-center justify-between w-full md:w-auto">
             <Link to="/" className="flex items-center gap-2.5 group">
               <img
@@ -78,8 +78,8 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* Center: Desktop Nav Links */}
-          <div className="hidden md:flex items-center justify-center gap-3 lg:gap-5 font-semibold text-sm">
+          {/* Desktop Nav Links & Action Buttons Together */}
+          <div className="hidden md:flex items-center gap-6 lg:gap-8 font-semibold text-sm">
             <Link
               to="/"
               className={`px-3.5 py-1.5 rounded-full transition-all duration-200 ${
@@ -102,7 +102,27 @@ const Navbar = () => {
               Products
             </Link>
 
-            {token && (
+            {!token ? (
+              <>
+                <Link
+                  to="/login"
+                  className={`px-4 py-2 rounded-full border border-transparent transition-all duration-200 ${
+                    isActive("/login")
+                      ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold border-[#2E7D32]/20"
+                      : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/80"
+                  }`}
+                >
+                  Login
+                </Link>
+
+                <Link
+                  to="/register"
+                  className="bg-[#2E7D32] border-2 border-[#2E7D32] hover:bg-[#236327] hover:border-[#236327] text-white font-bold px-6 py-2 rounded-full shadow-md shadow-[#2E7D32]/25 hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-200 text-sm"
+                >
+                  Register
+                </Link>
+              </>
+            ) : (
               <>
                 <Link
                   to="/addProduct"
@@ -134,34 +154,7 @@ const Navbar = () => {
                 >
                   Dashboard
                 </Link>
-              </>
-            )}
-          </div>
 
-          {/* Right: Desktop Action Buttons */}
-          <div className="hidden md:flex items-center gap-3">
-            {!token ? (
-              <>
-                <Link
-                  to="/login"
-                  className={`px-4 py-2 rounded-full border border-transparent font-semibold transition-all duration-200 ${
-                    isActive("/login")
-                      ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold border-[#2E7D32]/20"
-                      : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/80"
-                  }`}
-                >
-                  Login
-                </Link>
-
-                <Link
-                  to="/register"
-                  className="bg-[#2E7D32] border-2 border-[#2E7D32] hover:bg-[#236327] hover:border-[#236327] text-white font-bold px-6 py-2 rounded-full shadow-md shadow-[#2E7D32]/25 hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-200 text-sm"
-                >
-                  Register
-                </Link>
-              </>
-            ) : (
-              <>
                 <div
                   onClick={() => navigate("/mySwapRequests")}
                   className="relative cursor-pointer p-2 rounded-full text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60 transition-colors"
@@ -293,7 +286,7 @@ const Navbar = () => {
 
                 <button
                   onClick={handleLogout}
-                  className="flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-2.5 px-4 rounded-2xl font-bold text-sm transition mt-1"
+                  className="flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-[#fff] py-2.5 px-4 rounded-2xl font-bold text-sm transition mt-1"
                 >
                   <span>Logout</span>
                   <AiOutlineLogout className="text-lg" />
