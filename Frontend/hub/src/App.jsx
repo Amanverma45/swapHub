@@ -23,7 +23,7 @@ const App = () => {
     <div className="w-full min-h-screen flex flex-col bg-gray-50 overflow-x-hidden">
       
       <Navbar />
-      <main className="flex-grow w-full">
+      <main className="flex-grow w-full pt-16 sm:pt-20">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />

@@ -47,8 +47,8 @@ const Navbar = () => {
         />
       )}
 
-      {/* Floating Glassmorphic Navbar Container - Sticky Pinned to Top */}
-      <header className="sticky top-0 z-50 w-full flex justify-center px-2.5 sm:px-4 py-2 bg-gray-50/60 backdrop-blur-md transition-all duration-300">
+      {/* Fixed Glassmorphic Navbar Container - Pinned to Top on Scroll */}
+      <header className="fixed top-0 left-0 right-0 z-50 w-full flex justify-center px-2.5 sm:px-4 py-2 bg-gray-50/80 backdrop-blur-md transition-all duration-300">
         <nav className="w-[98%] sm:w-[95%] max-w-6xl h-13 sm:h-16 bg-white/90 backdrop-blur-md shadow-lg shadow-gray-200/50 border border-gray-100 rounded-full px-4 sm:px-8 md:px-10 flex items-center justify-between transition-all duration-300">
 
           {/* Logo Area */}
