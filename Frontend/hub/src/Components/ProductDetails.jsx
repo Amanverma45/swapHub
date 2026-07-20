@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "../utils/axiosInstance.js";
 import toast from "react-hot-toast";
-import { FaLocationDot, FaExchangeAlt, FaCalendarDays } from "react-icons/fa6";
+import { FaExchangeAlt } from "react-icons/fa";
+import { FaLocationDot, FaCalendarDays } from "react-icons/fa6";
 
 const ProductDetails = () => {
   const [myProducts, setMyProducts] = useState([]);
