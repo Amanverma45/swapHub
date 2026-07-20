@@ -6,34 +6,27 @@ const ForgotPassword = () => {
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
 
-   const handleSubmit = async (e) => {
-    e.preventDefault();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    if (!email) {
-        toast.error("Please enter your email");
-        return;
-    }
+        if (!email) {
+            toast.error("Please enter your email");
+            return;
+        }
 
-    try {
-        setLoading(true);
-
-        // const response = await axios.post("/forgotPassword", {
-        //     email,
-        // });
-        const response = await axios.post("/forgotPassword", {
-    email,
-});
-
-console.log(response.data);
-
-        toast.success(response.data.message);
-
-    } catch (error) {
-        toast.error(error.response?.data?.message || "Something went wrong");
-    } finally {
-        setLoading(false);
-    }
-};
+        try {
+            setLoading(true);
+            const response = await axios.post("/forgotPassword", {
+                email,
+            });
+            // console.log(response.data);
+            toast.success(response.data.message);
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Something went wrong");
+        } finally {
+            setLoading(false);
+        }
+    };
     return (
         <section className="min-h-[80vh] flex items-center justify-center px-4">
             <div className="w-full max-w-md bg-white shadow-lg rounded-3xl p-8 border border-gray-100">

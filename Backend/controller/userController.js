@@ -1,6 +1,7 @@
 const userModel = require('../model/userModel.js')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+import sendEmail from "../utils/sendEmail.js";
 
 const saveUser = async (req, res) => {
     try {
@@ -145,8 +146,6 @@ const forgotPassword = async (req, res) => {
                 message: "Email is required"
             });
         }
-console.log("Forgot Password API Hit");
-console.log("Email:", email);
         const user = await userModel.findOne({ email });
 
         if (!user) {
@@ -161,12 +160,31 @@ console.log("Email:", email);
             { expiresIn: "15m" }
         );
 
-        console.log(resetToken);
+        const resetLink = `http://localhost:5173/reset-password/${resetToken}`;
 
-        return res.status(200).json({
-            message: "User verified successfully"
-            , resetToken
-        });
+        await sendEmail(
+            user.email,
+            "SwapHub Password Reset",
+            `
+            <h2>Reset Your Password</h2>
+             <p>Hello ${user.name},</p>
+             <p>Click the button below to reset your password.</p>
+
+            <a href="${resetLink}" style="
+               display:inline-block;
+               padding:10px 18px;
+               background:#2E7D32;
+                color:white;
+               text-decoration:none;
+               border-radius:6px;
+            ">
+            Reset Password
+            </a>
+
+    <p>This link will expire in 15 minutes.</p>
+    <p>If you didn't request this, you can safely ignore this email.</p>
+    `
+        );
     } catch (error) {
         console.log("ERROR:", error);
         return res.status(500).json({
