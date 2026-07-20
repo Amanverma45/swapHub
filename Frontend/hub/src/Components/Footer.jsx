@@ -6,8 +6,8 @@ const Footer = () => {
     <footer className="bg-white border-t-4 border-t-[#2E7D32] shadow-sm mt-6 sm:mt-10">
       <div className="w-[90%] max-w-6xl mx-auto py-8">
         
-        {/* Main Container: Flex row on desktop, stacked on mobile with Quick Links & Contact side-by-side */}
-        <div className="flex flex-col md:flex-row justify-between items-start gap-8">
+        {/* Main Container: Centered on Desktop with controlled gaps */}
+        <div className="flex flex-col md:flex-row justify-between md:justify-center items-start md:items-center gap-8 md:gap-20 lg:gap-28">
           
           {/* Logo & Tagline */}
           <div className="max-w-xs text-left">
@@ -19,8 +19,8 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Quick Links & Contact: Side-by-Side (flex-row) on ALL screens */}
-          <div className="flex flex-row items-start justify-between w-full md:w-auto gap-8 sm:gap-16">
+          {/* Quick Links & Contact: Side-by-Side with reduced, tight gap */}
+          <div className="flex flex-row items-start justify-between w-full md:w-auto gap-8 sm:gap-10 md:gap-12">
             
             {/* Quick Links Column */}
             <div className="flex flex-col text-left">
