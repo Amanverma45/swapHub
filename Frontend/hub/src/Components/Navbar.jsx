@@ -64,10 +64,10 @@ const Navbar = () => {
               </h1>
             </Link>
 
-            {/* Mobile Hamburger Icon Button with Border */}
+            {/* Mobile Hamburger Icon Button with Brand Theme (Rounded Square) */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden flex items-center justify-center p-2 rounded-full border border-gray-200/80 bg-gray-50/80 text-gray-700 hover:text-[#2E7D32] hover:border-[#2E7D32]/40 transition-colors shadow-xs"
+              className="md:hidden flex items-center justify-center p-2 rounded-xl border-2 border-[#2E7D32] bg-[#2E7D32]/10 text-[#2E7D32] hover:bg-[#2E7D32] hover:text-white transition-all duration-200 shadow-xs"
               aria-label="Toggle Menu"
             >
               {isOpen ? (
