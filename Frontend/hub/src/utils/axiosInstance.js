@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "https://swaphub-backend-855x.onrender.com/api",
+  // Local backend server par connect kar rahe hain
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:6000/api",
 });
 
 // Request Interceptor
