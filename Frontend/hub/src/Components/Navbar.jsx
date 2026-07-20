@@ -48,8 +48,8 @@ const Navbar = () => {
       )}
 
       {/* Floating Glassmorphic Navbar Container */}
-      <header className="sticky top-3 z-50 w-full flex justify-center px-3 sm:px-4">
-        <nav className="w-[98%] sm:w-[95%] max-w-6xl h-16 bg-white/90 backdrop-blur-md shadow-lg shadow-gray-200/50 border border-gray-100 rounded-full px-5 sm:px-8 md:px-10 flex items-center justify-between transition-all duration-300">
+      <header className="sticky top-2 sm:top-3 z-50 w-full flex justify-center px-2.5 sm:px-4 mb-3 sm:mb-6">
+        <nav className="w-[98%] sm:w-[95%] max-w-6xl h-13 sm:h-16 bg-white/90 backdrop-blur-md shadow-lg shadow-gray-200/50 border border-gray-100 rounded-full px-4 sm:px-8 md:px-10 flex items-center justify-between transition-all duration-300">
           
           {/* Logo Area */}
           <div className="flex items-center justify-between w-full md:w-auto">

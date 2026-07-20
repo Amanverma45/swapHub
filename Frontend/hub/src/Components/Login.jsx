@@ -45,7 +45,7 @@ const Login = () => {
     }
 }, []);
   return (
-    <section className="min-h-[80vh] flex items-center justify-center px-4">
+    <section className="min-h-[80vh] flex items-center justify-center px-4 py-8 sm:py-12">
       <div className="w-full max-w-md bg-white shadow-lg rounded-3xl p-8 border border-gray-100">
 
         <div className="text-center mb-8">
