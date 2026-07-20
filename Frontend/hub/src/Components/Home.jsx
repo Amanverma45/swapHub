@@ -20,22 +20,22 @@ const Home = () => {
                         initial={{ opacity: 0, x: -40 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.6 }}
-                        className="flex flex-col justify-center text-left"
+                        className="flex flex-col justify-center text-center md:text-left items-center md:items-start"
                     >
-                        <span className="self-start inline-flex items-center gap-2 bg-[#F4A261]/15 text-[#F4A261] border border-[#F4A261]/30 px-4 py-1.5 rounded-full text-xs md:text-sm font-semibold mb-4 shadow-xs">
+                        <span className="self-center md:self-start inline-flex items-center gap-2 bg-[#F4A261]/15 text-[#D97706] border border-[#F4A261]/35 px-4 py-1.5 rounded-full text-xs md:text-sm font-semibold mb-4 shadow-xs">
                             <span className="w-2 h-2 rounded-full bg-[#F4A261] animate-pulse"></span>
                             Smart Product Exchange Platform
                         </span>
 
                         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-gray-900">
                             Exchange Products{" "}
-                            <span className="text-[#2E7D32]">
+                            <span className="text-[#2E7D32] relative inline-block">
                                 Smarter
                             </span>,
                             <br className="hidden lg:inline" /> Not Costlier.
                         </h1>
 
-                        <p className="text-gray-600 text-sm md:text-lg mt-5 leading-relaxed max-w-xl">
+                        <p className="text-gray-600 text-sm md:text-lg mt-5 leading-relaxed max-w-xl mx-auto md:mx-0">
                             Swap books, mobiles, gadgets and other useful products with
                             people around you. Give unused items a new life and discover
                             something valuable without spending money.
