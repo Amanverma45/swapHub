@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { AiOutlineLogout } from "react-icons/ai";
 import { FaBell } from "react-icons/fa";
+import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
 import axios from "../utils/axiosInstance";
 
 const Navbar = () => {
@@ -63,13 +64,17 @@ const Navbar = () => {
               </h1>
             </Link>
 
-            {/* Mobile Hamburger Button */}
+            {/* Mobile Hamburger Icon Button with Border */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden text-2xl text-gray-700 hover:text-[#2E7D32] focus:outline-none p-1 transition-colors"
+              className="md:hidden flex items-center justify-center p-2 rounded-full border border-gray-200/80 bg-gray-50/80 text-gray-700 hover:text-[#2E7D32] hover:border-[#2E7D32]/40 transition-colors shadow-xs"
               aria-label="Toggle Menu"
             >
-              {isOpen ? "✕" : "☰"}
+              {isOpen ? (
+                <HiOutlineX className="text-xl" />
+              ) : (
+                <HiOutlineMenuAlt3 className="text-xl" />
+              )}
             </button>
           </div>
 
@@ -184,41 +189,51 @@ const Navbar = () => {
             isOpen ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 -translate-y-4 pointer-events-none"
           }`}
         >
-          <div className="flex flex-col p-5 gap-3 text-center">
-            <Link
-              to="/"
-              onClick={() => setIsOpen(false)}
-              className={`py-2.5 px-4 rounded-2xl font-bold text-sm transition-colors ${
-                isActive("/") ? "bg-[#2E7D32]/10 text-[#2E7D32]" : "text-gray-700 hover:bg-gray-50"
-              }`}
-            >
-              Home
-            </Link>
+          <div className="flex flex-col p-5 gap-3">
+            
+            {/* Home & Products Side-by-Side in Flex Row */}
+            <div className="flex flex-row items-center justify-center gap-3 w-full">
+              <Link
+                to="/"
+                onClick={() => setIsOpen(false)}
+                className={`flex-1 py-2.5 px-4 rounded-2xl border font-bold text-sm text-center transition-colors ${
+                  isActive("/")
+                    ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]"
+                    : "border-gray-200 text-gray-700 hover:border-[#2E7D32]/30"
+                }`}
+              >
+                Home
+              </Link>
 
-            <Link
-              to="/products"
-              onClick={() => setIsOpen(false)}
-              className={`py-2.5 px-4 rounded-2xl font-bold text-sm transition-colors ${
-                isActive("/products") ? "bg-[#2E7D32]/10 text-[#2E7D32]" : "text-gray-700 hover:bg-gray-50"
-              }`}
-            >
-              Products
-            </Link>
+              <Link
+                to="/products"
+                onClick={() => setIsOpen(false)}
+                className={`flex-1 py-2.5 px-4 rounded-2xl border font-bold text-sm text-center transition-colors ${
+                  isActive("/products")
+                    ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]"
+                    : "border-gray-200 text-gray-700 hover:border-[#2E7D32]/30"
+                }`}
+              >
+                Products
+              </Link>
+            </div>
 
             {!token ? (
-              <div className="flex flex-col gap-2.5 mt-2 pt-3 border-t border-gray-100">
+              <div className="flex flex-col gap-2.5 mt-1 pt-3 border-t border-gray-100">
+                {/* Login Button */}
                 <Link
                   to="/login"
                   onClick={() => setIsOpen(false)}
-                  className="py-2.5 px-4 rounded-2xl border border-[#2E7D32] text-[#2E7D32] font-bold text-sm hover:bg-[#2E7D32]/5 transition-colors"
+                  className="w-full py-2.5 px-4 rounded-2xl border-2 border-[#2E7D32] text-[#2E7D32] font-bold text-sm text-center hover:bg-[#2E7D32]/5 transition-colors shadow-xs"
                 >
                   Login
                 </Link>
 
+                {/* Register Button */}
                 <Link
                   to="/register"
                   onClick={() => setIsOpen(false)}
-                  className="py-2.5 px-4 rounded-2xl bg-[#2E7D32] text-white font-bold text-sm shadow-md shadow-[#2E7D32]/20 hover:bg-[#236327] transition-colors"
+                  className="w-full py-2.5 px-4 rounded-2xl bg-[#2E7D32] border-2 border-[#2E7D32] text-white font-bold text-sm text-center shadow-md shadow-[#2E7D32]/25 hover:bg-[#236327] hover:border-[#236327] transition-colors"
                 >
                   Register
                 </Link>
@@ -228,8 +243,8 @@ const Navbar = () => {
                 <Link
                   to="/addProduct"
                   onClick={() => setIsOpen(false)}
-                  className={`py-2.5 px-4 rounded-2xl font-bold text-sm ${
-                    isActive("/addProduct") ? "bg-[#2E7D32]/10 text-[#2E7D32]" : "text-gray-700"
+                  className={`py-2.5 px-4 rounded-2xl font-bold text-sm text-center border ${
+                    isActive("/addProduct") ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]" : "border-gray-200 text-gray-700"
                   }`}
                 >
                   Add Product
@@ -238,8 +253,8 @@ const Navbar = () => {
                 <Link
                   to="/myProducts"
                   onClick={() => setIsOpen(false)}
-                  className={`py-2.5 px-4 rounded-2xl font-bold text-sm ${
-                    isActive("/myProducts") ? "bg-[#2E7D32]/10 text-[#2E7D32]" : "text-gray-700"
+                  className={`py-2.5 px-4 rounded-2xl font-bold text-sm text-center border ${
+                    isActive("/myProducts") ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]" : "border-gray-200 text-gray-700"
                   }`}
                 >
                   My Products
@@ -248,8 +263,8 @@ const Navbar = () => {
                 <Link
                   to="/welcome"
                   onClick={() => setIsOpen(false)}
-                  className={`py-2.5 px-4 rounded-2xl font-bold text-sm ${
-                    isActive("/welcome") ? "bg-[#2E7D32]/10 text-[#2E7D32]" : "text-gray-700"
+                  className={`py-2.5 px-4 rounded-2xl font-bold text-sm text-center border ${
+                    isActive("/welcome") ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]" : "border-gray-200 text-gray-700"
                   }`}
                 >
                   Dashboard
@@ -260,7 +275,7 @@ const Navbar = () => {
                     navigate("/mySwapRequests");
                     setIsOpen(false);
                   }}
-                  className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-2xl text-gray-700 font-bold text-sm hover:bg-gray-50 cursor-pointer"
+                  className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-2xl border border-gray-200 text-gray-700 font-bold text-sm hover:bg-gray-50 cursor-pointer"
                 >
                   <FaBell className="text-lg text-[#2E7D32]" />
                   <span>Notifications</span>
