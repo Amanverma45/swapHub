@@ -230,12 +230,12 @@ const Navbar = () => {
             </div>
 
             {!token ? (
-              <div className="flex flex-col gap-2.5 mt-1 pt-3 border-t border-gray-100">
+              <div className="flex flex-row items-center justify-center gap-3 w-full mt-1 pt-3 border-t border-gray-100">
                 {/* Login Button */}
                 <Link
                   to="/login"
                   onClick={() => setIsOpen(false)}
-                  className="w-full py-2.5 px-4 rounded-2xl border-2 border-[#2E7D32] text-[#2E7D32] font-bold text-sm text-center hover:bg-[#2E7D32]/5 transition-colors shadow-xs"
+                  className={`flex-1 py-2.5 px-4 rounded-2xl border-2 border-[#2E7D32] text-[#2E7D32] font-bold text-sm text-center hover:bg-[#2E7D32]/5 transition-colors shadow-xs ${isActive("/login") ? "bg-[#2E7D32]/10" : ""}`}
                 >
                   Login
                 </Link>
@@ -244,59 +244,63 @@ const Navbar = () => {
                 <Link
                   to="/register"
                   onClick={() => setIsOpen(false)}
-                  className="w-full py-2.5 px-4 rounded-2xl bg-[#2E7D32] border-2 border-[#2E7D32] text-white font-bold text-sm text-center shadow-md shadow-[#2E7D32]/25 hover:bg-[#236327] hover:border-[#236327] transition-colors"
+                  className="flex-1 py-2.5 px-4 rounded-2xl bg-[#2E7D32] border-2 border-[#2E7D32] text-white font-bold text-sm text-center shadow-md shadow-[#2E7D32]/25 hover:bg-[#236327] hover:border-[#236327] transition-colors"
                 >
                   Register
                 </Link>
               </div>
             ) : (
-              <div className="flex flex-col gap-2 pt-2 border-t border-gray-100">
-                <Link
-                  to="/addProduct"
-                  onClick={() => setIsOpen(false)}
-                  className={`py-2.5 px-4 rounded-2xl font-bold text-sm text-center border ${isActive("/addProduct") ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]" : "border-gray-200 text-gray-700"
-                    }`}
-                >
-                  Add Product
-                </Link>
+              <div className="flex flex-col gap-2.5 pt-2 border-t border-gray-100">
+                {/* Row 1: Add Product & My Products */}
+                <div className="flex flex-row items-center justify-center gap-3 w-full">
+                  <Link
+                    to="/addProduct"
+                    onClick={() => setIsOpen(false)}
+                    className={`flex-1 py-2.5 px-3 rounded-2xl font-bold text-sm text-center border transition-colors ${isActive("/addProduct") ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]" : "border-gray-200 text-gray-700 hover:border-[#2E7D32]/30"}`}
+                  >
+                    Add Product
+                  </Link>
 
-                <Link
-                  to="/myProducts"
-                  onClick={() => setIsOpen(false)}
-                  className={`py-2.5 px-4 rounded-2xl font-bold text-sm text-center border ${isActive("/myProducts") ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]" : "border-gray-200 text-gray-700"
-                    }`}
-                >
-                  My Products
-                </Link>
-
-                <Link
-                  to="/welcome"
-                  onClick={() => setIsOpen(false)}
-                  className={`py-2.5 px-4 rounded-2xl font-bold text-sm text-center border ${isActive("/welcome") ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]" : "border-gray-200 text-gray-700"
-                    }`}
-                >
-                  Dashboard
-                </Link>
-
-                <div
-                  onClick={() => {
-                    navigate("/mySwapRequests");
-                    setIsOpen(false);
-                  }}
-                  className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-2xl border border-gray-200 text-gray-700 font-bold text-sm hover:bg-gray-50 cursor-pointer"
-                >
-                  <FaBell className="text-lg text-[#2E7D32]" />
-                  <span>Notifications</span>
-                  {notificationCount > 0 && (
-                    <span className="bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-                      {notificationCount}
-                    </span>
-                  )}
+                  <Link
+                    to="/myProducts"
+                    onClick={() => setIsOpen(false)}
+                    className={`flex-1 py-2.5 px-3 rounded-2xl font-bold text-sm text-center border transition-colors ${isActive("/myProducts") ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]" : "border-gray-200 text-gray-700 hover:border-[#2E7D32]/30"}`}
+                  >
+                    My Products
+                  </Link>
                 </div>
 
+                {/* Row 2: Dashboard & Notifications */}
+                <div className="flex flex-row items-center justify-center gap-3 w-full">
+                  <Link
+                    to="/welcome"
+                    onClick={() => setIsOpen(false)}
+                    className={`flex-1 py-2.5 px-3 rounded-2xl font-bold text-sm text-center border transition-colors ${isActive("/welcome") ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]" : "border-gray-200 text-gray-700 hover:border-[#2E7D32]/30"}`}
+                  >
+                    Dashboard
+                  </Link>
+
+                  <div
+                    onClick={() => {
+                      navigate("/mySwapRequests");
+                      setIsOpen(false);
+                    }}
+                    className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-2xl border transition-colors cursor-pointer ${isActive("/mySwapRequests") ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]" : "border-gray-200 text-gray-700 hover:border-[#2E7D32]/30"}`}
+                  >
+                    <FaBell className="text-base text-[#2E7D32]" />
+                    <span className="font-bold text-sm">Requests</span>
+                    {notificationCount > 0 && (
+                      <span className="bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                        {notificationCount}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Row 3: Logout Button */}
                 <button
                   onClick={handleLogout}
-                  className="flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-2.5 px-4 rounded-2xl font-bold text-sm transition mt-1"
+                  className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-2.5 px-4 rounded-2xl font-bold text-sm transition mt-1 shadow-xs"
                 >
                   <span>Logout</span>
                   <AiOutlineLogout className="text-lg" />
