@@ -241,7 +241,7 @@ const Home = () => {
                                 </p>
                             </div>
 
-                            <span className="mt-2 sm:mt-4 inline-flex items-center justify-center px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold text-[#2E7D32] bg-[#2E7D32]/10 border border-[#2E7D32]/30 group-hover:bg-[#2E7D32] group-hover:text-white transition-all duration-300">
+                            <span className="mt-2 sm:mt-4 inline-flex items-center justify-center px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-semibold whitespace-nowrap text-[#2E7D32] bg-[#2E7D32]/10 border border-[#2E7D32]/30 group-hover:bg-[#2E7D32] group-hover:text-white transition-all duration-300">
                                 Explore Books &rarr;
                             </span>
                         </motion.div>
@@ -274,7 +274,7 @@ const Home = () => {
                                 </p>
                             </div>
 
-                            <span className="mt-2 sm:mt-4 inline-flex items-center justify-center px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold text-[#F4A261] bg-[#F4A261]/10 border border-[#F4A261]/30 group-hover:bg-[#F4A261] group-hover:text-white transition-all duration-300">
+                            <span className="mt-2 sm:mt-4 inline-flex items-center justify-center px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-semibold whitespace-nowrap text-[#F4A261] bg-[#F4A261]/10 border border-[#F4A261]/30 group-hover:bg-[#F4A261] group-hover:text-white transition-all duration-300">
                                 Explore Mobiles &rarr;
                             </span>
                         </motion.div>
@@ -307,7 +307,7 @@ const Home = () => {
                                 </p>
                             </div>
 
-                            <span className="mt-2 sm:mt-4 inline-flex items-center justify-center px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold text-[#2E7D32] bg-[#2E7D32]/10 border border-[#2E7D32]/30 group-hover:bg-[#2E7D32] group-hover:text-white transition-all duration-300">
+                            <span className="mt-2 sm:mt-4 inline-flex items-center justify-center px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-semibold whitespace-nowrap text-[#2E7D32] bg-[#2E7D32]/10 border border-[#2E7D32]/30 group-hover:bg-[#2E7D32] group-hover:text-white transition-all duration-300">
                                 Explore Electronics &rarr;
                             </span>
                         </motion.div>
@@ -340,7 +340,7 @@ const Home = () => {
                                 </p>
                             </div>
 
-                            <span className="mt-2 sm:mt-4 inline-flex items-center justify-center px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold text-[#F4A261] bg-[#F4A261]/10 border border-[#F4A261]/30 group-hover:bg-[#F4A261] group-hover:text-white transition-all duration-300">
+                            <span className="mt-2 sm:mt-4 inline-flex items-center justify-center px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-semibold whitespace-nowrap text-[#F4A261] bg-[#F4A261]/10 border border-[#F4A261]/30 group-hover:bg-[#F4A261] group-hover:text-white transition-all duration-300">
                                 Explore Gaming &rarr;
                             </span>
                         </motion.div>
@@ -373,7 +373,7 @@ const Home = () => {
                                 </p>
                             </div>
 
-                            <span className="mt-2 sm:mt-4 inline-flex items-center justify-center px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold text-[#2E7D32] bg-[#2E7D32]/10 border border-[#2E7D32]/30 group-hover:bg-[#2E7D32] group-hover:text-white transition-all duration-300">
+                            <span className="mt-2 sm:mt-4 inline-flex items-center justify-center px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-semibold whitespace-nowrap text-[#2E7D32] bg-[#2E7D32]/10 border border-[#2E7D32]/30 group-hover:bg-[#2E7D32] group-hover:text-white transition-all duration-300">
                                 Explore Accessories &rarr;
                             </span>
                         </motion.div>
@@ -406,7 +406,7 @@ const Home = () => {
                                 </p>
                             </div>
 
-                            <span className="mt-2 sm:mt-4 inline-flex items-center justify-center px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-semibold text-[#F4A261] bg-[#F4A261]/10 border border-[#F4A261]/30 group-hover:bg-[#F4A261] group-hover:text-white transition-all duration-300">
+                            <span className="mt-2 sm:mt-4 inline-flex items-center justify-center px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-semibold whitespace-nowrap text-[#F4A261] bg-[#F4A261]/10 border border-[#F4A261]/30 group-hover:bg-[#F4A261] group-hover:text-white transition-all duration-300">
                                 Explore Home Items &rarr;
                             </span>
                         </motion.div>
