@@ -67,7 +67,7 @@ const Navbar = () => {
           }`}
       >
         <nav
-          className={`h-13 sm:h-16 flex items-center justify-between transition-all duration-300 ${scrolled
+          className={`h-15 sm:h-16 flex items-center justify-between transition-all duration-300 ${scrolled
               ? "w-full max-w-full rounded-none px-6 sm:px-12 md:px-16 bg-white/95 backdrop-blur-md shadow-md border-b border-gray-100"
               : "w-[98%] sm:w-[95%] max-w-6xl rounded-full px-4 sm:px-8 md:px-10 bg-white/90 backdrop-blur-md shadow-lg shadow-gray-200/50 border border-gray-100"
             }`}
@@ -198,7 +198,7 @@ const Navbar = () => {
 
         {/* Mobile Dropdown Drawer */}
         <div
-          className={`fixed left-4 right-4 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-gray-100 z-50 transition-all duration-300 transform md:hidden overflow-hidden ${scrolled ? "top-16" : "top-18"
+          className={`fixed left-4 right-4 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-gray-100 z-50 transition-all duration-300 transform md:hidden overflow-hidden ${scrolled ? "top-17" : "top-19"
             } ${isOpen ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 -translate-y-4 pointer-events-none"
             }`}
         >
