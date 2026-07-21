@@ -413,6 +413,47 @@ const Home = () => {
                     </Link>
                 </div>
             </section>
+
+            {/* Call To Action Banner */}
+            <section className="w-[92%] max-w-6xl mx-auto my-10 md:my-16">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4 }}
+                    className="relative overflow-hidden bg-gradient-to-r from-[#2E7D32] via-[#256728] to-[#1E5621] rounded-3xl p-8 sm:p-14 text-white text-center shadow-xl shadow-[#2E7D32]/15 border border-emerald-600/30"
+                >
+                    <div className="absolute -top-12 -right-12 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+                    <div className="absolute -bottom-12 -left-12 w-64 h-64 bg-[#F4A261]/15 rounded-full blur-2xl pointer-events-none" />
+
+                    <div className="relative z-10 max-w-2xl mx-auto">
+                        <span className="inline-block px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white/15 text-emerald-100 border border-white/20 mb-3 shadow-xs">
+                            Start Swapping Today
+                        </span>
+                        <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
+                            Ready to declutter and find amazing products?
+                        </h2>
+                        <p className="mt-3 text-sm sm:text-lg text-emerald-100/90 font-medium leading-relaxed">
+                            Join thousands of community members exchanging books, gadgets, games, and items every day.
+                        </p>
+
+                        <div className="flex flex-row items-center justify-center gap-3 sm:gap-4 mt-8">
+                            <Link
+                                to="/products"
+                                className="inline-flex items-center justify-center font-bold text-[#2E7D32] px-6 sm:px-8 py-3 rounded-full bg-white hover:bg-emerald-50 shadow-lg hover:scale-105 active:scale-95 transition-all duration-200 text-xs sm:text-base"
+                            >
+                                <span>Browse Marketplace</span>
+                            </Link>
+                            <Link
+                                to="/addProduct"
+                                className="inline-flex items-center justify-center font-bold text-white px-6 sm:px-8 py-3 rounded-full bg-white/15 hover:bg-white hover:text-[#2E7D32] border border-white/40 shadow-md hover:scale-105 active:scale-95 transition-all duration-200 text-xs sm:text-base"
+                            >
+                                <span>List Product</span>
+                            </Link>
+                        </div>
+                    </div>
+                </motion.div>
+            </section>
         </div>
     );
 };

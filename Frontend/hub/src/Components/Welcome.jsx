@@ -56,99 +56,75 @@ const Welcome = () => {
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 md:gap-6">
             {/* Add Product */}
-            <Link to="/addProduct" className="block h-full">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.3 }}
-                whileHover={{ y: -6, scale: 1.02 }}
-                className="group relative bg-white border border-gray-100 border-t-4 border-t-[#2E7D32] shadow-md hover:shadow-2xl hover:shadow-[#2E7D32]/15 p-4 sm:p-5 rounded-2xl md:rounded-3xl flex flex-col items-center justify-center gap-2 sm:gap-3 text-center h-full min-h-[150px] sm:min-h-[180px] transition-all duration-300 overflow-hidden"
-              >
-                <div className="p-2.5 sm:p-3.5 rounded-2xl bg-[#2E7D32]/10 text-[#2E7D32] group-hover:bg-[#2E7D32] group-hover:text-white transition-colors duration-300">
-                  <FaPlusCircle className="text-2xl sm:text-3xl" />
-                </div>
-                <div>
-                  <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#2E7D32] transition-colors leading-tight">
-                    Add Product
-                  </h3>
-                  <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-0.5 leading-tight">
-                    Upload new item
-                  </p>
-                </div>
-              </motion.div>
+            <Link
+              to="/addProduct"
+              className="group relative bg-white border border-gray-100 border-t-4 border-t-[#2E7D32] shadow-md hover:shadow-2xl hover:shadow-[#2E7D32]/15 p-4 sm:p-5 rounded-2xl md:rounded-3xl flex flex-col items-center justify-center gap-2 sm:gap-3 text-center h-full min-h-[150px] sm:min-h-[180px] hover:-translate-y-1.5 active:scale-95 transition-all duration-300 overflow-hidden cursor-pointer"
+            >
+              <div className="p-2.5 sm:p-3.5 rounded-2xl bg-[#2E7D32]/10 text-[#2E7D32] group-hover:bg-[#2E7D32] group-hover:text-white transition-colors duration-300">
+                <FaPlusCircle className="text-2xl sm:text-3xl" />
+              </div>
+              <div>
+                <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#2E7D32] transition-colors leading-tight">
+                  Add Product
+                </h3>
+                <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-0.5 leading-tight">
+                  Upload new item
+                </p>
+              </div>
             </Link>
 
             {/* My Products */}
-            <Link to="/myProducts" className="block h-full">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.3, delay: 0.05 }}
-                whileHover={{ y: -6, scale: 1.02 }}
-                className="group relative bg-white border border-gray-100 border-t-4 border-t-[#F4A261] shadow-md hover:shadow-2xl hover:shadow-[#F4A261]/15 p-4 sm:p-5 rounded-2xl md:rounded-3xl flex flex-col items-center justify-center gap-2 sm:gap-3 text-center h-full min-h-[150px] sm:min-h-[180px] transition-all duration-300 overflow-hidden"
-              >
-                <div className="p-2.5 sm:p-3.5 rounded-2xl bg-[#F4A261]/15 text-[#F4A261] group-hover:bg-[#F4A261] group-hover:text-white transition-colors duration-300">
-                  <FaBoxOpen className="text-2xl sm:text-3xl" />
-                </div>
-                <div>
-                  <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#F4A261] transition-colors leading-tight">
-                    My Products
-                  </h3>
-                  <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-0.5 leading-tight">
-                    Manage listings
-                  </p>
-                </div>
-              </motion.div>
+            <Link
+              to="/myProducts"
+              className="group relative bg-white border border-gray-100 border-t-4 border-t-[#F4A261] shadow-md hover:shadow-2xl hover:shadow-[#F4A261]/15 p-4 sm:p-5 rounded-2xl md:rounded-3xl flex flex-col items-center justify-center gap-2 sm:gap-3 text-center h-full min-h-[150px] sm:min-h-[180px] hover:-translate-y-1.5 active:scale-95 transition-all duration-300 overflow-hidden cursor-pointer"
+            >
+              <div className="p-2.5 sm:p-3.5 rounded-2xl bg-[#F4A261]/15 text-[#F4A261] group-hover:bg-[#F4A261] group-hover:text-white transition-colors duration-300">
+                <FaBoxOpen className="text-2xl sm:text-3xl" />
+              </div>
+              <div>
+                <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#F4A261] transition-colors leading-tight">
+                  My Products
+                </h3>
+                <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-0.5 leading-tight">
+                  Manage listings
+                </p>
+              </div>
             </Link>
 
             {/* Swap Requests */}
-            <Link to="/mySwapRequests" className="block h-full">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.3, delay: 0.1 }}
-                whileHover={{ y: -6, scale: 1.02 }}
-                className="group relative bg-white border border-gray-100 border-t-4 border-t-[#2E7D32] shadow-md hover:shadow-2xl hover:shadow-[#2E7D32]/15 p-4 sm:p-5 rounded-2xl md:rounded-3xl flex flex-col items-center justify-center gap-2 sm:gap-3 text-center h-full min-h-[150px] sm:min-h-[180px] transition-all duration-300 overflow-hidden"
-              >
-                <div className="p-2.5 sm:p-3.5 rounded-2xl bg-[#2E7D32]/10 text-[#2E7D32] group-hover:bg-[#2E7D32] group-hover:text-white transition-colors duration-300">
-                  <FaExchangeAlt className="text-2xl sm:text-3xl" />
-                </div>
-                <div>
-                  <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#2E7D32] transition-colors leading-tight">
-                    Swap Requests
-                  </h3>
-                  <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-0.5 leading-tight">
-                    View requests
-                  </p>
-                </div>
-              </motion.div>
+            <Link
+              to="/mySwapRequests"
+              className="group relative bg-white border border-gray-100 border-t-4 border-t-[#2E7D32] shadow-md hover:shadow-2xl hover:shadow-[#2E7D32]/15 p-4 sm:p-5 rounded-2xl md:rounded-3xl flex flex-col items-center justify-center gap-2 sm:gap-3 text-center h-full min-h-[150px] sm:min-h-[180px] hover:-translate-y-1.5 active:scale-95 transition-all duration-300 overflow-hidden cursor-pointer"
+            >
+              <div className="p-2.5 sm:p-3.5 rounded-2xl bg-[#2E7D32]/10 text-[#2E7D32] group-hover:bg-[#2E7D32] group-hover:text-white transition-colors duration-300">
+                <FaExchangeAlt className="text-2xl sm:text-3xl" />
+              </div>
+              <div>
+                <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#2E7D32] transition-colors leading-tight">
+                  Swap Requests
+                </h3>
+                <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-0.5 leading-tight">
+                  View requests
+                </p>
+              </div>
             </Link>
 
             {/* Profile */}
-            <Link to="/welcome" className="block h-full">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.3, delay: 0.15 }}
-                whileHover={{ y: -6, scale: 1.02 }}
-                className="group relative bg-white border border-gray-100 border-t-4 border-t-[#F4A261] shadow-md hover:shadow-2xl hover:shadow-[#F4A261]/15 p-4 sm:p-5 rounded-2xl md:rounded-3xl flex flex-col items-center justify-center gap-2 sm:gap-3 text-center h-full min-h-[150px] sm:min-h-[180px] transition-all duration-300 overflow-hidden"
-              >
-                <div className="p-2.5 sm:p-3.5 rounded-2xl bg-[#F4A261]/15 text-[#F4A261] group-hover:bg-[#F4A261] group-hover:text-white transition-colors duration-300">
-                  <FaUserCircle className="text-2xl sm:text-3xl" />
-                </div>
-                <div>
-                  <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#F4A261] transition-colors leading-tight">
-                    Profile
-                  </h3>
-                  <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-0.5 leading-tight">
-                    Manage account
-                  </p>
-                </div>
-              </motion.div>
+            <Link
+              to="/profile"
+              className="group relative bg-white border border-gray-100 border-t-4 border-t-[#F4A261] shadow-md hover:shadow-2xl hover:shadow-[#F4A261]/15 p-4 sm:p-5 rounded-2xl md:rounded-3xl flex flex-col items-center justify-center gap-2 sm:gap-3 text-center h-full min-h-[150px] sm:min-h-[180px] hover:-translate-y-1.5 active:scale-95 transition-all duration-300 overflow-hidden cursor-pointer"
+            >
+              <div className="p-2.5 sm:p-3.5 rounded-2xl bg-[#F4A261]/15 text-[#F4A261] group-hover:bg-[#F4A261] group-hover:text-white transition-colors duration-300">
+                <FaUserCircle className="text-2xl sm:text-3xl" />
+              </div>
+              <div>
+                <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#F4A261] transition-colors leading-tight">
+                  Profile
+                </h3>
+                <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-0.5 leading-tight">
+                  Manage account
+                </p>
+              </div>
             </Link>
           </div>
         </div>

@@ -174,17 +174,19 @@ const AddProduct = () => {
 
                     {/* Product Image */}
                     <div>
-                        <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
-                            Product Image
-                        </label>
-                        <div className="relative">
-                            <label
-                                htmlFor="productImage"
-                                className="absolute top-3 right-3 w-11 h-11 rounded-full bg-gradient-to-r from-[#2E7D32] to-[#1E5621] text-white flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition shadow-lg z-10"
-                                title="Upload Camera/File"
-                            >
-                                <FaCamera className="text-lg" />
+                        <div className="flex items-center justify-between mb-2">
+                            <label className="block text-xs font-bold uppercase tracking-wider text-gray-700">
+                                Product Image
                             </label>
+
+                            {image && (
+                                <span className="text-[11px] font-bold px-3 py-1 rounded-full border shadow-2xs bg-emerald-50 text-[#2E7D32] border-emerald-200">
+                                    ✓ Image Selected
+                                </span>
+                            )}
+                        </div>
+
+                        <div className="relative">
                             <input
                                 id="productImage"
                                 type="file"
@@ -193,38 +195,44 @@ const AddProduct = () => {
                                 className="hidden"
                             />
 
-                            <label
-                                htmlFor="productImage"
-                                className="w-full h-48 md:h-60 border-2 border-dashed border-emerald-300/80 hover:border-[#2E7D32] bg-emerald-50/40 hover:bg-emerald-50/80 rounded-3xl cursor-pointer flex flex-col items-center justify-center transition-all duration-300 overflow-hidden shadow-inner"
-                            >
-                                {image ? (
-                                    <>
+                            {image ? (
+                                <div className="space-y-3">
+                                    <div className="relative w-full h-52 md:h-64 rounded-3xl overflow-hidden border border-gray-200/80 shadow-md bg-gray-50 flex items-center justify-center p-2.5">
                                         <img
                                             src={URL.createObjectURL(image)}
                                             alt="Product"
-                                            className="w-full h-full object-contain p-3 bg-white/80 backdrop-blur-xs"
+                                            className="w-full h-full object-contain rounded-2xl bg-white border border-gray-100 shadow-inner"
                                         />
-                                    </>
-                                ) : (
-                                    <div className="text-center p-4">
-                                        <div className="w-16 h-16 mx-auto mb-3 rounded-2xl bg-emerald-100/70 text-[#2E7D32] flex items-center justify-center text-3xl shadow-xs">
-                                            📷
-                                        </div>
-
-                                        <p className="font-bold text-gray-800 text-sm sm:text-base">
-                                            Upload Product Image
-                                        </p>
-
-                                        <p className="text-xs text-gray-500 mt-1 font-medium">
-                                            JPG, PNG, WEBP, AVIF (Max 5MB)
-                                        </p>
                                     </div>
-                                )}
-                            </label>
-                            {image && (
-                                <p className="mt-2 text-center text-xs font-semibold text-[#2E7D32] truncate">
-                                    ✓ Selected: {image.name}
-                                </p>
+
+                                    {/* Change Image Button Below Card */}
+                                    <div className="flex justify-center sm:justify-start">
+                                        <label
+                                            htmlFor="productImage"
+                                            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl bg-emerald-50/90 text-[#2E7D32] border border-emerald-200/80 hover:bg-[#2E7D32] hover:text-white transition-all duration-200 font-bold text-xs sm:text-sm cursor-pointer shadow-xs active:scale-95"
+                                        >
+                                            <FaCamera className="text-sm" />
+                                            <span>Change Product Image</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            ) : (
+                                <label
+                                    htmlFor="productImage"
+                                    className="w-full h-48 md:h-60 border-2 border-dashed border-emerald-300/80 hover:border-[#2E7D32] bg-emerald-50/40 hover:bg-emerald-50/80 rounded-3xl cursor-pointer flex flex-col items-center justify-center transition-all duration-300 overflow-hidden shadow-inner p-4 text-center"
+                                >
+                                    <div className="w-14 h-14 mx-auto mb-2.5 rounded-2xl bg-emerald-100/80 text-[#2E7D32] flex items-center justify-center text-2xl shadow-xs">
+                                        <FaCamera />
+                                    </div>
+
+                                    <p className="font-bold text-gray-800 text-sm sm:text-base">
+                                        Upload Product Image
+                                    </p>
+
+                                    <p className="text-xs text-gray-500 mt-1 font-medium">
+                                        JPG, PNG, WEBP, AVIF (Max 5MB)
+                                    </p>
+                                </label>
                             )}
                         </div>
                     </div>

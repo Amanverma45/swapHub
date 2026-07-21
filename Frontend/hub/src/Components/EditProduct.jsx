@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "../utils/axiosInstance";
 import toast from "react-hot-toast";
+import { FaCamera } from "react-icons/fa";
 
 const EditProduct = () => {
     const { id } = useParams();
@@ -17,6 +18,9 @@ const EditProduct = () => {
     const [loading, setLoading] = useState(true);
     const [updating, setUpdating] = useState(false);
     const [previewImage, setPreviewImage] = useState("");
+
+    const [showPreview, setShowPreview] = useState(false);
+    const [tempImage, setTempImage] = useState(null);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -40,21 +44,24 @@ const EditProduct = () => {
         try {
             const formData = new FormData();
 
+            if (image) {
+                formData.append("image", image);
+            }
             formData.append("productName", productName);
             formData.append("category", category);
             formData.append("exchangeFor", exchangeFor);
             formData.append("location", location);
             formData.append("description", description);
 
-            const response = await axios.put(`/updateProduct/${id}`, formData,
+            await axios.put(`/updateProduct/${id}`, formData,
                 {
                     headers: {
+                        Authorization: localStorage.getItem("token"),
                         "Content-Type": "multipart/form-data",
                     }
                 }
             );
 
-            console.error(response.data);
             toast.success("Product Updated Successfully");
 
             setImage(null);
@@ -99,32 +106,82 @@ const EditProduct = () => {
             setLoading(false);
         }
     };
+
     useEffect(() => {
         getProduct();
     }, []);
+
+    const handleImageChange = (e) => {
+        const file = e.target.files?.[0];
+
+        if (!file) return;
+
+        if (file.size > 5 * 1024 * 1024) {
+            toast.error("Image must be less than 5MB");
+            e.target.value = "";
+            return;
+        }
+
+        const allowedTypes = [
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+            "image/webp",
+            "image/avif",
+        ];
+
+        if (!allowedTypes.includes(file.type)) {
+            toast.error("Only JPG, PNG, WEBP and AVIF images are allowed");
+            e.target.value = "";
+            return;
+        }
+
+        setTempImage(file);
+        setShowPreview(true);
+
+        e.target.value = "";
+    };
+
+    const handleDone = () => {
+        setImage(tempImage);
+        setTempImage(null);
+        setShowPreview(false);
+    };
+
+    const handleCancel = () => {
+        setTempImage(null);
+        setShowPreview(false);
+    };
+
     if (loading) {
         return (
-            <div className="flex flex-col items-center justify-center py-24">
-                <div className="w-10 h-10 border-4 border-[#2E7D32] border-t-transparent rounded-full animate-spin"></div>
-
-                <p className="mt-4 text-gray-600">
-                    Loading Product...
+            <div className="flex flex-col items-center justify-center min-h-[70vh] bg-gradient-to-br from-emerald-50/60 via-slate-50 to-amber-50/50">
+                <div className="w-12 h-12 border-4 border-[#2E7D32] border-t-transparent rounded-full animate-spin shadow-md"></div>
+                <p className="mt-4 text-gray-600 font-bold text-sm tracking-wide">
+                    Loading Product Details...
                 </p>
             </div>
         );
     }
 
     return (
-        <section className="min-h-screen bg-gray-50 py-10 px-4">
-            <div className="max-w-3xl mx-auto bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+        <section className="relative min-h-screen py-10 sm:py-16 px-4 overflow-hidden bg-gradient-to-br from-emerald-50/60 via-slate-50 to-amber-50/50">
+            {/* Decorative Background Gradient Orbs */}
+            <div className="absolute top-1/4 -left-20 w-96 h-96 bg-emerald-400/20 rounded-full blur-3xl pointer-events-none animate-pulse" />
+            <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-[#F4A261]/25 rounded-full blur-3xl pointer-events-none animate-pulse" />
 
-                <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-[#2E7D32]">
+            <div className="relative max-w-3xl mx-auto bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl shadow-emerald-950/10 border border-white/80 ring-1 ring-black/5 p-6 sm:p-10">
+
+                <div className="text-center sm:text-left mb-8">
+                    <span className="inline-block px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-50 text-[#D97706] border border-amber-200/60 mb-3 shadow-xs">
+                        Product Management
+                    </span>
+                    <h1 className="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-[#2E7D32] via-[#236327] to-[#1E5621] bg-clip-text text-transparent tracking-tight">
                         Update Product
                     </h1>
 
-                    <p className="text-gray-500 mt-2">
-                        Update your product details.
+                    <p className="text-gray-500 text-sm mt-2 font-medium">
+                        Modify your product details and keep your listing up to date.
                     </p>
                 </div>
 
@@ -132,141 +189,228 @@ const EditProduct = () => {
 
                     {/* Product Image */}
                     <div>
-                        <label className="block font-medium mb-2">
-                            Product Image
-                        </label>
+                        <div className="flex items-center justify-between mb-2">
+                            <label className="block text-xs font-bold uppercase tracking-wider text-gray-700">
+                                Product Image
+                            </label>
 
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => setImage(e.target.files[0])}
-                            className="w-full border border-gray-300 rounded-xl p-3"
-                        />
+                            {(image || previewImage) && (
+                                <span className={`text-[11px] font-bold px-3 py-1 rounded-full border shadow-2xs ${image ? "bg-emerald-50 text-[#2E7D32] border-emerald-200" : "bg-gray-100 text-gray-600 border-gray-200"}`}>
+                                    {image ? "✓ New Image Selected" : "Current Product Image"}
+                                </span>
+                            )}
+                        </div>
 
-                        {(image || previewImage) && (
-                            <div className="mt-4">
+                        <div className="relative">
+                            <input
+                                id="productImage"
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                className="hidden"
+                            />
 
-                                <p
-                                    className={`text-xs mb-2 ${image
-                                        ? "text-[#2E7D32] font-medium"
-                                        : "text-gray-500"
-                                        }`}
+                            {image || previewImage ? (
+                                <div className="space-y-3">
+                                    <div className="relative w-full h-52 md:h-64 rounded-3xl overflow-hidden border border-gray-200/80 shadow-md bg-gray-50 flex items-center justify-center p-2.5">
+                                        <img
+                                            src={image ? URL.createObjectURL(image) : previewImage}
+                                            alt="Product"
+                                            className="w-full h-full object-contain rounded-2xl bg-white border border-gray-100 shadow-inner"
+                                        />
+                                    </div>
+
+                                    {/* Change Image Button Below Card */}
+                                    <div className="flex justify-center sm:justify-start">
+                                        <label
+                                            htmlFor="productImage"
+                                            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl bg-emerald-50/90 text-[#2E7D32] border border-emerald-200/80 hover:bg-[#2E7D32] hover:text-white transition-all duration-200 font-bold text-xs sm:text-sm cursor-pointer shadow-xs active:scale-95"
+                                        >
+                                            <FaCamera className="text-sm" />
+                                            <span>Change Product Image</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            ) : (
+                                <label
+                                    htmlFor="productImage"
+                                    className="w-full h-48 md:h-60 border-2 border-dashed border-emerald-300/80 hover:border-[#2E7D32] bg-emerald-50/40 hover:bg-emerald-50/80 rounded-3xl cursor-pointer flex flex-col items-center justify-center transition-all duration-300 overflow-hidden shadow-inner p-4 text-center"
                                 >
-                                    {image ? "Selected Image" : "Current Image"}
-                                </p>
+                                    <div className="w-14 h-14 mx-auto mb-2.5 rounded-2xl bg-emerald-100/80 text-[#2E7D32] flex items-center justify-center text-2xl shadow-xs">
+                                        <FaCamera />
+                                    </div>
 
-                                <img
-                                    src={image ? URL.createObjectURL(image) : previewImage}
-                                    alt="Preview"
-                                    className="w-64 h-44 rounded-2xl object-cover border border-gray-200 shadow-sm"
-                                />
+                                    <p className="font-bold text-gray-800 text-sm sm:text-base">
+                                        Upload Product Image
+                                    </p>
 
-                            </div>
-                        )}
-
-                        <p className="text-sm text-gray-500 mt-2">
-                            Select a new image only if you want to replace the current one.
-                        </p>
+                                    <p className="text-xs text-gray-500 mt-1 font-medium">
+                                        JPG, PNG, WEBP, AVIF (Max 5MB)
+                                    </p>
+                                </label>
+                            )}
+                        </div>
                     </div>
 
-                    {/* Product Name */}
-                    <div>
-                        <label className="block font-medium mb-2">
-                            Product Name
-                        </label>
+                    <div className="grid sm:grid-cols-2 gap-5">
+                        {/* Product Name */}
+                        <div>
+                            <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
+                                Product Name
+                            </label>
 
-                        <input
-                            type="text"
-                            value={productName}
-                            onChange={(e) => setProductName(e.target.value)}
-                            placeholder="Enter product name"
-                            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20"
-                        />
+                            <input
+                                type="text"
+                                value={productName}
+                                onChange={(e) => setProductName(e.target.value)}
+                                placeholder="Enter product title"
+                                className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-gray-800 text-sm outline-none transition-all duration-200 focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10"
+                            />
+                        </div>
+
+                        {/* Category */}
+                        <div>
+                            <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
+                                Category
+                            </label>
+
+                            <select
+                                value={category}
+                                onChange={(e) => setCategory(e.target.value)}
+                                className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-gray-800 text-sm outline-none transition-all duration-200 focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10"
+                            >
+                                <option value="">Select Category</option>
+                                <option value="Books">Books</option>
+                                <option value="Mobiles">Mobiles</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Gaming">Gaming</option>
+                                <option value="Accessories">Accessories</option>
+                                <option value="Home Items">Home Items</option>
+                            </select>
+                        </div>
                     </div>
 
-                    {/* Category */}
-                    <div>
-                        <label className="block font-medium mb-2">
-                            Category
-                        </label>
+                    <div className="grid sm:grid-cols-2 gap-5">
+                        {/* Exchange For */}
+                        <div>
+                            <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
+                                Looking To Swap With
+                            </label>
 
-                        <select
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)} className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20"
-                        >
-                            <option value="">Select Category</option>
-                            <option value="Books">Books</option>
-                            <option value="Mobiles">Mobiles</option>
-                            <option value="Electronics">Electronics</option>
-                            <option value="Gaming">Gaming</option>
-                            <option value="Accessories">Accessories</option>
-                            <option value="Home Items">Home Items</option>
-                        </select>
-                    </div>
+                            <input
+                                value={exchangeFor}
+                                onChange={(e) => setExchangeFor(e.target.value)}
+                                type="text"
+                                placeholder="e.g. Laptop, Gaming Console, Books"
+                                className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-gray-800 text-sm outline-none transition-all duration-200 focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10"
+                            />
+                        </div>
 
-                    {/* Exchange For */}
-                    <div>
-                        <label className="block font-medium mb-2">
-                            Exchange For
-                        </label>
+                        {/* Location */}
+                        <div>
+                            <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
+                                City / Location
+                            </label>
 
-                        <input
-                            value={exchangeFor}
-                            onChange={(e) => setExchangeFor(e.target.value)}
-                            type="text"
-                            placeholder="Example: Laptop, Books, Mobile"
-                            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20"
-                        />
-                    </div>
-
-                    {/* Location */}
-                    <div>
-                        <label className="block font-medium mb-2">
-                            Location
-                        </label>
-
-                        <input
-                            value={location}
-                            onChange={(e) => setLocation(e.target.value)}
-                            type="text"
-                            placeholder="Enter your city"
-                            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20"
-                        />
+                            <input
+                                value={location}
+                                onChange={(e) => setLocation(e.target.value)}
+                                type="text"
+                                placeholder="Enter your city"
+                                className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-gray-800 text-sm outline-none transition-all duration-200 focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10"
+                            />
+                        </div>
                     </div>
 
                     {/* Description */}
                     <div>
-                        <label className="block font-medium mb-2">
-                            Description
+                        <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
+                            Product Description
                         </label>
 
                         <textarea
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
-                            rows="5"
-                            placeholder="Describe your product..."
-                            className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none resize-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20"
+                            rows="4"
+                            placeholder="Describe item condition, usage details and swap preferences..."
+                            className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-gray-800 text-sm outline-none resize-none transition-all duration-200 focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10"
                         ></textarea>
                     </div>
 
                     <button
                         type="submit"
                         disabled={updating}
-                        className="w-full bg-[#2E7D32] hover:bg-[#256728] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed text-white py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+                        className="w-full bg-gradient-to-r from-[#2E7D32] to-[#1E5621] hover:from-[#256728] hover:to-[#164219] text-white font-bold py-4 rounded-2xl shadow-lg shadow-[#2E7D32]/25 hover:shadow-xl hover:shadow-[#2E7E32]/35 hover:scale-[1.01] active:scale-[0.98] disabled:opacity-70 transition-all duration-200 text-sm sm:text-base mt-2 flex items-center justify-center gap-2"
                     >
                         {updating ? (
                             <>
-                                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                Updating...
+                                <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                                Updating Product...
                             </>
                         ) : (
-                            "Update Product"
+                            "Save Product Changes"
                         )}
                     </button>
 
                 </form>
             </div>
+
+            {/* Image Preview Modal */}
+            {showPreview && (
+                <div className="fixed inset-0 bg-black/75 backdrop-blur-md flex items-center justify-center z-50 px-4">
+
+                    <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden border border-white/80">
+
+                        {/* Header */}
+                        <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                            <h2 className="text-lg font-bold text-gray-900">
+                                New Image Preview
+                            </h2>
+
+                            <button
+                                onClick={handleCancel}
+                                className="w-8 h-8 rounded-full bg-gray-100 text-gray-500 hover:bg-red-50 hover:text-red-500 flex items-center justify-center transition font-bold"
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        {/* Image */}
+                        <div className="bg-gray-50/80 flex justify-center items-center p-5">
+
+                            <img
+                                src={URL.createObjectURL(tempImage)}
+                                alt="Preview"
+                                className="max-h-[400px] w-full object-contain rounded-2xl bg-white border shadow-xs"
+                            />
+
+                        </div>
+
+                        {/* Footer */}
+                        <div className="flex gap-3 p-5 border-t border-gray-100">
+
+                            <button
+                                onClick={handleCancel}
+                                className="flex-1 border border-gray-200 rounded-2xl py-3 font-bold text-sm text-gray-700 hover:bg-gray-100 transition"
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                onClick={handleDone}
+                                className="flex-1 bg-gradient-to-r from-[#2E7D32] to-[#1E5621] text-white rounded-2xl py-3 font-bold text-sm hover:from-[#256728] hover:to-[#164219] shadow-md transition"
+                            >
+                                Use New Image
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            )}
         </section>
     );
-}
-export default EditProduct
+};
+
+export default EditProduct;
