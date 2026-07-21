@@ -63,16 +63,16 @@ const Welcome = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.3 }}
                 whileHover={{ y: -6, scale: 1.02 }}
-                className="group relative bg-white border border-gray-100 border-t-4 border-t-[#2E7D32] shadow-md hover:shadow-2xl hover:shadow-[#2E7D32]/15 p-4 sm:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[170px] sm:min-h-[200px] transition-all duration-300 overflow-hidden"
+                className="group relative bg-white border border-gray-100 border-t-4 border-t-[#2E7D32] shadow-md hover:shadow-2xl hover:shadow-[#2E7D32]/15 p-4 sm:p-5 rounded-2xl md:rounded-3xl flex flex-col items-center justify-center gap-2 sm:gap-3 text-center h-full min-h-[150px] sm:min-h-[180px] transition-all duration-300 overflow-hidden"
               >
-                <div className="p-3 sm:p-4 rounded-2xl bg-[#2E7D32]/10 text-[#2E7D32] group-hover:bg-[#2E7D32] group-hover:text-white transition-colors duration-300 mt-1 mb-2 sm:mb-3">
-                  <FaPlusCircle className="text-3xl sm:text-4xl" />
+                <div className="p-2.5 sm:p-3.5 rounded-2xl bg-[#2E7D32]/10 text-[#2E7D32] group-hover:bg-[#2E7D32] group-hover:text-white transition-colors duration-300">
+                  <FaPlusCircle className="text-2xl sm:text-3xl" />
                 </div>
                 <div>
-                  <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#2E7D32] transition-colors">
+                  <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#2E7D32] transition-colors leading-tight">
                     Add Product
                   </h3>
-                  <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-1 leading-tight">
+                  <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-0.5 leading-tight">
                     Upload new item
                   </p>
                 </div>
@@ -87,16 +87,16 @@ const Welcome = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.3, delay: 0.05 }}
                 whileHover={{ y: -6, scale: 1.02 }}
-                className="group relative bg-white border border-gray-100 border-t-4 border-t-[#F4A261] shadow-md hover:shadow-2xl hover:shadow-[#F4A261]/15 p-4 sm:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[170px] sm:min-h-[200px] transition-all duration-300 overflow-hidden"
+                className="group relative bg-white border border-gray-100 border-t-4 border-t-[#F4A261] shadow-md hover:shadow-2xl hover:shadow-[#F4A261]/15 p-4 sm:p-5 rounded-2xl md:rounded-3xl flex flex-col items-center justify-center gap-2 sm:gap-3 text-center h-full min-h-[150px] sm:min-h-[180px] transition-all duration-300 overflow-hidden"
               >
-                <div className="p-3 sm:p-4 rounded-2xl bg-[#F4A261]/15 text-[#F4A261] group-hover:bg-[#F4A261] group-hover:text-white transition-colors duration-300 mt-1 mb-2 sm:mb-3">
-                  <FaBoxOpen className="text-3xl sm:text-4xl" />
+                <div className="p-2.5 sm:p-3.5 rounded-2xl bg-[#F4A261]/15 text-[#F4A261] group-hover:bg-[#F4A261] group-hover:text-white transition-colors duration-300">
+                  <FaBoxOpen className="text-2xl sm:text-3xl" />
                 </div>
                 <div>
-                  <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#F4A261] transition-colors">
+                  <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#F4A261] transition-colors leading-tight">
                     My Products
                   </h3>
-                  <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-1 leading-tight">
+                  <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-0.5 leading-tight">
                     Manage listings
                   </p>
                 </div>
@@ -111,16 +111,16 @@ const Welcome = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.3, delay: 0.1 }}
                 whileHover={{ y: -6, scale: 1.02 }}
-                className="group relative bg-white border border-gray-100 border-t-4 border-t-[#2E7D32] shadow-md hover:shadow-2xl hover:shadow-[#2E7D32]/15 p-4 sm:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[170px] sm:min-h-[200px] transition-all duration-300 overflow-hidden"
+                className="group relative bg-white border border-gray-100 border-t-4 border-t-[#2E7D32] shadow-md hover:shadow-2xl hover:shadow-[#2E7D32]/15 p-4 sm:p-5 rounded-2xl md:rounded-3xl flex flex-col items-center justify-center gap-2 sm:gap-3 text-center h-full min-h-[150px] sm:min-h-[180px] transition-all duration-300 overflow-hidden"
               >
-                <div className="p-3 sm:p-4 rounded-2xl bg-[#2E7D32]/10 text-[#2E7D32] group-hover:bg-[#2E7D32] group-hover:text-white transition-colors duration-300 mt-1 mb-2 sm:mb-3">
-                  <FaExchangeAlt className="text-3xl sm:text-4xl" />
+                <div className="p-2.5 sm:p-3.5 rounded-2xl bg-[#2E7D32]/10 text-[#2E7D32] group-hover:bg-[#2E7D32] group-hover:text-white transition-colors duration-300">
+                  <FaExchangeAlt className="text-2xl sm:text-3xl" />
                 </div>
                 <div>
-                  <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#2E7D32] transition-colors">
+                  <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#2E7D32] transition-colors leading-tight">
                     Swap Requests
                   </h3>
-                  <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-1 leading-tight">
+                  <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-0.5 leading-tight">
                     View requests
                   </p>
                 </div>
@@ -135,16 +135,16 @@ const Welcome = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.3, delay: 0.15 }}
                 whileHover={{ y: -6, scale: 1.02 }}
-                className="group relative bg-white border border-gray-100 border-t-4 border-t-[#F4A261] shadow-md hover:shadow-2xl hover:shadow-[#F4A261]/15 p-4 sm:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[170px] sm:min-h-[200px] transition-all duration-300 overflow-hidden"
+                className="group relative bg-white border border-gray-100 border-t-4 border-t-[#F4A261] shadow-md hover:shadow-2xl hover:shadow-[#F4A261]/15 p-4 sm:p-5 rounded-2xl md:rounded-3xl flex flex-col items-center justify-center gap-2 sm:gap-3 text-center h-full min-h-[150px] sm:min-h-[180px] transition-all duration-300 overflow-hidden"
               >
-                <div className="p-3 sm:p-4 rounded-2xl bg-[#F4A261]/15 text-[#F4A261] group-hover:bg-[#F4A261] group-hover:text-white transition-colors duration-300 mt-1 mb-2 sm:mb-3">
-                  <FaUserCircle className="text-3xl sm:text-4xl" />
+                <div className="p-2.5 sm:p-3.5 rounded-2xl bg-[#F4A261]/15 text-[#F4A261] group-hover:bg-[#F4A261] group-hover:text-white transition-colors duration-300">
+                  <FaUserCircle className="text-2xl sm:text-3xl" />
                 </div>
                 <div>
-                  <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#F4A261] transition-colors">
+                  <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#F4A261] transition-colors leading-tight">
                     Profile
                   </h3>
-                  <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-1 leading-tight">
+                  <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-0.5 leading-tight">
                     Manage account
                   </p>
                 </div>
@@ -166,16 +166,16 @@ const Welcome = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.3 }}
               whileHover={{ y: -6, scale: 1.02 }}
-              className="group relative bg-white border border-gray-100 border-t-4 border-t-[#2E7D32] shadow-md hover:shadow-2xl hover:shadow-[#2E7D32]/15 p-4 sm:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[170px] sm:min-h-[200px] transition-all duration-300 overflow-hidden"
+              className="group relative bg-white border border-gray-100 border-t-4 border-t-[#2E7D32] shadow-md hover:shadow-2xl hover:shadow-[#2E7D32]/15 p-4 sm:p-5 rounded-2xl md:rounded-3xl flex flex-col items-center justify-center gap-2 sm:gap-3 text-center h-full min-h-[150px] sm:min-h-[180px] transition-all duration-300 overflow-hidden"
             >
-              <div className="p-3 sm:p-4 rounded-2xl bg-[#2E7D32]/10 text-[#2E7D32] group-hover:bg-[#2E7D32] group-hover:text-white transition-colors duration-300 mt-1 mb-2">
+              <div className="p-2.5 sm:p-3.5 rounded-2xl bg-[#2E7D32]/10 text-[#2E7D32] group-hover:bg-[#2E7D32] group-hover:text-white transition-colors duration-300">
                 <FaBoxOpen className="text-2xl sm:text-3xl" />
               </div>
               <div>
-                <h3 className="text-2xl sm:text-4xl font-extrabold text-[#2E7D32]">
+                <h3 className="text-2xl sm:text-4xl font-extrabold text-[#2E7D32] leading-tight">
                   0
                 </h3>
-                <p className="text-xs sm:text-sm text-gray-500 font-semibold mt-1">
+                <p className="text-xs sm:text-sm text-gray-500 font-semibold mt-0.5">
                   Products Listed
                 </p>
               </div>
@@ -188,16 +188,16 @@ const Welcome = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.3, delay: 0.05 }}
               whileHover={{ y: -6, scale: 1.02 }}
-              className="group relative bg-white border border-gray-100 border-t-4 border-t-[#F4A261] shadow-md hover:shadow-2xl hover:shadow-[#F4A261]/15 p-4 sm:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[170px] sm:min-h-[200px] transition-all duration-300 overflow-hidden"
+              className="group relative bg-white border border-gray-100 border-t-4 border-t-[#F4A261] shadow-md hover:shadow-2xl hover:shadow-[#F4A261]/15 p-4 sm:p-5 rounded-2xl md:rounded-3xl flex flex-col items-center justify-center gap-2 sm:gap-3 text-center h-full min-h-[150px] sm:min-h-[180px] transition-all duration-300 overflow-hidden"
             >
-              <div className="p-3 sm:p-4 rounded-2xl bg-[#F4A261]/15 text-[#F4A261] group-hover:bg-[#F4A261] group-hover:text-white transition-colors duration-300 mt-1 mb-2">
+              <div className="p-2.5 sm:p-3.5 rounded-2xl bg-[#F4A261]/15 text-[#F4A261] group-hover:bg-[#F4A261] group-hover:text-white transition-colors duration-300">
                 <FaExchangeAlt className="text-2xl sm:text-3xl" />
               </div>
               <div>
-                <h3 className="text-2xl sm:text-4xl font-extrabold text-[#F4A261]">
+                <h3 className="text-2xl sm:text-4xl font-extrabold text-[#F4A261] leading-tight">
                   0
                 </h3>
-                <p className="text-xs sm:text-sm text-gray-500 font-semibold mt-1">
+                <p className="text-xs sm:text-sm text-gray-500 font-semibold mt-0.5">
                   Swap Requests
                 </p>
               </div>
@@ -210,16 +210,16 @@ const Welcome = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.3, delay: 0.1 }}
               whileHover={{ y: -6, scale: 1.02 }}
-              className="group relative bg-white border border-gray-100 border-t-4 border-t-emerald-500 shadow-md hover:shadow-2xl hover:shadow-emerald-500/15 p-4 sm:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[170px] sm:min-h-[200px] transition-all duration-300 overflow-hidden"
+              className="group relative bg-white border border-gray-100 border-t-4 border-t-emerald-500 shadow-md hover:shadow-2xl hover:shadow-emerald-500/15 p-4 sm:p-5 rounded-2xl md:rounded-3xl flex flex-col items-center justify-center gap-2 sm:gap-3 text-center h-full min-h-[150px] sm:min-h-[180px] transition-all duration-300 overflow-hidden"
             >
-              <div className="p-3 sm:p-4 rounded-2xl bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300 mt-1 mb-2">
+              <div className="p-2.5 sm:p-3.5 rounded-2xl bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
                 <FaCheckCircle className="text-2xl sm:text-3xl" />
               </div>
               <div>
-                <h3 className="text-2xl sm:text-4xl font-extrabold text-emerald-600">
+                <h3 className="text-2xl sm:text-4xl font-extrabold text-emerald-600 leading-tight">
                   0
                 </h3>
-                <p className="text-xs sm:text-sm text-gray-500 font-semibold mt-1">
+                <p className="text-xs sm:text-sm text-gray-500 font-semibold mt-0.5">
                   Accepted Swaps
                 </p>
               </div>
@@ -232,16 +232,16 @@ const Welcome = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.3, delay: 0.15 }}
               whileHover={{ y: -6, scale: 1.02 }}
-              className="group relative bg-white border border-gray-100 border-t-4 border-t-red-500 shadow-md hover:shadow-2xl hover:shadow-red-500/15 p-4 sm:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[170px] sm:min-h-[200px] transition-all duration-300 overflow-hidden"
+              className="group relative bg-white border border-gray-100 border-t-4 border-t-red-500 shadow-md hover:shadow-2xl hover:shadow-red-500/15 p-4 sm:p-5 rounded-2xl md:rounded-3xl flex flex-col items-center justify-center gap-2 sm:gap-3 text-center h-full min-h-[150px] sm:min-h-[180px] transition-all duration-300 overflow-hidden"
             >
-              <div className="p-3 sm:p-4 rounded-2xl bg-red-50 text-red-500 group-hover:bg-red-500 group-hover:text-white transition-colors duration-300 mt-1 mb-2">
+              <div className="p-2.5 sm:p-3.5 rounded-2xl bg-red-50 text-red-500 group-hover:bg-red-500 group-hover:text-white transition-colors duration-300">
                 <FaTimesCircle className="text-2xl sm:text-3xl" />
               </div>
               <div>
-                <h3 className="text-2xl sm:text-4xl font-extrabold text-red-500">
+                <h3 className="text-2xl sm:text-4xl font-extrabold text-red-500 leading-tight">
                   0
                 </h3>
-                <p className="text-xs sm:text-sm text-gray-500 font-semibold mt-1">
+                <p className="text-xs sm:text-sm text-gray-500 font-semibold mt-0.5">
                   Rejected Swaps
                 </p>
               </div>
