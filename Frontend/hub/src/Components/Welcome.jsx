@@ -5,203 +5,250 @@ import { FaBoxOpen, FaExchangeAlt, FaPlusCircle, FaUserCircle, FaCheckCircle, Fa
 const Welcome = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   return (
-    <section className="min-h-[85vh] bg-gray-50 py-10 px-4">
-      <div className="w-[90%] max-w-6xl mx-auto">
+    <section className="min-h-[85vh] bg-gray-50/60 py-8 sm:py-12 px-4">
+      <div className="w-[92%] max-w-6xl mx-auto space-y-8 sm:space-y-12">
 
-        {/* top section  */}
+        {/* Top Banner Section */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="relative overflow-hidden bg-gradient-to-r from-[#2E7D32] via-[#256728] to-[#1E5621] rounded-3xl p-6 sm:p-10 text-white shadow-xl shadow-[#2E7D32]/15 border border-emerald-600/30"
+        >
+          {/* Subtle Ambient Light Orb */}
+          <div className="absolute -top-12 -right-12 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none" />
 
-        <motion.div initial={{ opacity: 0, y: -40 }} animate={{ opacity: 1, y: 0 }} transition={{
-          duration: 0.3
-        }}
-          className="bg-gradient-to-r from-[#2E7D32] to-[#43A047] rounded-3xl p-8 md:p-10 text-white shadow-lg">
-          <h1 className="text-3xl md:text-5xl font-bold"> Welcome Back, {user?.name} </h1>
-          <p className="mt-4 text-lg text-green-100 max-w-2xl">
-            Manage your products, swap requests and profile from one beautiful dashboard. </p>
+          <div className="relative z-10">
+            <span className="inline-block px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white/15 text-emerald-100 border border-white/20 mb-3 shadow-xs">
+              Dashboard Overview
+            </span>
+            <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight">
+              Welcome Back, {user?.name || "User"}!
+            </h1>
+            <p className="mt-2 sm:mt-3 text-sm sm:text-lg text-emerald-100/90 max-w-2xl font-medium leading-relaxed">
+              Manage your products, swap requests and profile from one beautiful dashboard.
+            </p>
 
-          <div className="flex flex-wrap gap-4 mt-8">
-            <Link
-              to="/addProduct"
-              className="bg-white text-[#2E7D32] px-7 py-3 rounded-full font-semibold hover:scale-105 transition"
-            >
-              + Add Product
-            </Link>
+            <div className="flex flex-row items-center gap-2 sm:gap-4 mt-5 sm:mt-8 flex-nowrap">
+              <Link
+                to="/addProduct"
+                className="relative group inline-flex items-center justify-center font-bold text-[#2E7D32] px-3 sm:px-7 py-2 sm:py-3 rounded-full bg-white border-2 border-transparent hover:bg-emerald-50 shadow-md hover:shadow-xl hover:-translate-y-0.5 hover:scale-105 active:scale-95 transition-all duration-200 text-[11px] sm:text-base whitespace-nowrap"
+              >
+                <FaPlusCircle className="mr-1.5 sm:mr-2 text-xs sm:text-lg text-[#2E7D32]" />
+                <span>Add Product</span>
+              </Link>
 
-            <Link
-              to="/products"
-              className="border border-white px-7 py-3 rounded-full hover:bg-white hover:text-[#2E7D32] transition"
-            >
-              Browse Products
-            </Link>
+              <Link
+                to="/products"
+                className="relative group inline-flex items-center justify-center font-bold text-white px-3 sm:px-7 py-2 sm:py-3 rounded-full bg-white/10 hover:bg-white hover:text-[#2E7D32] border-2 border-white/80 backdrop-blur-xs shadow-md hover:shadow-xl hover:-translate-y-0.5 hover:scale-105 active:scale-95 transition-all duration-200 text-[11px] sm:text-base whitespace-nowrap"
+              >
+                <span>Browse Products</span>
+                <span className="ml-1 sm:ml-2 group-hover:translate-x-1 transition-transform duration-300">&rarr;</span>
+              </Link>
+            </div>
           </div>
         </motion.div>
 
-        {/* second section  */}
+        {/* Quick Actions Cards Section */}
+        <div>
+          <h2 className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-4 sm:mb-6">
+            Quick Actions
+          </h2>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 md:gap-6">
+            {/* Add Product */}
+            <Link to="/addProduct" className="block h-full">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3 }}
+                whileHover={{ y: -6, scale: 1.02 }}
+                className="group relative bg-white border border-gray-100 border-t-4 border-t-[#2E7D32] shadow-md hover:shadow-2xl hover:shadow-[#2E7D32]/15 p-4 sm:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[170px] sm:min-h-[200px] transition-all duration-300 overflow-hidden"
+              >
+                <div className="p-3 sm:p-4 rounded-2xl bg-[#2E7D32]/10 text-[#2E7D32] group-hover:bg-[#2E7D32] group-hover:text-white transition-colors duration-300 mt-1 mb-2 sm:mb-3">
+                  <FaPlusCircle className="text-3xl sm:text-4xl" />
+                </div>
+                <div>
+                  <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#2E7D32] transition-colors">
+                    Add Product
+                  </h3>
+                  <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-1 leading-tight">
+                    Upload new item
+                  </p>
+                </div>
+              </motion.div>
+            </Link>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mt-8">
-          <Link to="/addProduct" className="block">
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.97 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.35, ease: "easeOut", delay: 0 }}
-              whileHover={{ y: -6, scale: 1.03, transition: { duration: 0.18, ease: "easeOut" } }}
-              className="bg-white rounded-2xl border border-gray-100 shadow-sm aspect-square flex flex-col items-center justify-center p-3 lg:p-6 text-center transition-all duration-300"
-            >
-              <FaPlusCircle className="text-4xl lg:text-6xl text-[#2E7D32] mb-3 lg:mb-5" />
-              <h2 className="font-bold text-base lg:text-xl">
-                Add Product
-              </h2>
+            {/* My Products */}
+            <Link to="/myProducts" className="block h-full">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: 0.05 }}
+                whileHover={{ y: -6, scale: 1.02 }}
+                className="group relative bg-white border border-gray-100 border-t-4 border-t-[#F4A261] shadow-md hover:shadow-2xl hover:shadow-[#F4A261]/15 p-4 sm:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[170px] sm:min-h-[200px] transition-all duration-300 overflow-hidden"
+              >
+                <div className="p-3 sm:p-4 rounded-2xl bg-[#F4A261]/15 text-[#F4A261] group-hover:bg-[#F4A261] group-hover:text-white transition-colors duration-300 mt-1 mb-2 sm:mb-3">
+                  <FaBoxOpen className="text-3xl sm:text-4xl" />
+                </div>
+                <div>
+                  <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#F4A261] transition-colors">
+                    My Products
+                  </h3>
+                  <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-1 leading-tight">
+                    Manage listings
+                  </p>
+                </div>
+              </motion.div>
+            </Link>
 
-              <p className="text-xs lg:text-base text-gray-500 mt-1 lg:mt-2">
-                Upload Product
-              </p>
-            </motion.div>
-          </Link>
+            {/* Swap Requests */}
+            <Link to="/mySwapRequests" className="block h-full">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: 0.1 }}
+                whileHover={{ y: -6, scale: 1.02 }}
+                className="group relative bg-white border border-gray-100 border-t-4 border-t-[#2E7D32] shadow-md hover:shadow-2xl hover:shadow-[#2E7D32]/15 p-4 sm:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[170px] sm:min-h-[200px] transition-all duration-300 overflow-hidden"
+              >
+                <div className="p-3 sm:p-4 rounded-2xl bg-[#2E7D32]/10 text-[#2E7D32] group-hover:bg-[#2E7D32] group-hover:text-white transition-colors duration-300 mt-1 mb-2 sm:mb-3">
+                  <FaExchangeAlt className="text-3xl sm:text-4xl" />
+                </div>
+                <div>
+                  <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#2E7D32] transition-colors">
+                    Swap Requests
+                  </h3>
+                  <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-1 leading-tight">
+                    View requests
+                  </p>
+                </div>
+              </motion.div>
+            </Link>
 
-          <Link to="/myProducts" className="block">
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.97 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.35, ease: "easeOut", delay: 0.05 }}
-              whileHover={{ y: -6, scale: 1.03, transition: { duration: 0.18, ease: "easeOut" } }}
-              className="bg-white rounded-2xl border border-gray-100 shadow-sm aspect-square flex flex-col items-center justify-center p-3 lg:p-6 text-center transition-all duration-300"
-            >
-              <FaBoxOpen className="text-4xl lg:text-6xl text-[#F4A261] mb-3 lg:mb-5" />
-
-              <h2 className="font-bold text-base lg:text-xl">
-                My Products
-              </h2>
-
-              <p className="text-xs lg:text-base text-gray-500 mt-1 lg:mt-2">
-                Manage Products
-              </p>
-            </motion.div>
-          </Link>
-
-          <Link to="/swapRequest" className="block">
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.97 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.35, ease: "easeOut", delay: 0.1 }}
-              whileHover={{ y: -6, scale: 1.03, transition: { duration: 0.18, ease: "easeOut" } }}
-              className="bg-white rounded-2xl border border-gray-100 shadow-sm aspect-square flex flex-col items-center justify-center p-3 lg:p-6 text-center transition-all duration-300"
-            >
-              <FaExchangeAlt className="text-4xl lg:text-6xl text-[#2E7D32] mb-3 lg:mb-5" />
-
-              <h2 className="font-bold text-base lg:text-xl">
-                Swap Requests
-              </h2>
-
-              <p className="text-xs lg:text-base text-gray-500 mt-1 lg:mt-2">
-                View Requests
-              </p>
-            </motion.div>
-          </Link>
-
-          <Link to="/profile" className="block">
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.97 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.35, ease: "easeOut", delay: 0.15 }}
-              whileHover={{ y: -6, scale: 1.03, transition: { duration: 0.18, ease: "easeOut" } }}
-              className="bg-white rounded-2xl border border-gray-100 shadow-sm aspect-square flex flex-col items-center justify-center p-3 lg:p-6 text-center transition-all duration-300"
-            >
-              <FaUserCircle className="text-4xl lg:text-6xl text-[#F4A261] mb-3 lg:mb-5" />
-
-              <h2 className="font-bold text-base lg:text-xl">
-                Profile
-              </h2>
-
-              <p className="text-xs lg:text-base text-gray-500 mt-1 lg:mt-2">
-                Edit Profile
-              </p>
-            </motion.div>
-          </Link>
+            {/* Profile */}
+            <Link to="/welcome" className="block h-full">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: 0.15 }}
+                whileHover={{ y: -6, scale: 1.02 }}
+                className="group relative bg-white border border-gray-100 border-t-4 border-t-[#F4A261] shadow-md hover:shadow-2xl hover:shadow-[#F4A261]/15 p-4 sm:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[170px] sm:min-h-[200px] transition-all duration-300 overflow-hidden"
+              >
+                <div className="p-3 sm:p-4 rounded-2xl bg-[#F4A261]/15 text-[#F4A261] group-hover:bg-[#F4A261] group-hover:text-white transition-colors duration-300 mt-1 mb-2 sm:mb-3">
+                  <FaUserCircle className="text-3xl sm:text-4xl" />
+                </div>
+                <div>
+                  <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#F4A261] transition-colors">
+                    Profile
+                  </h3>
+                  <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-1 leading-tight">
+                    Manage account
+                  </p>
+                </div>
+              </motion.div>
+            </Link>
+          </div>
         </div>
 
-        {/* third section  */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mt-8">
+        {/* Stats Counter Section */}
+        <div>
+          <h2 className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-4 sm:mb-6">
+            Activity Overview
+          </h2>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 md:gap-6">
+            {/* Products Listed */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3 }}
+              whileHover={{ y: -6, scale: 1.02 }}
+              className="group relative bg-white border border-gray-100 border-t-4 border-t-[#2E7D32] shadow-md hover:shadow-2xl hover:shadow-[#2E7D32]/15 p-4 sm:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[170px] sm:min-h-[200px] transition-all duration-300 overflow-hidden"
+            >
+              <div className="p-3 sm:p-4 rounded-2xl bg-[#2E7D32]/10 text-[#2E7D32] group-hover:bg-[#2E7D32] group-hover:text-white transition-colors duration-300 mt-1 mb-2">
+                <FaBoxOpen className="text-2xl sm:text-3xl" />
+              </div>
+              <div>
+                <h3 className="text-2xl sm:text-4xl font-extrabold text-[#2E7D32]">
+                  0
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-500 font-semibold mt-1">
+                  Products Listed
+                </p>
+              </div>
+            </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.97 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, amount: 0.15 }}
-            transition={{ duration: 0.35, ease: "easeOut", delay: 0 }}
-            whileHover={{ y: -6, scale: 1.03, transition: { duration: 0.18, ease: "easeOut" } }}
-            className="bg-white border border-gray-100 rounded-l-xl aspect-square flex flex-col items-center justify-center p-3 lg:p-6 shadow-sm transition-all duration-300"
-          >
-            <FaBoxOpen className="text-4xl lg:text-6xl text-[#2E7D32] mb-3 lg:mb-5" />
+            {/* Swap Requests */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: 0.05 }}
+              whileHover={{ y: -6, scale: 1.02 }}
+              className="group relative bg-white border border-gray-100 border-t-4 border-t-[#F4A261] shadow-md hover:shadow-2xl hover:shadow-[#F4A261]/15 p-4 sm:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[170px] sm:min-h-[200px] transition-all duration-300 overflow-hidden"
+            >
+              <div className="p-3 sm:p-4 rounded-2xl bg-[#F4A261]/15 text-[#F4A261] group-hover:bg-[#F4A261] group-hover:text-white transition-colors duration-300 mt-1 mb-2">
+                <FaExchangeAlt className="text-2xl sm:text-3xl" />
+              </div>
+              <div>
+                <h3 className="text-2xl sm:text-4xl font-extrabold text-[#F4A261]">
+                  0
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-500 font-semibold mt-1">
+                  Swap Requests
+                </p>
+              </div>
+            </motion.div>
 
-            <h3 className="text-3xl lg:text-5xl font-bold text-[#2E7D32]">
-              0
-            </h3>
+            {/* Accepted Swaps */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+              whileHover={{ y: -6, scale: 1.02 }}
+              className="group relative bg-white border border-gray-100 border-t-4 border-t-emerald-500 shadow-md hover:shadow-2xl hover:shadow-emerald-500/15 p-4 sm:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[170px] sm:min-h-[200px] transition-all duration-300 overflow-hidden"
+            >
+              <div className="p-3 sm:p-4 rounded-2xl bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300 mt-1 mb-2">
+                <FaCheckCircle className="text-2xl sm:text-3xl" />
+              </div>
+              <div>
+                <h3 className="text-2xl sm:text-4xl font-extrabold text-emerald-600">
+                  0
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-500 font-semibold mt-1">
+                  Accepted Swaps
+                </p>
+              </div>
+            </motion.div>
 
-            <p className="text-sm lg:text-base text-gray-500 mt-1 lg:mt-2 text-center">
-              Products Listed
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.97 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 0.35, ease: "easeOut", delay: 0.05 }}
-            whileHover={{ y: -6, scale: 1.03, transition: { duration: 0.18, ease: "easeOut" } }}
-            className="bg-white border border-gray-100 rounded-r-xl aspect-square flex flex-col items-center justify-center p-3 lg:p-6 shadow-sm transition-all duration-300"
-          >
-            <FaExchangeAlt className="text-4xl lg:text-6xl text-[#F4A261] mb-3 lg:mb-5" />
-
-            <h3 className="text-3xl lg:text-5xl font-bold text-[#F4A261]">
-              0
-            </h3>
-
-            <p className="text-sm lg:text-base text-gray-500 mt-1 lg:mt-2 text-center">
-              Swap Requests
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.97 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 0.35, ease: "easeOut", delay: 0.1 }}
-            whileHover={{ y: -6, scale: 1.03, transition: { duration: 0.18, ease: "easeOut" } }}
-            className="bg-white border border-gray-100 rounded-l-xl aspect-square flex flex-col items-center justify-center p-3 lg:p-6 shadow-sm transition-all duration-300"
-          >
-            <FaCheckCircle className="text-4xl lg:text-6xl text-green-500 mb-3 lg:mb-5" />
-
-            <h3 className="text-3xl lg:text-5xl font-bold text-green-600">
-              0
-            </h3>
-
-            <p className="text-sm lg:text-base text-gray-500 mt-1 lg:mt-2 text-center">
-              Accepted Swaps
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.97 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 0.35, ease: "easeOut", delay: 0.15 }}
-            whileHover={{ y: -6, scale: 1.03, transition: { duration: 0.18, ease: "easeOut" } }}
-            className="bg-white border border-gray-100 rounded-r-xl aspect-square flex flex-col items-center justify-center p-3 lg:p-6 shadow-sm transition-all duration-300"
-          >
-            <FaTimesCircle className="text-4xl lg:text-6xl text-red-500 mb-3 lg:mb-5" />
-
-            <h3 className="text-3xl lg:text-5xl font-bold text-red-500">
-              0
-            </h3>
-
-            <p className="text-sm lg:text-base text-gray-500 mt-1 lg:mt-2 text-center">
-              Rejected Swaps
-            </p>
-          </motion.div>
-
+            {/* Rejected Swaps */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: 0.15 }}
+              whileHover={{ y: -6, scale: 1.02 }}
+              className="group relative bg-white border border-gray-100 border-t-4 border-t-red-500 shadow-md hover:shadow-2xl hover:shadow-red-500/15 p-4 sm:p-6 rounded-2xl md:rounded-3xl flex flex-col justify-between items-center text-center h-full min-h-[170px] sm:min-h-[200px] transition-all duration-300 overflow-hidden"
+            >
+              <div className="p-3 sm:p-4 rounded-2xl bg-red-50 text-red-500 group-hover:bg-red-500 group-hover:text-white transition-colors duration-300 mt-1 mb-2">
+                <FaTimesCircle className="text-2xl sm:text-3xl" />
+              </div>
+              <div>
+                <h3 className="text-2xl sm:text-4xl font-extrabold text-red-500">
+                  0
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-500 font-semibold mt-1">
+                  Rejected Swaps
+                </p>
+              </div>
+            </motion.div>
+          </div>
         </div>
+
       </div>
     </section>
   );
