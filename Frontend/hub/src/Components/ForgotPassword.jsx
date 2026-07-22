@@ -19,7 +19,6 @@ const ForgotPassword = () => {
             const response = await axios.post("/forgotPassword", {
                 email,
             });
-            // console.log(response.data);
             toast.success(response.data.message);
         } catch (error) {
             toast.error(error.response?.data?.message || "Something went wrong");
@@ -29,7 +28,7 @@ const ForgotPassword = () => {
     };
     return (
         <section className="relative min-h-[85vh] flex items-center justify-center px-4 py-10 sm:py-16 overflow-hidden bg-gradient-to-br from-emerald-50/60 via-slate-50 to-amber-50/50">
-            {/* Decorative Background Gradient Orbs */}
+            {/* Background Gradient */}
             <div className="absolute top-1/4 -left-20 w-80 h-80 bg-emerald-400/20 rounded-full blur-3xl pointer-events-none animate-pulse" />
             <div className="absolute bottom-1/4 -right-20 w-80 h-80 bg-[#F4A261]/25 rounded-full blur-3xl pointer-events-none animate-pulse" />
 
