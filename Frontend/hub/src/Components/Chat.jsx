@@ -17,7 +17,8 @@ const Chat = () => {
 
   // Initialize Socket.io Connection
   useEffect(() => {
-    socket.current = io("http://localhost:5000");
+    const socketHost = typeof window !== "undefined" ? window.location.hostname : "localhost";
+    socket.current = io(`http://${socketHost}:5000`);
 
     socket.current.on("connect", () => {
       console.log("Socket client connected:", socket.current.id);
