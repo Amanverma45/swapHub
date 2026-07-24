@@ -17,10 +17,10 @@ import Profile from './Components/Profile'
 import SwapRequests from './Components/SwapRequests'
 import MySwapRequests from './Components/MySwapRequests'
 import ForgotPassword from './Components/ForgotPassword'
-// NAYA IMPORT: Reset password page ka component
+import Chat from './Components/Chat'
 import ResetPassword from './Components/ResetPassword'
 
-// Automatically scrolls window to top on route change
+
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -31,7 +31,7 @@ const ScrollToTop = () => {
   return null;
 };
 
-// Global Floating Back To Top Button
+
 const BackToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -81,7 +81,7 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/forgotPassword" element={<ForgotPassword />} />
-          {/* NAYA ROUTE: Email se aane wale link (/reset-password/:token) ko handle karne ke liye */}
+          
           <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/addProduct" element={<ProtectedRoute><AddProduct /></ProtectedRoute>} />
           <Route path="/product/:id" element={<ProductDetails />} />
@@ -90,6 +90,7 @@ const App = () => {
           <Route path="/swapRequest" element={<ProtectedRoute><SwapRequests /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/mySwapRequests" element={<ProtectedRoute><MySwapRequests /></ProtectedRoute>} />
+          <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
         </Routes>
         <Footer/>
       </main>

@@ -1,0 +1,230 @@
+import { useEffect, useState, useRef } from "react";
+import { useLocation } from "react-router-dom";
+import { io } from "socket.io-client";
+import axios from "../utils/axiosInstance";
+import toast from "react-hot-toast";
+import ChatList from "./ChatList";
+import ChatWindow from "./ChatWindow";
+
+const Chat = () => {
+  const [chats, setChats] = useState([]);
+  const [activeChat, setActiveChat] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const socket = useRef(null);
+  const location = useLocation();
+
+  const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+
+  // Initialize Socket.io Connection
+  useEffect(() => {
+    socket.current = io("http://localhost:5000");
+
+    socket.current.on("connect", () => {
+      console.log("Socket client connected:", socket.current.id);
+    });
+
+    // Real-time message receive handler
+    socket.current.on("receiveMessage", (data) => {
+      // 1. If it belongs to the active chat room, append to messages
+      setActiveChat((currentActive) => {
+        if (currentActive && currentActive._id === data.chatId) {
+          setMessages((prev) => {
+            // Prevent duplicate message rendering
+            const exists = prev.some((m) => m._id === data.message._id);
+            if (exists) return prev;
+            return [...prev, data.message];
+          });
+        }
+        return currentActive;
+      });
+
+      // 2. Fresh snippet update in the sidebar chats list
+      setChats((prevChats) =>
+        prevChats.map((c) => {
+          if (c._id === data.chatId) {
+            const hasMsg = c.messages.some((m) => m._id === data.message._id);
+            const updatedMessages = hasMsg ? c.messages : [...c.messages, data.message];
+            return { ...c, messages: updatedMessages };
+          }
+          return c;
+        })
+      );
+    });
+
+    // Real-time message edit handler
+    socket.current.on("messageUpdated", (data) => {
+      setActiveChat((currentActive) => {
+        if (currentActive && currentActive._id === data.chatId) {
+          setMessages((prev) =>
+            prev.map((msg, i) =>
+              i === data.messageIndex ? { ...msg, text: data.text } : msg
+            )
+          );
+        }
+        return currentActive;
+      });
+
+      setChats((prevChats) =>
+        prevChats.map((c) => {
+          if (c._id === data.chatId) {
+            const updatedMessages = c.messages.map((msg, i) =>
+              i === data.messageIndex ? { ...msg, text: data.text } : msg
+            );
+            return { ...c, messages: updatedMessages };
+          }
+          return c;
+        })
+      );
+    });
+
+    // Real-time message delete handler
+    socket.current.on("messageDeleted", (data) => {
+      setActiveChat((currentActive) => {
+        if (currentActive && currentActive._id === data.chatId) {
+          setMessages((prev) => prev.filter((_, i) => i !== data.messageIndex));
+        }
+        return currentActive;
+      });
+
+      setChats((prevChats) =>
+        prevChats.map((c) => {
+          if (c._id === data.chatId) {
+            const updatedMessages = c.messages.filter((_, i) => i !== data.messageIndex);
+            return { ...c, messages: updatedMessages };
+          }
+          return c;
+        })
+      );
+    });
+
+    return () => {
+      if (socket.current) {
+        socket.current.off("connect");
+        socket.current.off("receiveMessage");
+        socket.current.off("messageUpdated");
+        socket.current.off("messageDeleted");
+        socket.current.disconnect();
+      }
+    };
+  }, []);
+
+  // Fetch all chats user is part of
+  const getChats = async (selectChatIdAfterFetch = null) => {
+    if (!currentUser?._id) return;
+    try {
+      const response = await axios.get(`/myChats/${currentUser._id}`);
+      setChats(response.data);
+
+      if (selectChatIdAfterFetch) {
+        const matchingChat = response.data.find((c) => c._id === selectChatIdAfterFetch);
+        if (matchingChat) {
+          handleSelectChat(matchingChat);
+        }
+      }
+    } catch (error) {
+      console.error("Fetch chats error:", error);
+      toast.error("Could not fetch conversations");
+    }
+  };
+
+  useEffect(() => {
+    // If we have a redirected activeChatId from router state, load it automatically
+    const targetChatId = location.state?.activeChatId;
+    getChats(targetChatId);
+  }, [location.state]);
+
+  const handleSelectChat = async (chat) => {
+    setActiveChat(chat);
+    try {
+      const response = await axios.get(`/getMessages/${chat._id}`);
+      setMessages(response.data);
+
+      // Join the socket room channel
+      if (socket.current) {
+        socket.current.emit("joinRoom", chat._id);
+      }
+    } catch (error) {
+      console.error("Fetch messages error:", error);
+      toast.error("Could not load messages");
+    }
+  };
+
+  const handleSendMessage = async (text) => {
+    if (!activeChat) return;
+    try {
+      await axios.post("/sendMessage", {
+        chatId: activeChat._id,
+        senderId: currentUser._id,
+        text,
+      });
+      // The socket event will trigger the local state update automatically!
+    } catch (error) {
+      console.error("Send message error:", error);
+      toast.error("Message send failed");
+    }
+  };
+
+  const handleUpdateMessage = async (messageIndex, text) => {
+    if (!activeChat) return;
+    try {
+      await axios.put("/updateMessage", {
+        chatId: activeChat._id,
+        messageIndex,
+        text,
+      });
+    } catch (error) {
+      console.error("Update message error:", error);
+      toast.error("Message update failed");
+    }
+  };
+
+  const handleDeleteMessage = async (messageIndex) => {
+    if (!activeChat) return;
+    try {
+      await axios.delete("/deleteMessage", {
+        data: {
+          chatId: activeChat._id,
+          messageIndex,
+        },
+      });
+    } catch (error) {
+      console.error("Delete message error:", error);
+      toast.error("Message delete failed");
+    }
+  };
+
+  const handleDeleteChat = async (chatId) => {
+    try {
+      await axios.delete(`/deleteChat/${chatId}`);
+      toast.success("Chat deleted successfully");
+      setActiveChat(null);
+      setMessages([]);
+      getChats();
+    } catch (error) {
+      console.error("Delete chat error:", error);
+      toast.error("Could not delete conversation");
+    }
+  };
+
+  return (
+    <div className="w-[95%] max-w-6xl mx-auto h-[80vh] min-h-[500px] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden flex flex-col md:flex-row mt-6 md:mt-10 mb-16">
+      <ChatList
+        chats={chats}
+        activeChat={activeChat}
+        onSelectChat={handleSelectChat}
+        currentUser={currentUser}
+      />
+      <ChatWindow
+        activeChat={activeChat}
+        messages={messages}
+        currentUser={currentUser}
+        onSendMessage={handleSendMessage}
+        onUpdateMessage={handleUpdateMessage}
+        onDeleteMessage={handleDeleteMessage}
+        onDeleteChat={handleDeleteChat}
+      />
+    </div>
+  );
+};
+
+export default Chat;

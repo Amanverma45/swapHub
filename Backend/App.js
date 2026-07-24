@@ -1,14 +1,23 @@
+const http = require("http");
+const { Server } = require("socket.io");
 require('dotenv').config()
+
+const { setIo } = require("./socket.js");
+
 const express = require('express')
 require('./Db/Connection.js')
 const app = express();
+const server = http.createServer(app);
 const userRoutes = require('./routes/userRoutes.js')
 const chatRoutes = require('./routes/chatRoutes.js')
 const productRoutes = require('./routes/productRoutes.js')
 const swapRoutes = require('./routes/swapRoutes.js')
 const port = process.env.PORT || 5000;
 const cors = require('cors')
-app.use(cors())
+app.use(cors({
+    origin: ["http://localhost:5173", "http://localhost:5174"],
+    credentials: true
+}));
 app.use(express.json())
 app.get('/',(req,res)=>{
     res.send('Server start from here ')
@@ -18,6 +27,28 @@ app.use('/api',productRoutes)
 app.use('/api',swapRoutes)
 app.use('/api',chatRoutes)
 
-app.listen(port,()=>{
-    console.log(`server is running on port ${port}`)
-})
+const io = new Server(server, {
+    cors: {
+        origin: ["http://localhost:5173", "http://localhost:5174"],
+        methods: ["GET", "POST"],
+        credentials: true
+    }
+});
+setIo(io);
+
+io.on("connection", (socket) => {
+    console.log("User Connected :", socket.id);
+
+    socket.on("joinRoom", (chatId) => {
+        socket.join(chatId);
+        console.log(`Socket ${socket.id} joined room ${chatId}`);
+    });
+
+    socket.on("disconnect", () => {
+        console.log("User Disconnected :", socket.id);
+    });
+});
+
+server.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});

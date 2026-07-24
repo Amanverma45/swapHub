@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "../utils/axiosInstance";
 import toast from "react-hot-toast";
@@ -10,6 +11,26 @@ const SwapRequests = () => {
   const [loading, setLoading] = useState(true);
   const [previewImage, setPreviewImage] = useState(null);
   const [actionLoading, setActionLoading] = useState("");
+  const navigate = useNavigate();
+
+  const handleStartChat = async (receiverId) => {
+    const token = localStorage.getItem("token");
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    if (!token || !user._id) {
+      toast.error("Please login to chat");
+      return;
+    }
+    try {
+      const response = await axios.post("/createChat", {
+        senderId: user._id,
+        receiverId,
+      });
+      navigate("/chat", { state: { activeChatId: response.data._id } });
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Could not start chat");
+    }
+  };
 
   const getSwapRequests = async () => {
     try {
@@ -120,16 +141,26 @@ const SwapRequests = () => {
                 >
                   {/* Header Row: Sender Info & Status Badge */}
                   <div className="flex flex-wrap justify-between items-center gap-4 mb-6 pb-4 border-b border-gray-100">
-                    <div>
-                      <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400">
-                        Offered By Member
-                      </span>
-                      <h2 className="text-lg sm:text-xl font-extrabold text-gray-900 mt-0.5">
-                        {request.sender?.name || "User"}
-                      </h2>
-                      <p className="text-xs text-gray-500 font-medium">
-                        {request.sender?.email}
-                      </p>
+                    <div className="flex items-center gap-4">
+                      <div>
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-gray-400">
+                          Offered By Member
+                        </span>
+                        <h2 className="text-lg sm:text-xl font-extrabold text-gray-900 mt-0.5">
+                          {request.sender?.name || "User"}
+                        </h2>
+                        <p className="text-xs text-gray-500 font-medium">
+                          {request.sender?.email}
+                        </p>
+                      </div>
+
+                      <button
+                        onClick={() => handleStartChat(request.sender?._id)}
+                        className="px-3 py-1.5 rounded-xl bg-emerald-50 text-[#2E7D32] hover:bg-[#2E7D32] hover:text-white transition-all shadow-2xs border border-emerald-100 cursor-pointer text-xs font-bold flex items-center justify-center"
+                        title="Chat with Member"
+                      >
+                        Chat
+                      </button>
                     </div>
 
                     <div className="flex flex-col items-end gap-1">

@@ -170,6 +170,16 @@ const Navbar = () => {
                   Dashboard
                 </Link>
 
+                <Link
+                  to="/chat"
+                  className={`px-3.5 py-1.5 rounded-full transition-all duration-200 ${isActive("/chat")
+                      ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold"
+                      : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60"
+                    }`}
+                >
+                  Chat
+                </Link>
+
                 <div
                   onClick={() => navigate("/mySwapRequests")}
                   className="relative cursor-pointer p-2 rounded-full text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60 transition-colors"
@@ -297,7 +307,18 @@ const Navbar = () => {
                   </div>
                 </div>
 
-                {/* Row 3: Logout Button */}
+                {/* Row 3: Chat */}
+                <div className="flex flex-row items-center justify-center gap-3 w-full">
+                  <Link
+                    to="/chat"
+                    onClick={() => setIsOpen(false)}
+                    className={`flex-1 py-2.5 px-3 rounded-2xl font-bold text-sm text-center border transition-colors ${isActive("/chat") ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]" : "border-gray-200 text-gray-700 hover:border-[#2E7D32]/30"}`}
+                  >
+                    Chat
+                  </Link>
+                </div>
+
+                {/* Row 4: Logout Button */}
                 <button
                   onClick={handleLogout}
                   className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-2.5 px-4 rounded-2xl font-bold text-sm transition mt-1 shadow-xs"

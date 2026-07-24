@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "../utils/axiosInstance.js";
 import toast from "react-hot-toast";
@@ -11,6 +11,7 @@ const ProductDetails = () => {
   const [selectedProduct, setSelectedProduct] = useState("");
   const [previewImage, setPreviewImage] = useState(null);
 
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const [product, setProduct] = useState(null);
@@ -59,6 +60,23 @@ const ProductDetails = () => {
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.message || error.message);
+    }
+  };
+
+  const handleStartChat = async () => {
+    if (!token) {
+      toast.error("Please login to chat with seller");
+      return;
+    }
+    try {
+      const response = await axios.post("/createChat", {
+        senderId: loggedInUser._id,
+        receiverId: product.owner,
+      });
+      navigate("/chat", { state: { activeChatId: response.data._id } });
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Could not start chat");
     }
   };
 
@@ -264,6 +282,14 @@ const ProductDetails = () => {
                           >
                             <FaPaperPlane className="text-xs" />
                             <span>Send Swap Request</span>
+                          </button>
+
+                          <button
+                            onClick={handleStartChat}
+                            className="mt-3 w-full bg-white border border-[#2E7D32] hover:bg-emerald-50 text-[#2E7D32] font-bold py-3.5 rounded-2xl shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200 text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer"
+                          >
+                            <FaExchangeAlt className="rotate-90 text-xs" />
+                            <span>Chat with Seller</span>
                           </button>
                         </div>
                       )}
