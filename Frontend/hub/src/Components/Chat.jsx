@@ -10,12 +10,13 @@ const Chat = () => {
   const [chats, setChats] = useState([]);
   const [activeChat, setActiveChat] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [typingUsers, setTypingUsers] = useState({});
   const socket = useRef(null);
   const location = useLocation();
 
   const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
 
-  // Initialize Socket.io Connection
+  // Initialize Socket.io Connection on mount
   useEffect(() => {
     const socketHost = typeof window !== "undefined" ? window.location.hostname : "localhost";
     socket.current = io(`http://${socketHost}:5000`);
@@ -30,7 +31,6 @@ const Chat = () => {
       setActiveChat((currentActive) => {
         if (currentActive && currentActive._id === data.chatId) {
           setMessages((prev) => {
-            // Prevent duplicate message rendering
             const exists = prev.some((m) => m._id === data.message._id);
             if (exists) return prev;
             return [...prev, data.message];
@@ -98,16 +98,43 @@ const Chat = () => {
       );
     });
 
+    // Real-time typing status handlers
+    socket.current.on("typing", (data) => {
+      setTypingUsers((prev) => ({ ...prev, [data.chatId]: true }));
+    });
+
+    socket.current.on("stopTyping", (data) => {
+      setTypingUsers((prev) => ({ ...prev, [data.chatId]: false }));
+    });
+
     return () => {
       if (socket.current) {
         socket.current.off("connect");
         socket.current.off("receiveMessage");
         socket.current.off("messageUpdated");
         socket.current.off("messageDeleted");
+        socket.current.off("typing");
+        socket.current.off("stopTyping");
         socket.current.disconnect();
       }
     };
   }, []);
+
+  // Emit joinRoom for active chat room whenever it is selected/changed
+  useEffect(() => {
+    if (socket.current && activeChat) {
+      socket.current.emit("joinRoom", activeChat._id);
+    }
+  }, [activeChat]);
+
+  // Emit joinRoom for all chats whenever list changes (to receive background events)
+  useEffect(() => {
+    if (socket.current && chats.length > 0) {
+      chats.forEach((chat) => {
+        socket.current.emit("joinRoom", chat._id);
+      });
+    }
+  }, [chats]);
 
   // Fetch all chats user is part of
   const getChats = async (selectChatIdAfterFetch = null) => {
@@ -139,11 +166,6 @@ const Chat = () => {
     try {
       const response = await axios.get(`/getMessages/${chat._id}`);
       setMessages(response.data);
-
-      // Join the socket room channel
-      if (socket.current) {
-        socket.current.emit("joinRoom", chat._id);
-      }
     } catch (error) {
       console.error("Fetch messages error:", error);
       toast.error("Could not load messages");
@@ -153,12 +175,40 @@ const Chat = () => {
   const handleSendMessage = async (text) => {
     if (!activeChat) return;
     try {
-      await axios.post("/sendMessage", {
+      const response = await axios.post("/sendMessage", {
         chatId: activeChat._id,
         senderId: currentUser._id,
         text,
       });
-      // The socket event will trigger the local state update automatically!
+
+      // Instantly append for lag-free performance on the sender side
+      const populatedChat = response.data;
+      const newSavedMsg = populatedChat.messages[populatedChat.messages.length - 1];
+      const formattedMessage = {
+        ...newSavedMsg,
+        sender: {
+          _id: currentUser._id,
+          name: currentUser.name,
+          email: currentUser.email,
+        },
+      };
+
+      setMessages((prev) => {
+        const exists = prev.some((m) => m._id === formattedMessage._id);
+        if (exists) return prev;
+        return [...prev, formattedMessage];
+      });
+
+      setChats((prevChats) =>
+        prevChats.map((c) => {
+          if (c._id === activeChat._id) {
+            const hasMsg = c.messages.some((m) => m._id === formattedMessage._id);
+            const updatedMessages = hasMsg ? c.messages : [...c.messages, formattedMessage];
+            return { ...c, messages: updatedMessages };
+          }
+          return c;
+        })
+      );
     } catch (error) {
       console.error("Send message error:", error);
       toast.error("Message send failed");
@@ -207,6 +257,15 @@ const Chat = () => {
     }
   };
 
+  const handleTypingStatus = (isTyping) => {
+    if (!activeChat || !socket.current) return;
+    if (isTyping) {
+      socket.current.emit("typing", { chatId: activeChat._id });
+    } else {
+      socket.current.emit("stopTyping", { chatId: activeChat._id });
+    }
+  };
+
   return (
     <div className="w-[95%] max-w-6xl mx-auto h-[80vh] min-h-[500px] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden flex flex-col md:flex-row mt-6 md:mt-10 mb-16">
       <ChatList
@@ -223,6 +282,8 @@ const Chat = () => {
         onUpdateMessage={handleUpdateMessage}
         onDeleteMessage={handleDeleteMessage}
         onDeleteChat={handleDeleteChat}
+        isTyping={!!typingUsers[activeChat?._id]}
+        onTyping={handleTypingStatus}
       />
     </div>
   );

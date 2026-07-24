@@ -44,6 +44,14 @@ io.on("connection", (socket) => {
         console.log(`Socket ${socket.id} joined room ${chatId}`);
     });
 
+    socket.on("typing", (data) => {
+        socket.to(data.chatId).emit("typing", data);
+    });
+
+    socket.on("stopTyping", (data) => {
+        socket.to(data.chatId).emit("stopTyping", data);
+    });
+
     socket.on("disconnect", () => {
         console.log("User Disconnected :", socket.id);
     });

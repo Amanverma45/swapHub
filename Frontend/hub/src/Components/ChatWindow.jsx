@@ -10,6 +10,8 @@ const ChatWindow = ({
   onUpdateMessage,
   onDeleteMessage,
   onDeleteChat,
+  isTyping,
+  onTyping,
 }) => {
   const [editingIndex, setEditingIndex] = useState(null);
   const [editText, setEditText] = useState("");
@@ -208,8 +210,18 @@ const ChatWindow = ({
         <div ref={messagesEndRef} />
       </div>
 
+      {/* Typing Indicator */}
+      {isTyping && (
+        <div className="flex items-center gap-1.5 text-xs text-gray-400 font-semibold px-6 py-1.5 animate-pulse shrink-0 bg-white/40">
+          <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '0ms' }} />
+          <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '150ms' }} />
+          <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '300ms' }} />
+          <span className="ml-1">{otherUser.name} is typing...</span>
+        </div>
+      )}
+
       {/* Input Form */}
-      <MessageInput onSendMessage={onSendMessage} />
+      <MessageInput onSendMessage={onSendMessage} onTyping={onTyping} />
     </div>
   );
 };
