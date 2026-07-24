@@ -73,7 +73,7 @@ const App = () => {
   const isChatPage = location.pathname === "/chat";
 
   return (
-    <div className="w-full min-h-screen flex flex-col bg-gray-50 overflow-x-hidden relative">
+    <div className={`w-full ${isChatPage ? "h-screen overflow-hidden fixed inset-0" : "min-h-screen"} flex flex-col bg-gray-50 overflow-x-hidden relative`}>
       <ScrollToTop />
       {!isChatPage && <Navbar />}
       <main className={`flex-grow w-full ${isChatPage ? "" : "pt-16 sm:pt-20"}`}>

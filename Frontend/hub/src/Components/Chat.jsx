@@ -14,11 +14,25 @@ const Chat = () => {
   const [viewportHeight, setViewportHeight] = useState(
     typeof window !== "undefined" ? window.innerHeight : 600
   );
+  
   const socket = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
 
   const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+
+  // Keep references to the latest chats and activeChat state
+  // to avoid stale closures inside the socket events (like connection/reconnection)
+  const chatsRef = useRef([]);
+  const activeChatRef = useRef(null);
+
+  useEffect(() => {
+    chatsRef.current = chats;
+  }, [chats]);
+
+  useEffect(() => {
+    activeChatRef.current = activeChat;
+  }, [activeChat]);
 
   // Initialize Socket.io Connection on mount
   useEffect(() => {
@@ -27,6 +41,16 @@ const Chat = () => {
 
     socket.current.on("connect", () => {
       console.log("Socket client connected:", socket.current.id);
+      
+      // Rejoin active room on connect/reconnect
+      if (activeChatRef.current) {
+        socket.current.emit("joinRoom", activeChatRef.current._id);
+      }
+
+      // Rejoin all chat rooms on connect/reconnect to listen to background messages
+      chatsRef.current.forEach((chat) => {
+        socket.current.emit("joinRoom", chat._id);
+      });
     });
 
     // Real-time message receive handler
@@ -171,6 +195,13 @@ const Chat = () => {
       const response = await axios.get(`/myChats/${currentUser._id}`);
       setChats(response.data);
 
+      // Join rooms for all fetched chats immediately
+      if (socket.current) {
+        response.data.forEach((chat) => {
+          socket.current.emit("joinRoom", chat._id);
+        });
+      }
+
       if (selectChatIdAfterFetch) {
         const matchingChat = response.data.find((c) => c._id === selectChatIdAfterFetch);
         if (matchingChat) {
@@ -194,6 +225,11 @@ const Chat = () => {
     try {
       const response = await axios.get(`/getMessages/${chat._id}`);
       setMessages(response.data);
+
+      // Explicitly emit joinRoom on select click for safety
+      if (socket.current) {
+        socket.current.emit("joinRoom", chat._id);
+      }
     } catch (error) {
       console.error("Fetch messages error:", error);
       toast.error("Could not load messages");
