@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import axios from "../utils/axiosInstance";
 import toast from "react-hot-toast";
@@ -13,6 +13,7 @@ const Chat = () => {
   const [typingUsers, setTypingUsers] = useState({});
   const socket = useRef(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
 
@@ -267,24 +268,30 @@ const Chat = () => {
   };
 
   return (
-    <div className="w-[95%] max-w-6xl mx-auto h-[80vh] min-h-[500px] bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden flex flex-col md:flex-row mt-6 md:mt-10 mb-16">
-      <ChatList
-        chats={chats}
-        activeChat={activeChat}
-        onSelectChat={handleSelectChat}
-        currentUser={currentUser}
-      />
-      <ChatWindow
-        activeChat={activeChat}
-        messages={messages}
-        currentUser={currentUser}
-        onSendMessage={handleSendMessage}
-        onUpdateMessage={handleUpdateMessage}
-        onDeleteMessage={handleDeleteMessage}
-        onDeleteChat={handleDeleteChat}
-        isTyping={!!typingUsers[activeChat?._id]}
-        onTyping={handleTypingStatus}
-      />
+    <div className="fixed inset-0 w-screen h-screen h-[100dvh] bg-white overflow-hidden flex flex-col md:flex-row z-50">
+      <div className={`h-full md:w-80 md:border-r border-gray-100 shrink-0 ${activeChat ? "hidden md:flex" : "w-full flex"}`}>
+        <ChatList
+          chats={chats}
+          activeChat={activeChat}
+          onSelectChat={handleSelectChat}
+          currentUser={currentUser}
+          onExitChat={() => navigate("/welcome")}
+        />
+      </div>
+      <div className={`h-full flex-grow ${activeChat ? "w-full flex" : "hidden md:flex"}`}>
+        <ChatWindow
+          activeChat={activeChat}
+          messages={messages}
+          currentUser={currentUser}
+          onSendMessage={handleSendMessage}
+          onUpdateMessage={handleUpdateMessage}
+          onDeleteMessage={handleDeleteMessage}
+          onDeleteChat={handleDeleteChat}
+          isTyping={!!typingUsers[activeChat?._id]}
+          onTyping={handleTypingStatus}
+          onBackToList={() => setActiveChat(null)}
+        />
+      </div>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { FaTrashAlt, FaPen, FaTimes, FaExchangeAlt, FaRegClock } from "react-icons/fa";
+import { FaTrashAlt, FaPen, FaTimes, FaExchangeAlt, FaRegClock, FaArrowLeft } from "react-icons/fa";
 import MessageInput from "./MessageInput";
 
 const ChatWindow = ({
@@ -92,6 +92,15 @@ const ChatWindow = ({
       {/* Header */}
       <div className="h-16 border-b border-gray-100 bg-white px-4 flex items-center justify-between shadow-xs shrink-0 z-10">
         <div className="flex items-center gap-3">
+          {onBackToList && (
+            <button
+              onClick={onBackToList}
+              className="md:hidden text-gray-500 hover:text-[#2E7D32] p-1.5 rounded-xl hover:bg-gray-100 cursor-pointer flex items-center justify-center shrink-0"
+              title="Back to conversations"
+            >
+              <FaArrowLeft className="text-base" />
+            </button>
+          )}
           <div className={`w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold bg-gradient-to-br ${gradient}`}>
             {initials}
           </div>

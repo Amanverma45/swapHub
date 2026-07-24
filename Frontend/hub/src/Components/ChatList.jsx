@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FaSearch, FaComments } from "react-icons/fa";
 
-const ChatList = ({ chats, activeChat, onSelectChat, currentUser }) => {
+const ChatList = ({ chats, activeChat, onSelectChat, currentUser, onExitChat }) => {
   const [search, setSearch] = useState("");
 
   const getInitialsAvatar = (name) => {
@@ -33,9 +33,19 @@ const ChatList = ({ chats, activeChat, onSelectChat, currentUser }) => {
     <div className="w-full md:w-80 h-full border-r border-gray-100 flex flex-col bg-white shrink-0">
       {/* Header & Search */}
       <div className="p-4 border-b border-gray-100 space-y-3 shrink-0">
-        <div className="flex items-center gap-2 text-[#2E7D32]">
-          <FaComments className="text-xl" />
-          <h2 className="text-lg font-extrabold tracking-tight text-gray-900">Conversations</h2>
+        <div className="flex items-center justify-between text-[#2E7D32]">
+          <div className="flex items-center gap-2">
+            <FaComments className="text-xl" />
+            <h2 className="text-lg font-extrabold tracking-tight text-gray-900">Conversations</h2>
+          </div>
+          {onExitChat && (
+            <button
+              onClick={onExitChat}
+              className="text-xs font-bold text-[#2E7D32] bg-emerald-50 hover:bg-[#2E7D32] hover:text-white px-3 py-1 rounded-full border border-emerald-100/50 transition-all duration-200 cursor-pointer"
+            >
+              Exit
+            </button>
+          )}
         </div>
 
         <div className="relative flex items-center bg-gray-50 border border-gray-200 rounded-xl px-3 py-1.5 focus-within:bg-white focus-within:border-[#2E7D32] transition-colors">

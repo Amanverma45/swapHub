@@ -69,11 +69,14 @@ const BackToTopButton = () => {
 };
 
 const App = () => {
+  const location = useLocation();
+  const isChatPage = location.pathname === "/chat";
+
   return (
     <div className="w-full min-h-screen flex flex-col bg-gray-50 overflow-x-hidden relative">
       <ScrollToTop />
-      <Navbar />
-      <main className="flex-grow w-full pt-16 sm:pt-20">
+      {!isChatPage && <Navbar />}
+      <main className={`flex-grow w-full ${isChatPage ? "" : "pt-16 sm:pt-20"}`}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
@@ -92,7 +95,7 @@ const App = () => {
           <Route path="/mySwapRequests" element={<ProtectedRoute><MySwapRequests /></ProtectedRoute>} />
           <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
         </Routes>
-        <Footer/>
+        {!isChatPage && <Footer/>}
       </main>
       <BackToTopButton />
     </div>
