@@ -11,6 +11,9 @@ const Chat = () => {
   const [activeChat, setActiveChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [typingUsers, setTypingUsers] = useState({});
+  const [viewportHeight, setViewportHeight] = useState(
+    typeof window !== "undefined" ? window.innerHeight : 600
+  );
   const socket = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
@@ -118,6 +121,30 @@ const Chat = () => {
         socket.current.off("stopTyping");
         socket.current.disconnect();
       }
+    };
+  }, []);
+
+  // Handle mobile keyboard and address bar resizing dynamically
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.visualViewport) return;
+
+    const handleResize = () => {
+      setViewportHeight(window.visualViewport.height);
+      window.scrollTo(0, 0);
+    };
+
+    window.visualViewport.addEventListener("resize", handleResize);
+    window.visualViewport.addEventListener("scroll", handleResize);
+    window.addEventListener("scroll", handleResize);
+
+    handleResize();
+
+    return () => {
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener("resize", handleResize);
+        window.visualViewport.removeEventListener("scroll", handleResize);
+      }
+      window.removeEventListener("scroll", handleResize);
     };
   }, []);
 
@@ -268,7 +295,10 @@ const Chat = () => {
   };
 
   return (
-    <div className="fixed inset-0 w-screen h-screen h-[100dvh] bg-white overflow-hidden flex flex-col md:flex-row z-50">
+    <div
+      style={{ height: `${viewportHeight}px` }}
+      className="fixed inset-x-0 top-0 w-screen bg-white overflow-hidden flex flex-col md:flex-row z-50"
+    >
       <div className={`h-full md:w-80 md:border-r border-gray-100 shrink-0 ${activeChat ? "hidden md:flex" : "w-full flex"}`}>
         <ChatList
           chats={chats}

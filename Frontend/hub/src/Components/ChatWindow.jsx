@@ -27,6 +27,21 @@ const ChatWindow = ({
     scrollToBottom();
   }, [messages]);
 
+  // Auto-scroll when keyboard opens/resizes viewport
+  useEffect(() => {
+    const handleResize = () => {
+      setTimeout(scrollToBottom, 150);
+    };
+    if (typeof window !== "undefined" && window.visualViewport) {
+      window.visualViewport.addEventListener("resize", handleResize);
+    }
+    return () => {
+      if (typeof window !== "undefined" && window.visualViewport) {
+        window.visualViewport.removeEventListener("resize", handleResize);
+      }
+    };
+  }, []);
+
   if (!activeChat) {
     return (
       <div className="flex-1 h-full flex flex-col items-center justify-center bg-gray-50/50 p-6 text-center select-none">
