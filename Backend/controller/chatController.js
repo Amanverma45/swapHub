@@ -33,4 +33,38 @@ const createChat = async (req, res) => {
     }
 };
 
-module.exports = {createChat};
+const sendMessage = async (req, res) => {
+    try {
+
+        const { chatId, senderId, text } = req.body;
+
+        if (!chatId || !senderId || !text) {
+            return res.status(400).json({
+                message: "All fields are required"
+            });
+        }
+
+        const chat = await chatModel.findById(chatId);
+
+        if (!chat) {
+            return res.status(404).json({
+                message: "Chat not found"
+            });
+        }
+
+        chat.messages.push({
+            sender: senderId,
+            text
+        });
+
+        await chat.save();
+
+        return res.status(200).json(chat);
+
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+};
+module.exports = {createChat,sendMessage};
