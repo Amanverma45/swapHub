@@ -67,4 +67,27 @@ const sendMessage = async (req, res) => {
         });
     }
 };
-module.exports = {createChat,sendMessage};
+const getMessages = async (req, res) => {
+    try {
+
+        const { chatId } = req.params;
+
+        const chat = await chatModel
+            .findById(chatId)
+            .populate("messages.sender", "name email");
+
+        if (!chat) {
+            return res.status(404).json({
+                message: "Chat not found"
+            });
+        }
+
+        return res.status(200).json(chat.messages);
+
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+};
+module.exports = {createChat,sendMessage,getMessages};
