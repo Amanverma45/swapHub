@@ -12,6 +12,7 @@ const ChatWindow = ({
   onDeleteChat,
   isTyping,
   onTyping,
+  onBackToList,
 }) => {
   const [editingIndex, setEditingIndex] = useState(null);
   const [editText, setEditText] = useState("");
