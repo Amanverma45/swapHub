@@ -104,7 +104,7 @@ const ChatWindow = ({
   const { initials, gradient } = getInitialsAvatar(otherUser.name);
 
   return (
-    <div className="flex-1 h-full flex flex-col bg-slate-50/40 relative">
+    <div className="flex-1 w-full min-w-0 h-full flex flex-col bg-slate-50/40 relative overflow-hidden">
       {/* Header */}
       <div className="h-16 border-b border-gray-100 bg-white px-4 flex items-center justify-between shadow-xs shrink-0 z-10">
         <div className="flex items-center gap-3">

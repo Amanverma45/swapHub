@@ -395,7 +395,7 @@ const Chat = () => {
         height: `${viewportHeight}px`,
         transform: `translateY(${viewportOffsetTop}px)`,
       }}
-      className="fixed inset-x-0 top-0 w-screen bg-white overflow-hidden flex flex-col md:flex-row z-50 transition-transform duration-100 ease-out"
+      className="fixed inset-0 w-full bg-white overflow-hidden flex flex-col md:flex-row z-50 transition-transform duration-100 ease-out"
     >
       <div className={`h-full md:w-80 md:border-r border-gray-100 shrink-0 ${activeChat ? "hidden md:flex" : "w-full flex"}`}>
         <ChatList
@@ -406,7 +406,7 @@ const Chat = () => {
           onExitChat={() => navigate("/welcome")}
         />
       </div>
-      <div className={`h-full flex-grow ${activeChat ? "w-full flex" : "hidden md:flex"}`}>
+      <div className={`h-full flex-grow min-w-0 ${activeChat ? "w-full flex flex-col" : "hidden md:flex"}`}>
         <ChatWindow
           activeChat={activeChat}
           messages={messages}
