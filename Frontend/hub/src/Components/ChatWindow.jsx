@@ -150,7 +150,7 @@ const ChatWindow = ({
 
             return (
               <div key={msg._id || index} className={`flex ${isMe ? "justify-end" : "justify-start"} w-full group animate-fade-in`}>
-                <div className={`flex flex-col max-w-[70%] ${isMe ? "items-end" : "items-start"}`}>
+                <div className={`flex flex-col max-w-[50%] ${isMe ? "items-end" : "items-start"} min-w-[80px]`}>
                   
                   {/* Sender Name */}
                   <span className="text-[10px] text-gray-400 font-semibold mb-0.5 px-1">{senderName}</span>
@@ -179,7 +179,7 @@ const ChatWindow = ({
 
                     {/* Bubble Content */}
                     <div
-                      className={`px-4 py-2.5 rounded-2xl text-sm shadow-2xs ${
+                      className={`px-4 py-2.5 rounded-2xl text-sm shadow-2xs break-all ${
                         isMe
                           ? "bg-gradient-to-br from-[#2E7D32] to-[#1E5621] text-white rounded-tr-none"
                           : "bg-white text-gray-800 border border-gray-100 rounded-tl-none"
@@ -212,7 +212,7 @@ const ChatWindow = ({
                           </div>
                         </div>
                       ) : (
-                        <p className="whitespace-pre-wrap leading-relaxed break-words">{msg.text}</p>
+                        <p className="whitespace-pre-wrap leading-relaxed break-all">{msg.text}</p>
                       )}
                     </div>
 
