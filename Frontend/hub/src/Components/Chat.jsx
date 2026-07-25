@@ -14,6 +14,7 @@ const Chat = () => {
   const [viewportHeight, setViewportHeight] = useState(
     typeof window !== "undefined" ? window.innerHeight : 600
   );
+  const [viewportOffsetTop, setViewportOffsetTop] = useState(0);
   
   const socket = useRef(null);
   const location = useLocation();
@@ -33,6 +34,40 @@ const Chat = () => {
   useEffect(() => {
     activeChatRef.current = activeChat;
   }, [activeChat]);
+
+  // Strict layout reset for html, body, and root elements
+  // to remove any default margins, paddings, or browser-specific offsets
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    const originalMargin = document.body.style.margin;
+    const originalPadding = document.body.style.padding;
+    const originalHeight = document.body.style.height;
+
+    document.body.style.overflow = "hidden";
+    document.body.style.margin = "0";
+    document.body.style.padding = "0";
+    document.body.style.height = "100%";
+    document.documentElement.style.height = "100%";
+    document.documentElement.style.overflow = "hidden";
+
+    // Stop any manual browser body scrolling gestures
+    const handleScroll = () => {
+      if (window.scrollY !== 0) {
+        window.scrollTo(0, 0);
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: false });
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      document.body.style.margin = originalMargin;
+      document.body.style.padding = originalPadding;
+      document.body.style.height = originalHeight;
+      document.documentElement.style.height = "";
+      document.documentElement.style.overflow = "";
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   // Initialize Socket.io Connection on mount
   useEffect(() => {
@@ -154,6 +189,7 @@ const Chat = () => {
 
     const handleResize = () => {
       setViewportHeight(window.visualViewport.height);
+      setViewportOffsetTop(window.visualViewport.offsetTop);
       window.scrollTo(0, 0);
     };
 
@@ -332,8 +368,11 @@ const Chat = () => {
 
   return (
     <div
-      style={{ height: `${viewportHeight}px` }}
-      className="fixed inset-x-0 top-0 w-screen bg-white overflow-hidden flex flex-col md:flex-row z-50"
+      style={{
+        height: `${viewportHeight}px`,
+        transform: `translateY(${viewportOffsetTop}px)`,
+      }}
+      className="fixed inset-x-0 top-0 w-screen bg-white overflow-hidden flex flex-col md:flex-row z-50 transition-transform duration-100 ease-out"
     >
       <div className={`h-full md:w-80 md:border-r border-gray-100 shrink-0 ${activeChat ? "hidden md:flex" : "w-full flex"}`}>
         <ChatList
