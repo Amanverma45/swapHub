@@ -72,25 +72,40 @@ const Chat = () => {
   // Initialize Socket.io Connection on mount
   useEffect(() => {
     const socketHost = typeof window !== "undefined" ? window.location.hostname : "localhost";
-    socket.current = io(`http://${socketHost}:5000`);
+    const socketUrl = `http://${socketHost}:5000`;
+    console.log("DEBUG: Initializing socket connection to:", socketUrl);
+    
+    socket.current = io(socketUrl);
 
     socket.current.on("connect", () => {
-      console.log("Socket client connected:", socket.current.id);
+      console.log("DEBUG: Socket connected successfully! ID:", socket.current.id);
       
       // Rejoin active room on connect/reconnect
       if (activeChatRef.current) {
+        console.log("DEBUG: Rejoining active room on connect:", activeChatRef.current._id);
         socket.current.emit("joinRoom", activeChatRef.current._id);
       }
 
       // Rejoin all chat rooms on connect/reconnect to listen to background messages
+      console.log("DEBUG: Rejoining all rooms on connect:", chatsRef.current.map(c => c._id));
       chatsRef.current.forEach((chat) => {
         socket.current.emit("joinRoom", chat._id);
       });
     });
 
+    socket.current.on("connect_error", (error) => {
+      console.error("DEBUG: Socket connection error:", error);
+    });
+
     // Real-time message receive handler
     socket.current.on("receiveMessage", (data) => {
+      console.log("DEBUG: receiveMessage socket event received!", data);
       const active = activeChatRef.current;
+      console.log("DEBUG: activeChatRef.current is:", active);
+
+      if (active) {
+        console.log(`DEBUG: Comparing active._id (${active._id}) with data.chatId (${data.chatId}):`, active._id === data.chatId);
+      }
 
       // 1. If it belongs to the active chat room, append to messages
       if (active && active._id === data.chatId) {
@@ -116,6 +131,7 @@ const Chat = () => {
 
     // Real-time message edit handler
     socket.current.on("messageUpdated", (data) => {
+      console.log("DEBUG: messageUpdated socket event received!", data);
       const active = activeChatRef.current;
 
       if (active && active._id === data.chatId) {
@@ -141,6 +157,7 @@ const Chat = () => {
 
     // Real-time message delete handler
     socket.current.on("messageDeleted", (data) => {
+      console.log("DEBUG: messageDeleted socket event received!", data);
       const active = activeChatRef.current;
 
       if (active && active._id === data.chatId) {
@@ -160,16 +177,19 @@ const Chat = () => {
 
     // Real-time typing status handlers
     socket.current.on("typing", (data) => {
+      console.log("DEBUG: typing socket event received from sender!", data);
       setTypingUsers((prev) => ({ ...prev, [data.chatId]: true }));
     });
 
     socket.current.on("stopTyping", (data) => {
+      console.log("DEBUG: stopTyping socket event received from sender!", data);
       setTypingUsers((prev) => ({ ...prev, [data.chatId]: false }));
     });
 
     return () => {
       if (socket.current) {
         socket.current.off("connect");
+        socket.current.off("connect_error");
         socket.current.off("receiveMessage");
         socket.current.off("messageUpdated");
         socket.current.off("messageDeleted");
@@ -208,6 +228,7 @@ const Chat = () => {
   // Emit joinRoom for active chat room whenever it is selected/changed
   useEffect(() => {
     if (socket.current && activeChat) {
+      console.log("DEBUG: Emitting joinRoom for activeChat:", activeChat._id);
       socket.current.emit("joinRoom", activeChat._id);
     }
   }, [activeChat]);
@@ -215,6 +236,7 @@ const Chat = () => {
   // Emit joinRoom for all chats whenever list changes (to receive background events)
   useEffect(() => {
     if (socket.current && chats.length > 0) {
+      console.log("DEBUG: Emitting joinRoom for all chats:", chats.map(c => c._id));
       chats.forEach((chat) => {
         socket.current.emit("joinRoom", chat._id);
       });
@@ -230,6 +252,7 @@ const Chat = () => {
 
       // Join rooms for all fetched chats immediately
       if (socket.current) {
+        console.log("DEBUG: Immediately joining rooms for fetched chats:", response.data.map(c => c._id));
         response.data.forEach((chat) => {
           socket.current.emit("joinRoom", chat._id);
         });
@@ -261,6 +284,7 @@ const Chat = () => {
 
       // Explicitly emit joinRoom on select click for safety
       if (socket.current) {
+        console.log("DEBUG: Explicitly joining room on select click:", chat._id);
         socket.current.emit("joinRoom", chat._id);
       }
     } catch (error) {
@@ -357,8 +381,10 @@ const Chat = () => {
   const handleTypingStatus = (isTyping) => {
     if (!activeChat || !socket.current) return;
     if (isTyping) {
+      console.log("DEBUG: Emitting typing status: true");
       socket.current.emit("typing", { chatId: activeChat._id });
     } else {
+      console.log("DEBUG: Emitting typing status: false");
       socket.current.emit("stopTyping", { chatId: activeChat._id });
     }
   };
