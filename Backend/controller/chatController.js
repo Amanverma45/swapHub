@@ -38,6 +38,7 @@ const sendMessage = async (req, res) => {
     try {
 
         const { chatId, senderId, text } = req.body;
+        console.log("BACKEND DEBUG: sendMessage request received:", { chatId, senderId, text });
 
         if (!chatId || !senderId || !text) {
             return res.status(400).json({
@@ -67,10 +68,15 @@ const sendMessage = async (req, res) => {
         const savedMessage = populatedChat.messages[populatedChat.messages.length - 1];
 
         const io = getIo();
-        io.to(chatId).emit("receiveMessage", {
-            chatId,
-            message: savedMessage
-        });
+        if (io) {
+            console.log("BACKEND DEBUG: Emitting receiveMessage to room:", chatId, "message text:", text);
+            io.to(chatId).emit("receiveMessage", {
+                chatId,
+                message: savedMessage
+            });
+        } else {
+            console.error("BACKEND DEBUG ERROR: Socket.io instance is null or undefined!");
+        }
         return res.status(200).json(chat);
 
     } catch (error) {
