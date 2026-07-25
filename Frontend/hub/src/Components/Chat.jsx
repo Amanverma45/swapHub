@@ -90,17 +90,16 @@ const Chat = () => {
 
     // Real-time message receive handler
     socket.current.on("receiveMessage", (data) => {
+      const active = activeChatRef.current;
+
       // 1. If it belongs to the active chat room, append to messages
-      setActiveChat((currentActive) => {
-        if (currentActive && currentActive._id === data.chatId) {
-          setMessages((prev) => {
-            const exists = prev.some((m) => m._id === data.message._id);
-            if (exists) return prev;
-            return [...prev, data.message];
-          });
-        }
-        return currentActive;
-      });
+      if (active && active._id === data.chatId) {
+        setMessages((prev) => {
+          const exists = prev.some((m) => m._id === data.message._id);
+          if (exists) return prev;
+          return [...prev, data.message];
+        });
+      }
 
       // 2. Fresh snippet update in the sidebar chats list
       setChats((prevChats) =>
@@ -117,16 +116,15 @@ const Chat = () => {
 
     // Real-time message edit handler
     socket.current.on("messageUpdated", (data) => {
-      setActiveChat((currentActive) => {
-        if (currentActive && currentActive._id === data.chatId) {
-          setMessages((prev) =>
-            prev.map((msg, i) =>
-              i === data.messageIndex ? { ...msg, text: data.text } : msg
-            )
-          );
-        }
-        return currentActive;
-      });
+      const active = activeChatRef.current;
+
+      if (active && active._id === data.chatId) {
+        setMessages((prev) =>
+          prev.map((msg, i) =>
+            i === data.messageIndex ? { ...msg, text: data.text } : msg
+          )
+        );
+      }
 
       setChats((prevChats) =>
         prevChats.map((c) => {
@@ -143,12 +141,11 @@ const Chat = () => {
 
     // Real-time message delete handler
     socket.current.on("messageDeleted", (data) => {
-      setActiveChat((currentActive) => {
-        if (currentActive && currentActive._id === data.chatId) {
-          setMessages((prev) => prev.filter((_, i) => i !== data.messageIndex));
-        }
-        return currentActive;
-      });
+      const active = activeChatRef.current;
+
+      if (active && active._id === data.chatId) {
+        setMessages((prev) => prev.filter((_, i) => i !== data.messageIndex));
+      }
 
       setChats((prevChats) =>
         prevChats.map((c) => {
