@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { FaEnvelope, FaMapMarkerAlt, FaExchangeAlt, FaHeart } from "react-icons/fa";
 
 const Footer = () => {
+  const token = localStorage.getItem("token");
   return (
     <footer className="bg-white/95 backdrop-blur-xl border-t-4 border-t-[#2E7D32] shadow-xl mt-12 sm:mt-16">
       <div className="w-[90%] max-w-6xl mx-auto py-10 sm:py-12">
@@ -40,12 +41,28 @@ const Footer = () => {
                 <Link to="/products" className="hover:text-[#2E7D32] hover:translate-x-1 transition-all">
                   Products
                 </Link>
-                <Link to="/login" className="hover:text-[#2E7D32] hover:translate-x-1 transition-all">
-                  Login
-                </Link>
-                <Link to="/register" className="hover:text-[#2E7D32] hover:translate-x-1 transition-all">
-                  Register
-                </Link>
+                {!token ? (
+                  <>
+                    <Link to="/login" className="hover:text-[#2E7D32] hover:translate-x-1 transition-all">
+                      Login
+                    </Link>
+                    <Link to="/register" className="hover:text-[#2E7D32] hover:translate-x-1 transition-all">
+                      Register
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link to="/addProduct" className="hover:text-[#2E7D32] hover:translate-x-1 transition-all">
+                      Add Product
+                    </Link>
+                    <Link to="/swapRequest" className="hover:text-[#2E7D32] hover:translate-x-1 transition-all">
+                      Swap Requests
+                    </Link>
+                    <Link to="/profile" className="hover:text-[#2E7D32] hover:translate-x-1 transition-all">
+                      Profile
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
 
