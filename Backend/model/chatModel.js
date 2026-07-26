@@ -14,6 +14,16 @@ const messageSchema = new mongoose.Schema(
             trim: true,
         },
 
+        isRead: {
+            type: Boolean,
+            default: false,
+        },
+
+        replyTo: {
+            text: { type: String },
+            senderName: { type: String }
+        },
+
         createdAt: {
             type: Date,
             default: Date.now,

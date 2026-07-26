@@ -114,6 +114,10 @@ const Chat = () => {
           if (exists) return prev;
           return [...prev, data.message];
         });
+        if (data.message.sender._id !== currentUser._id) {
+          axios.put("/markAsRead", { chatId: data.chatId, userId: currentUser._id })
+            .catch((e) => console.error("Error marking message as read on receive:", e));
+        }
       }
 
       // 2. Fresh snippet update in the sidebar chats list
@@ -175,6 +179,40 @@ const Chat = () => {
       );
     });
 
+    // Real-time message read status handler
+    socket.current.on("messagesRead", (data) => {
+      console.log("DEBUG: messagesRead socket event received!", data);
+      const active = activeChatRef.current;
+      if (active && active._id === data.chatId) {
+        setMessages((prev) =>
+          prev.map((msg) => {
+            const isMe = (msg.sender?._id || msg.sender) === currentUser?._id;
+            if (isMe && !msg.isRead) {
+              return { ...msg, isRead: true };
+            }
+            return msg;
+          })
+        );
+      }
+    });
+
+    // Real-time chat clear handler
+    socket.current.on("chatCleared", (data) => {
+      console.log("DEBUG: chatCleared socket event received!", data);
+      const active = activeChatRef.current;
+      if (active && active._id === data.chatId) {
+        setMessages([]);
+      }
+      setChats((prevChats) =>
+        prevChats.map((c) => {
+          if (c._id === data.chatId) {
+            return { ...c, messages: [] };
+          }
+          return c;
+        })
+      );
+    });
+
     // Real-time typing status handlers
     socket.current.on("typing", (data) => {
       console.log("DEBUG: typing socket event received from sender!", data);
@@ -193,6 +231,8 @@ const Chat = () => {
         socket.current.off("receiveMessage");
         socket.current.off("messageUpdated");
         socket.current.off("messageDeleted");
+        socket.current.off("messagesRead");
+        socket.current.off("chatCleared");
         socket.current.off("typing");
         socket.current.off("stopTyping");
         socket.current.disconnect();
@@ -279,7 +319,7 @@ const Chat = () => {
   const handleSelectChat = async (chat) => {
     setActiveChat(chat);
     try {
-      const response = await axios.get(`/getMessages/${chat._id}`);
+      const response = await axios.get(`/getMessages/${chat._id}?userId=${currentUser._id}`);
       setMessages(response.data);
 
       // Explicitly emit joinRoom on select click for safety
@@ -293,13 +333,14 @@ const Chat = () => {
     }
   };
 
-  const handleSendMessage = async (text) => {
+  const handleSendMessage = async (text, replyTo = null) => {
     if (!activeChat) return;
     try {
       const response = await axios.post("/sendMessage", {
         chatId: activeChat._id,
         senderId: currentUser._id,
         text,
+        replyTo,
       });
 
       // Instantly append for lag-free performance on the sender side
@@ -368,13 +409,12 @@ const Chat = () => {
   const handleDeleteChat = async (chatId) => {
     try {
       await axios.delete(`/deleteChat/${chatId}`);
-      toast.success("Chat deleted successfully");
-      setActiveChat(null);
+      toast.success("Chat cleared successfully");
       setMessages([]);
-      getChats();
+      getChats(chatId);
     } catch (error) {
-      console.error("Delete chat error:", error);
-      toast.error("Could not delete conversation");
+      console.error("Clear chat error:", error);
+      toast.error("Could not clear conversation");
     }
   };
 
