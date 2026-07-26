@@ -139,9 +139,9 @@ const ProductDetails = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-xl border border-gray-100 border-t-4 border-t-[#2E7D32] overflow-hidden"
+            className="w-full max-w-full bg-white/95 backdrop-blur-xl rounded-3xl shadow-xl border border-gray-100 border-t-4 border-t-[#2E7D32] overflow-hidden"
           >
-            <div className="grid md:grid-cols-2 gap-6 sm:gap-10 p-6 sm:p-8 md:p-10 items-stretch min-w-0">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10 p-6 sm:p-8 md:p-10 items-stretch min-w-0">
               
               {/* Left Image View */}
               <div className="w-full h-[300px] sm:h-[380px] md:h-[450px] bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden shadow-inner relative group cursor-pointer"

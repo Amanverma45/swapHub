@@ -26,7 +26,7 @@ const Footer = () => {
           </div>
 
           {/* Quick Links & Contact Columns Group */}
-          <div className="flex flex-row items-start justify-between w-full md:w-auto gap-12 sm:gap-16 md:gap-20 lg:gap-28">
+          <div className="flex flex-row items-start justify-between w-full md:w-auto gap-6 sm:gap-16 md:gap-20 lg:gap-28">
             
             {/* Quick Links Column */}
             <div className="flex flex-col text-left">
