@@ -120,9 +120,9 @@ const ProductDetails = () => {
 
   return (
     <>
-      <div className="w-full min-h-screen bg-gray-50/60 py-8 sm:py-12">
-        <section className="w-full max-w-6xl px-4 sm:px-8 mx-auto space-y-6">
-          
+      <div className="w-full min-h-screen bg-gray-50/60 py-8 sm:py-12 px-4 sm:px-6 md:px-8">
+        <section className="w-full max-w-6xl mx-auto space-y-6">
+
           {/* Back Button */}
           <div>
             <Link
@@ -142,7 +142,7 @@ const ProductDetails = () => {
             className="w-full max-w-full bg-white/95 backdrop-blur-xl rounded-3xl shadow-xl border border-gray-100 border-t-4 border-t-[#2E7D32] overflow-hidden"
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10 p-6 sm:p-8 md:p-10 items-stretch min-w-0">
-              
+
               {/* Left Image View */}
               <div className="w-full h-[300px] sm:h-[380px] md:h-[450px] bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden shadow-inner relative group cursor-pointer"
                 onClick={() => setPreviewImage(product.image)}
