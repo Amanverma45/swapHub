@@ -104,6 +104,22 @@ const SwapRequests = () => {
             </div>
           </motion.div>
 
+          {/* Toggle Navigation Tabs */}
+          <div className="flex items-center justify-center p-1.5 bg-gray-100/70 border border-gray-200/50 rounded-2xl max-w-md mx-auto shadow-2xs">
+            <button
+              onClick={() => navigate("/swapRequest")}
+              className="flex-1 py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm text-center transition-all bg-white text-[#2E7D32] shadow-sm border border-gray-200/40 cursor-pointer"
+            >
+              📥 Received Offers (Inbox)
+            </button>
+            <button
+              onClick={() => navigate("/mySwapRequests")}
+              className="flex-1 py-2.5 px-4 rounded-xl font-bold text-xs sm:text-sm text-center transition-all text-gray-600 hover:text-[#2E7D32] hover:bg-emerald-50/50 cursor-pointer"
+            >
+              📤 Sent Tracker
+            </button>
+          </div>
+
           {/* Content Section */}
           {loading ? (
             <div className="flex flex-col items-center justify-center py-20 bg-white/80 backdrop-blur-md rounded-3xl border border-gray-100 shadow-sm">

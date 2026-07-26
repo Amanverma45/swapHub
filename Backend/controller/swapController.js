@@ -114,17 +114,21 @@ const mySwapRequests = async (req, res) => {
 };
 const notificationCount = async (req, res) => {
   try {
+    const receivedPendingCount = await swapModel.countDocuments({
+      receiver: req.user.id,
+      status: "pending"
+    });
 
-    const count = await swapModel.countDocuments({
+    const sentUpdatesCount = await swapModel.countDocuments({
       sender: req.user.id,
       status: { $in: ["accepted", "rejected"] }
     });
 
+    const count = receivedPendingCount + sentUpdatesCount;
     return res.status(200).json({ count });
 
   } catch (error) {
     console.log(error.message);
-
     return res.status(500).json({
       message: "Something went wrong"
     });

@@ -93,7 +93,7 @@ const Welcome = () => {
 
             {/* Swap Requests */}
             <Link
-              to="/mySwapRequests"
+              to="/swapRequest"
               className="group relative bg-white border border-gray-100 border-t-4 border-t-[#2E7D32] shadow-md hover:shadow-2xl hover:shadow-[#2E7D32]/15 p-4 sm:p-5 rounded-2xl md:rounded-3xl flex flex-col items-center justify-center gap-2 sm:gap-3 text-center h-full min-h-[150px] sm:min-h-[180px] hover:-translate-y-1.5 active:scale-95 transition-all duration-300 overflow-hidden cursor-pointer"
             >
               <div className="p-2.5 sm:p-3.5 rounded-2xl bg-[#2E7D32]/10 text-[#2E7D32] group-hover:bg-[#2E7D32] group-hover:text-white transition-colors duration-300">

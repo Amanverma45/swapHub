@@ -181,7 +181,7 @@ const Navbar = () => {
                 </Link>
 
                 <div
-                  onClick={() => navigate("/mySwapRequests")}
+                  onClick={() => navigate("/swapRequest")}
                   className="relative cursor-pointer p-2 rounded-full text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60 transition-colors"
                   title="Notifications"
                 >
@@ -292,10 +292,10 @@ const Navbar = () => {
 
                   <div
                     onClick={() => {
-                      navigate("/mySwapRequests");
+                      navigate("/swapRequest");
                       setIsOpen(false);
                     }}
-                    className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-2xl border transition-colors cursor-pointer ${isActive("/mySwapRequests") ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]" : "border-gray-200 text-gray-700 hover:border-[#2E7D32]/30"}`}
+                    className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-2xl border transition-colors cursor-pointer ${isActive("/swapRequest") ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]" : "border-gray-200 text-gray-700 hover:border-[#2E7D32]/30"}`}
                   >
                     <FaBell className="text-base text-[#2E7D32]" />
                     <span className="font-bold text-sm">Requests</span>
