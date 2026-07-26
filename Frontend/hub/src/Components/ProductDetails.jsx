@@ -120,8 +120,8 @@ const ProductDetails = () => {
 
   return (
     <>
-      <div className="w-full min-h-screen bg-gray-50/60 py-8 sm:py-12 px-4">
-        <section className="w-[92%] max-w-6xl mx-auto space-y-6">
+      <div className="w-full min-h-screen bg-gray-50/60 py-8 sm:py-12">
+        <section className="w-full max-w-6xl px-4 sm:px-8 mx-auto space-y-6">
           
           {/* Back Button */}
           <div>
@@ -141,10 +141,10 @@ const ProductDetails = () => {
             transition={{ duration: 0.3 }}
             className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-xl border border-gray-100 border-t-4 border-t-[#2E7D32] overflow-hidden"
           >
-            <div className="grid md:grid-cols-2 gap-6 sm:gap-10 p-6 sm:p-8 md:p-10 items-stretch">
+            <div className="grid md:grid-cols-2 gap-6 sm:gap-10 p-6 sm:p-8 md:p-10 items-stretch min-w-0">
               
               {/* Left Image View */}
-              <div className="h-[300px] sm:h-[380px] md:h-[450px] bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden shadow-inner relative group cursor-pointer"
+              <div className="w-full h-[300px] sm:h-[380px] md:h-[450px] bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden shadow-inner relative group cursor-pointer"
                 onClick={() => setPreviewImage(product.image)}
               >
                 <img
@@ -266,7 +266,7 @@ const ProductDetails = () => {
                           <select
                             value={selectedProduct}
                             onChange={(e) => setSelectedProduct(e.target.value)}
-                            className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-xs sm:text-sm bg-white font-semibold text-gray-800 focus:outline-none focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10 transition-all shadow-2xs"
+                            className="w-full max-w-full border border-gray-200 rounded-2xl px-4 py-3 text-xs sm:text-sm bg-white font-semibold text-gray-800 focus:outline-none focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10 transition-all shadow-2xs"
                           >
                             <option value="">-- Choose From Your Listed Products --</option>
                             {myProducts.map((item) => (
