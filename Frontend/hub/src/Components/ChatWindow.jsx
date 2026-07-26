@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaTrashAlt, FaPen, FaTimes, FaExchangeAlt, FaRegClock, FaArrowLeft, FaReply, FaEllipsisV, FaCamera } from "react-icons/fa";
 import MessageInput from "./MessageInput";
+import axios from "../utils/axiosInstance";
 
 // WhatsApp-style double check marks SVG
 const DoubleCheckSVG = ({ isRead, className }) => (
@@ -247,9 +249,13 @@ const ChatWindow = ({
   onTyping,
   onBackToList,
 }) => {
+  const navigate = useNavigate();
   const [editingIndex, setEditingIndex] = useState(null);
   const [editText, setEditText] = useState("");
   const [replyingTo, setReplyingTo] = useState(null);
+  const [showProfile, setShowProfile] = useState(false);
+  const [userProducts, setUserProducts] = useState([]);
+  const [previewImage, setPreviewImage] = useState(null);
 
   // Wallpaper and Dropdown states
   const [wallpaper, setWallpaper] = useState(() => {
@@ -302,6 +308,29 @@ const ChatWindow = ({
     };
   }, []);
 
+  const otherUser = activeChat?.users?.find((u) => u._id !== currentUser?._id) || {
+    name: "Deleted User",
+    email: "deleted@swaphub.com",
+  };
+
+  // Close profile view when activeChat changes
+  useEffect(() => {
+    setShowProfile(false);
+    setUserProducts([]);
+  }, [activeChat?._id]);
+
+  // Fetch listed products of the other user when profile view is opened
+  useEffect(() => {
+    if (showProfile && otherUser?._id) {
+      axios.get("/getProduct")
+        .then((res) => {
+          const filtered = res.data.filter((p) => p.owner === otherUser._id);
+          setUserProducts(filtered);
+        })
+        .catch((err) => console.error("Error fetching user products:", err));
+    }
+  }, [showProfile, otherUser?._id]);
+
   if (!activeChat) {
     return (
       <div className="flex-1 h-full flex flex-col items-center justify-center bg-gray-50/50 p-6 text-center select-none">
@@ -315,11 +344,6 @@ const ChatWindow = ({
       </div>
     );
   }
-
-  const otherUser = activeChat.users.find((u) => u._id !== currentUser?._id) || {
-    name: "Deleted User",
-    email: "deleted@swaphub.com",
-  };
 
   const handleStartEdit = (index, currentText) => {
     setEditingIndex(index);
@@ -401,21 +425,34 @@ const ChatWindow = ({
     <div className="flex-1 w-full min-w-0 h-full flex flex-col bg-slate-50/40 relative overflow-hidden">
       {/* Header */}
       <div className="h-16 border-b border-gray-100 bg-white px-4 flex items-center justify-between shadow-xs shrink-0 z-10">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setShowProfile(true)} title="View Profile">
           {onBackToList && (
             <button
-              onClick={onBackToList}
+              onClick={(e) => {
+                e.stopPropagation();
+                onBackToList();
+              }}
               className="md:hidden text-gray-500 hover:text-[#2E7D32] p-1.5 rounded-xl hover:bg-gray-100 cursor-pointer flex items-center justify-center shrink-0"
               title="Back to conversations"
             >
               <FaArrowLeft className="text-base" />
             </button>
           )}
-          <div className={`w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold bg-gradient-to-br ${gradient}`}>
-            {initials}
+          <div className="relative">
+            {otherUser.profileImage ? (
+              <img
+                src={otherUser.profileImage}
+                alt={otherUser.name}
+                className="w-9 h-9 rounded-full object-cover border border-gray-100 group-hover:scale-105 transition-transform"
+              />
+            ) : (
+              <div className={`w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold bg-gradient-to-br ${gradient} group-hover:scale-105 transition-transform`}>
+                {initials}
+              </div>
+            )}
           </div>
           <div className="text-left">
-            <h2 className="text-sm font-bold text-gray-900 leading-tight">{otherUser.name}</h2>
+            <h2 className="text-sm font-bold text-gray-900 leading-tight group-hover:text-[#2E7D32] transition-colors">{otherUser.name}</h2>
             <p className="text-[10px] text-gray-400 font-medium">{otherUser.email}</p>
           </div>
         </div>
@@ -575,6 +612,139 @@ const ChatWindow = ({
 
       {/* Input Form */}
       <MessageInput onSendMessage={handleSendMessageWithReply} onTyping={onTyping} />
+
+      {/* Read-Only Member Profile Overlay View */}
+      {showProfile && (
+        <div className="absolute inset-0 bg-gray-50 flex flex-col z-40 animate-fade-in text-left">
+          {/* Profile Header */}
+          <div className="h-16 border-b border-gray-100 bg-white px-4 flex items-center gap-3 shadow-xs shrink-0">
+            <button
+              onClick={() => setShowProfile(false)}
+              className="text-gray-500 hover:text-[#2E7D32] p-1.5 rounded-xl hover:bg-gray-100 cursor-pointer flex items-center justify-center shrink-0"
+              title="Back to Chat"
+            >
+              <FaArrowLeft className="text-base" />
+            </button>
+            <h2 className="text-base font-extrabold text-gray-900">Member Profile</h2>
+          </div>
+
+          {/* Profile Content Body */}
+          <div className="flex-grow overflow-y-auto p-6 space-y-6">
+            
+            {/* Main Avatar & General Details Card */}
+            <div className="bg-white rounded-3xl border border-gray-100 shadow-md p-6 text-center flex flex-col items-center">
+              <div className="relative group cursor-pointer mb-4" onClick={() => {
+                if (otherUser.profileImage) {
+                  setPreviewImage(otherUser.profileImage);
+                }
+              }}>
+                {otherUser.profileImage ? (
+                  <img
+                    src={otherUser.profileImage}
+                    alt={otherUser.name}
+                    className="w-24 h-24 rounded-full object-cover border-2 border-emerald-500 shadow-lg group-hover:scale-105 transition-transform duration-300"
+                  />
+                ) : (
+                  <div className={`w-24 h-24 rounded-full flex items-center justify-center text-white text-3xl font-extrabold bg-gradient-to-br ${gradient} shadow-lg`}>
+                    {initials}
+                  </div>
+                )}
+                {otherUser.profileImage && (
+                  <div className="absolute inset-0 rounded-full bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold">
+                    🔍 View
+                  </div>
+                )}
+              </div>
+
+              <h3 className="text-xl font-extrabold text-gray-900 leading-tight">{otherUser.name}</h3>
+              <p className="text-xs text-gray-500 mt-1 font-semibold">{otherUser.email}</p>
+            </div>
+
+            {/* Detailed Metadata Card */}
+            <div className="bg-white rounded-3xl border border-gray-100 shadow-md p-6 space-y-4">
+              <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-gray-50 pb-2 text-left">
+                Contact & Location Details
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="text-left">
+                  <span className="text-[10px] font-bold text-gray-400 uppercase">Phone Number</span>
+                  <p className="text-sm font-extrabold text-gray-800 mt-0.5">
+                    {otherUser.phone || "Not Shared"}
+                  </p>
+                </div>
+                <div className="text-left">
+                  <span className="text-[10px] font-bold text-gray-400 uppercase">Location / City</span>
+                  <p className="text-sm font-extrabold text-gray-800 mt-0.5">
+                    {otherUser.location || "Not Specified"}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Listed Products by this user */}
+            <div className="space-y-3">
+              <h4 className="text-sm font-extrabold text-gray-900 text-left">
+                Listed items ({userProducts.length})
+              </h4>
+              
+              {userProducts.length === 0 ? (
+                <div className="bg-white rounded-3xl border border-gray-100 p-8 text-center shadow-xs">
+                  <p className="text-xs font-bold text-gray-400">No active listings posted by this member.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  {userProducts.map((p) => (
+                    <div
+                      key={p._id}
+                      onClick={() => {
+                        setShowProfile(false);
+                        navigate(`/product/${p._id}`);
+                      }}
+                      className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all p-3 cursor-pointer text-left"
+                    >
+                      <div className="w-full h-24 sm:h-28 rounded-xl bg-gray-50 overflow-hidden border border-gray-50">
+                        <img
+                          src={p.image}
+                          alt={p.productName}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <h5 className="text-xs font-bold text-gray-900 mt-2 truncate">
+                        {p.productName}
+                      </h5>
+                      <span className="text-[10px] font-semibold text-gray-400 mt-0.5 inline-block">
+                        {p.category}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* Image Preview Modal */}
+      {previewImage && (
+        <div
+          className="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center z-50 p-4"
+          onClick={() => setPreviewImage(null)}
+        >
+          <button
+            onClick={() => setPreviewImage(null)}
+            className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/20 text-white text-xl flex items-center justify-center hover:bg-white/40 transition font-bold cursor-pointer"
+          >
+            ✕
+          </button>
+          <img
+            src={previewImage}
+            alt="Preview"
+            className="max-w-[90%] max-h-[85vh] rounded-3xl shadow-2xl border border-white/20 object-contain"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
     </div>
   );
 };

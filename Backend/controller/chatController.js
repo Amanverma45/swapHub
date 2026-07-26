@@ -138,7 +138,7 @@ const getMyChats = async (req, res) => {
 
         const chats = await chatModel
             .find({ users: userId })
-            .populate("users", "name email");
+            .populate("users", "name email profileImage phone location");
 
         return res.status(200).json(chats);
 
