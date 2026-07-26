@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FaSearch, FaComments } from "react-icons/fa";
 
-const ChatList = ({ chats, activeChat, onSelectChat, currentUser, onExitChat }) => {
+const ChatList = ({ chats, activeChat, onSelectChat, currentUser, onExitChat, onViewProfile }) => {
   const [search, setSearch] = useState("");
 
   const getInitialsAvatar = (name) => {
@@ -75,26 +75,40 @@ const ChatList = ({ chats, activeChat, onSelectChat, currentUser, onExitChat }) 
             const { initials, gradient } = getInitialsAvatar(otherUser.name);
 
             return (
-              <button
+              <div
                 key={chat._id}
-                onClick={() => onSelectChat(chat)}
-                className={`w-full text-left p-4 flex items-start gap-3 transition-colors hover:bg-gray-50/70 border-l-4 cursor-pointer ${
+                className={`w-full p-4 flex items-start gap-3 transition-colors hover:bg-gray-50/70 border-l-4 ${
                   isActive
                     ? "bg-emerald-50/40 border-l-[#2E7D32]"
                     : "border-l-transparent bg-white"
                 }`}
               >
-                {/* Avatar Icon */}
+                {/* Left Side: Clickable Avatar to View Profile */}
                 <div
-                  className={`w-10 h-10 rounded-full shrink-0 flex items-center justify-center bg-gradient-to-br ${gradient} text-white font-bold text-xs shadow-xs`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onViewProfile && onViewProfile(otherUser);
+                  }}
+                  className={`w-10 h-10 rounded-full shrink-0 flex items-center justify-center bg-gradient-to-br ${gradient} text-white font-bold text-xs shadow-xs hover:scale-105 transition-transform cursor-pointer relative z-10`}
                 >
-                  {initials}
+                  {otherUser.profileImage ? (
+                    <img
+                      src={otherUser.profileImage}
+                      alt={otherUser.name}
+                      className="w-full h-full rounded-full object-cover"
+                    />
+                  ) : (
+                    initials
+                  )}
                 </div>
 
-                {/* Info */}
-                <div className="flex-1 min-w-0">
+                {/* Right Side: Clickable Info Box to Select Chat */}
+                <div
+                  onClick={() => onSelectChat(chat)}
+                  className="flex-1 min-w-0 cursor-pointer text-left"
+                >
                   <div className="flex justify-between items-baseline gap-1">
-                    <h3 className="text-sm font-bold text-gray-900 truncate">
+                    <h3 className="text-sm font-bold text-gray-900 truncate hover:text-[#2E7D32] transition-colors">
                       {otherUser.name}
                     </h3>
                     {lastMsg && (
@@ -118,7 +132,7 @@ const ChatList = ({ chats, activeChat, onSelectChat, currentUser, onExitChat }) 
                     )}
                   </p>
                 </div>
-              </button>
+              </div>
             );
           })
         )}

@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { FaTrashAlt, FaPen, FaTimes, FaExchangeAlt, FaRegClock, FaArrowLeft, FaReply, FaEllipsisV, FaCamera } from "react-icons/fa";
 import MessageInput from "./MessageInput";
 import axios from "../utils/axiosInstance";
+import toast from "react-hot-toast";
+
+const DEFAULT_AVATAR = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
 
 // WhatsApp-style double check marks SVG
 const DoubleCheckSVG = ({ isRead, className }) => (
@@ -625,33 +628,35 @@ const ChatWindow = ({
             >
               <FaArrowLeft className="text-base" />
             </button>
-            <h2 className="text-base font-extrabold text-gray-900">Member Profile</h2>
+            <h2 className="text-base font-extrabold text-gray-900">About {otherUser.name.split(" ")[0]}</h2>
           </div>
-
+ 
           {/* Profile Content Body */}
-          <div className="flex-grow overflow-y-auto p-6 space-y-6">
+          <div className="flex-grow overflow-y-auto p-6 space-y-6 max-w-2xl mx-auto w-full">
             
-            {/* Main Avatar & General Details Card */}
-            <div className="bg-white rounded-3xl border border-gray-100 shadow-md p-6 text-center flex flex-col items-center">
+            {/* Top Section: Avatar, Name & Email */}
+            <div className="flex flex-col items-center text-center pb-6 border-b border-gray-200">
               <div className="relative group cursor-pointer mb-4" onClick={() => {
                 if (otherUser.profileImage) {
                   setPreviewImage(otherUser.profileImage);
+                } else {
+                  toast.error("No profile photo uploaded by this user");
                 }
               }}>
                 {otherUser.profileImage ? (
                   <img
                     src={otherUser.profileImage}
                     alt={otherUser.name}
-                    className="w-24 h-24 rounded-full object-cover border-2 border-emerald-500 shadow-lg group-hover:scale-105 transition-transform duration-300"
+                    className="w-24 h-24 rounded-full object-cover border-2 border-emerald-500 shadow-md group-hover:scale-105 transition-transform duration-300"
                   />
                 ) : (
-                  <div className={`w-24 h-24 rounded-full flex items-center justify-center text-white text-3xl font-extrabold bg-gradient-to-br ${gradient} shadow-lg`}>
+                  <div className={`w-24 h-24 rounded-full flex items-center justify-center text-white text-3xl font-extrabold bg-gradient-to-br ${gradient} shadow-md`}>
                     {initials}
                   </div>
                 )}
                 {otherUser.profileImage && (
                   <div className="absolute inset-0 rounded-full bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold">
-                    🔍 View
+                    🔍 View Photo
                   </div>
                 )}
               </div>
@@ -660,20 +665,17 @@ const ChatWindow = ({
               <p className="text-xs text-gray-500 mt-1 font-semibold">{otherUser.email}</p>
             </div>
 
-            {/* Detailed Metadata Card */}
-            <div className="bg-white rounded-3xl border border-gray-100 shadow-md p-6 space-y-4">
-              <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-gray-50 pb-2 text-left">
-                Contact & Location Details
-              </h4>
+            {/* Middle Section: Phone & Location Details */}
+            <div className="space-y-4 pb-6 border-b border-gray-200">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="text-left">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase">Phone Number</span>
+                <div className="text-left border-b border-gray-100 sm:border-b-0 pb-3 sm:pb-0">
+                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Phone Number</span>
                   <p className="text-sm font-extrabold text-gray-800 mt-0.5">
                     {otherUser.phone || "Not Shared"}
                   </p>
                 </div>
                 <div className="text-left">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase">Location / City</span>
+                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Location / City</span>
                   <p className="text-sm font-extrabold text-gray-800 mt-0.5">
                     {otherUser.location || "Not Specified"}
                   </p>
@@ -681,14 +683,14 @@ const ChatWindow = ({
               </div>
             </div>
 
-            {/* Listed Products by this user */}
-            <div className="space-y-3">
-              <h4 className="text-sm font-extrabold text-gray-900 text-left">
+            {/* Bottom Section: Listed Products */}
+            <div className="space-y-4">
+              <h4 className="text-sm font-extrabold text-gray-900 text-left uppercase tracking-wider text-gray-400">
                 Listed items ({userProducts.length})
               </h4>
               
               {userProducts.length === 0 ? (
-                <div className="bg-white rounded-3xl border border-gray-100 p-8 text-center shadow-xs">
+                <div className="bg-gray-100 rounded-3xl p-8 text-center shadow-xs">
                   <p className="text-xs font-bold text-gray-400">No active listings posted by this member.</p>
                 </div>
               ) : (
@@ -720,7 +722,6 @@ const ChatWindow = ({
                 </div>
               )}
             </div>
-
           </div>
         </div>
       )}
@@ -728,12 +729,12 @@ const ChatWindow = ({
       {/* Image Preview Modal */}
       {previewImage && (
         <div
-          className="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-fade-in"
           onClick={() => setPreviewImage(null)}
         >
           <button
             onClick={() => setPreviewImage(null)}
-            className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/20 text-white text-xl flex items-center justify-center hover:bg-white/40 transition font-bold cursor-pointer"
+            className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/20 text-white text-xl flex items-center justify-center hover:bg-white/40 transition font-bold cursor-pointer z-50"
           >
             ✕
           </button>
