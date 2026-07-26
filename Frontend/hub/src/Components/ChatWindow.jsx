@@ -29,14 +29,20 @@ const DoubleCheckSVG = ({ isRead, className }) => (
   </svg>
 );
 
-// Preset wallpapers (colors and gradients)
+// Preset wallpapers (colors, gradients, devotional and nature images)
 const WALLPAPER_PRESETS = [
   { id: "default", name: "Default Light", value: "#efeae2" },
-  { id: "emerald", name: "Mint Emerald", value: "#e5ddd5" },
-  { id: "lavender", name: "Soft Lavender", value: "#e3e3ff" },
   { id: "dark", name: "Dark Slate", value: "#1e293b" },
   { id: "sunset", name: "Sunset Pink", value: "linear-gradient(to bottom right, #fecdd3, #ffedd5)" },
-  { id: "sky", name: "Sky Gradient", value: "linear-gradient(to bottom right, #e0f2fe, #f0fdf4)" }
+  { id: "sky", name: "Sky Gradient", value: "linear-gradient(to bottom right, #e0f2fe, #f0fdf4)" },
+  // Devotional Presets
+  { id: "hanuman", name: "Lord Hanuman", value: "url(/wallpapers/hanuman.png)" },
+  { id: "krishna", name: "Lord Krishna", value: "url(/wallpapers/krishna.png)" },
+  { id: "shiva", name: "Lord Shiva", value: "url(/wallpapers/shiva.png)" },
+  // Nature Presets
+  { id: "forest", name: "Forest Path", value: "url(/wallpapers/forest.png)" },
+  { id: "mountains", name: "Mountains Sunset", value: "url(/wallpapers/mountains.png)" },
+  { id: "beach", name: "Tropical Beach", value: "url(/wallpapers/beach.png)" }
 ];
 
 // Individual Message Item with Swipe to Reply gesture control
@@ -431,7 +437,7 @@ const ChatWindow = ({
             <div className="absolute right-0 mt-2 w-64 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-gray-100 p-4 z-50 animate-fade-in text-left">
               {/* Presets Grid */}
               <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Select Wallpaper</p>
-              <div className="grid grid-cols-6 gap-2 mb-3.5">
+              <div className="grid grid-cols-5 gap-2 mb-3.5">
                 {WALLPAPER_PRESETS.map((preset) => (
                   <button
                     key={preset.id}
@@ -441,8 +447,10 @@ const ChatWindow = ({
                       wallpaper === preset.value ? "ring-2 ring-emerald-500 ring-offset-1" : ""
                     }`}
                     style={{
-                      backgroundImage: preset.value.includes("gradient") ? preset.value : undefined,
-                      backgroundColor: preset.value.includes("gradient") ? undefined : preset.value
+                      backgroundImage: preset.value.includes("gradient") || preset.value.startsWith("url") ? preset.value : undefined,
+                      backgroundColor: preset.value.includes("gradient") || preset.value.startsWith("url") ? undefined : preset.value,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center"
                     }}
                   />
                 ))}
