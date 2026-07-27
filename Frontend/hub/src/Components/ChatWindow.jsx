@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaTrashAlt, FaPen, FaTimes, FaExchangeAlt, FaRegClock, FaArrowLeft, FaReply, FaEllipsisV, FaCamera, FaCheckSquare } from "react-icons/fa";
+import { FaTrashAlt, FaPen, FaTimes, FaExchangeAlt, FaRegClock, FaArrowLeft, FaReply, FaEllipsisV, FaCamera, FaCheckSquare, FaRegCopy, FaTrash } from "react-icons/fa";
 import MessageInput from "./MessageInput";
 import axios from "../utils/axiosInstance";
 import toast from "react-hot-toast";
@@ -10,13 +10,12 @@ const DEFAULT_AVATAR = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/20
 // WhatsApp-style double check marks SVG
 const DoubleCheckSVG = ({ isRead, className, isMe }) => (
   <svg
-    className={`${className} ${
-      isRead
+    className={`${className} ${isRead
         ? "text-sky-400"
         : isMe
           ? "text-white/60"
           : "text-gray-400"
-    }`}
+      }`}
     width="15"
     height="11"
     viewBox="0 0 15 11"
@@ -45,13 +44,13 @@ const getMessageDateHeader = (dateStr) => {
   if (!dateStr) return null;
   const date = new Date(dateStr);
   const today = new Date();
-  
+
   const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   const msgMidnight = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  
+
   const diffTime = todayMidnight.getTime() - msgMidnight.getTime();
   const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
-  
+
   if (diffDays === 0) {
     return "Today";
   } else if (diffDays === 1) {
@@ -133,6 +132,7 @@ const MessageItem = ({
   const isSwiping = useRef(false);
   const displaySenderName = isMe ? "You" : (senderName ? senderName.split(" ")[0] : "");
   const isSwapOffer = msg.text.startsWith('{"type":"swapOffer"');
+  const isMedia = msg.text.startsWith("data:image/") || msg.text.startsWith("data:video/");
   const longPressTimeout = useRef(null);
 
   const handleTouchStart = (e) => {
@@ -167,8 +167,8 @@ const MessageItem = ({
         text: msg.text.startsWith("data:image/")
           ? "📷 Photo"
           : msg.text.startsWith("data:video/")
-          ? "🎥 Video"
-          : msg.text,
+            ? "🎥 Video"
+            : msg.text,
         senderName: isMe ? "You" : (senderName ? senderName.split(" ")[0] : ""),
       });
     }
@@ -238,205 +238,209 @@ const MessageItem = ({
 
         <div className={`flex ${isMe ? "justify-end" : "justify-start"} flex-1 min-w-0`}>
           <div className={`flex flex-col ${isSwapOffer ? "max-w-[90%] sm:max-w-[70%]" : "max-w-[70%] sm:max-w-[50%]"} ${isMe ? "items-end" : "items-start"} min-w-[80px]`}>
-          
-          {/* Sender Name */}
-          <span className="text-[10px] text-gray-400 font-semibold mb-0.5 px-1">
-            {displaySenderName}
-          </span>
 
-          <div className={`relative flex items-center gap-2 w-full ${isMe ? "justify-end" : "justify-start"}`}>
-            
-            {/* Message Action Menu (Visible on hover for Own messages) */}
-            {isMe && editingIndex !== index && !isSelectionMode && (
-              <div className="opacity-0 group-hover:opacity-100 flex gap-1.5 transition-opacity bg-white/95 backdrop-blur-md px-2 py-1 rounded-xl shadow-md border border-gray-100 absolute -left-24 z-20">
-                <button
-                  onClick={() => setReplyingTo({ text: msg.text, senderName: "You" })}
-                  className="text-gray-400 hover:text-blue-500 transition-colors p-0.5 cursor-pointer"
-                  title="Reply"
-                >
-                  <FaReply className="text-[10px]" />
-                </button>
-                <button
-                  onClick={() => handleStartEdit(index, msg.text)}
-                  className="text-gray-400 hover:text-[#2E7D32] transition-colors p-0.5 cursor-pointer"
-                  title="Edit"
-                >
-                  <FaPen className="text-[10px]" />
-                </button>
-                <button
-                  onClick={() => handleDelete(index)}
-                  className="text-gray-400 hover:text-red-500 transition-colors p-0.5 cursor-pointer"
-                  title="Delete"
-                >
-                  <FaTrashAlt className="text-[10px]" />
-                </button>
-              </div>
-            )}
+            {/* Sender Name */}
+            <span className="text-[10px] text-gray-400 font-semibold mb-0.5 px-1">
+              {displaySenderName}
+            </span>
 
-            {/* Bubble Content */}
-            <div
-              className={`px-4 py-2.5 rounded-2xl text-sm shadow-2xs break-words w-fit max-w-full relative ${
-                isMe
-                  ? "bg-gradient-to-br from-[#2E7D32] to-[#1E5621] text-white"
-                  : "bg-white text-gray-800 border border-gray-100"
-              }`}
-            >
-              {/* Quoted Message (if replying) */}
-              {msg.replyTo && msg.replyTo.text && (
-                <div className={`mb-2 p-2 rounded-lg border-l-4 text-xs text-left ${
-                  isMe
-                    ? "bg-[#1E5621]/45 border-emerald-300 text-emerald-100"
-                    : "bg-gray-50 border-[#2E7D32] text-gray-600"
-                }`}>
-                  <p className="font-bold text-[9px] mb-0.5 opacity-90">
-                    {msg.replyTo.senderName}
-                  </p>
-                  <p className="line-clamp-2 truncate opacity-85">
-                    {getMessagePreviewText(msg.replyTo.text)}
-                  </p>
+            <div className={`relative flex items-center gap-2 w-full ${isMe ? "justify-end" : "justify-start"}`}>
+
+              {/* Message Action Menu (Visible on hover for Own messages) */}
+              {isMe && editingIndex !== index && !isSelectionMode && (
+                <div className="opacity-0 group-hover:opacity-100 flex gap-1.5 transition-opacity bg-white/95 backdrop-blur-md px-2 py-1 rounded-xl shadow-md border border-gray-100 absolute -left-24 z-20">
+                  <button
+                    onClick={() => setReplyingTo({ text: msg.text, senderName: "You" })}
+                    className="text-gray-400 hover:text-blue-500 transition-colors p-0.5 cursor-pointer"
+                    title="Reply"
+                  >
+                    <FaReply className="text-[10px]" />
+                  </button>
+                  <button
+                    onClick={() => handleStartEdit(index, msg.text)}
+                    className="text-gray-400 hover:text-[#2E7D32] transition-colors p-0.5 cursor-pointer"
+                    title="Edit"
+                  >
+                    <FaPen className="text-[10px]" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(index)}
+                    className="text-gray-400 hover:text-red-500 transition-colors p-0.5 cursor-pointer"
+                    title="Delete"
+                  >
+                    <FaTrashAlt className="text-[10px]" />
+                  </button>
                 </div>
               )}
 
-              {editingIndex === index ? (
-                <div className="flex flex-col gap-2 min-w-[200px] sm:min-w-[260px] py-1">
-                  <input
-                    type="text"
-                    value={editText}
-                    onChange={(e) => setEditText(e.target.value)}
-                    className="w-full bg-white text-gray-800 text-xs rounded-xl px-3 py-2 outline-none border border-gray-200 focus:border-[#2E7D32] text-left"
-                    autoFocus
-                  />
-                  <div className="flex justify-end gap-1.5 text-[10px]">
-                    <button
-                      type="button"
-                      onClick={() => handleStartEdit(null, "")}
-                      className="px-2.5 py-1 rounded-lg border border-gray-200 text-gray-500 font-bold bg-white hover:bg-gray-50 cursor-pointer"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleSaveEdit(index)}
-                      className="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold hover:bg-emerald-700 cursor-pointer shadow-xs"
-                    >
-                      Save
-                    </button>
+              {/* Bubble Content */}
+              <div
+                className={`rounded-2xl text-sm shadow-2xs break-words w-fit max-w-full relative overflow-hidden ${
+                  isMedia
+                    ? "p-1 bg-white border border-gray-200/80 shadow-xs"
+                    : isMe
+                      ? "px-4 py-2.5 bg-gradient-to-br from-[#2E7D32] to-[#1E5621] text-white"
+                      : "px-4 py-2.5 bg-white text-gray-800 border border-gray-100"
+                }`}
+              >
+                {/* Quoted Message (if replying) */}
+                {msg.replyTo && msg.replyTo.text && (
+                  <div className={`mb-2 p-2 rounded-lg border-l-4 text-xs text-left ${isMe
+                      ? "bg-[#1E5621]/45 border-emerald-300 text-emerald-100"
+                      : "bg-gray-50 border-[#2E7D32] text-gray-600"
+                    }`}>
+                    <p className="font-bold text-[9px] mb-0.5 opacity-90">
+                      {msg.replyTo.senderName}
+                    </p>
+                    <p className="line-clamp-2 truncate opacity-85">
+                      {getMessagePreviewText(msg.replyTo.text)}
+                    </p>
                   </div>
-                </div>
-              ) : (
-                <>
-                  {msg.text.startsWith('{"type":"swapOffer"') ? (() => {
-                    try {
-                      const offer = JSON.parse(msg.text);
-                      return (
-                        <div className={`flex flex-col gap-3 w-[220px] sm:w-[280px] p-1.5 text-left ${isMe ? "text-white" : "text-gray-850"}`}>
-                          <div className={`flex items-center gap-1.5 text-xs font-extrabold border-b pb-2 ${isMe ? "text-emerald-100 border-white/20" : "text-[#2E7D32] border-gray-150"}`}>
-                            <FaExchangeAlt className="text-sm" />
-                            <span>SWAP PROPOSAL</span>
-                          </div>
-                          
-                          <div className="grid grid-cols-5 gap-1.5 items-center my-1.5">
-                            <div className="col-span-2 flex flex-col items-center text-center">
-                              <div className="w-14 h-14 rounded-xl bg-gray-50 overflow-hidden border border-gray-150 shadow-2xs">
-                                <img src={offer.offerProductImage} alt={offer.offerProductName} className="w-full h-full object-cover" />
+                )}
+
+                {editingIndex === index ? (
+                  <div className="flex flex-col gap-2 min-w-[200px] sm:min-w-[260px] py-1">
+                    <input
+                      type="text"
+                      value={editText}
+                      onChange={(e) => setEditText(e.target.value)}
+                      className="w-full bg-white text-gray-800 text-xs rounded-xl px-3 py-2 outline-none border border-gray-200 focus:border-[#2E7D32] text-left"
+                      autoFocus
+                    />
+                    <div className="flex justify-end gap-1.5 text-[10px]">
+                      <button
+                        type="button"
+                        onClick={() => handleStartEdit(null, "")}
+                        className="px-2.5 py-1 rounded-lg border border-gray-200 text-gray-500 font-bold bg-white hover:bg-gray-50 cursor-pointer"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleSaveEdit(index)}
+                        className="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold hover:bg-emerald-700 cursor-pointer shadow-xs"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    {msg.text.startsWith('{"type":"swapOffer"') ? (() => {
+                      try {
+                        const offer = JSON.parse(msg.text);
+                        return (
+                          <div className={`flex flex-col gap-3 w-[220px] sm:w-[280px] p-1.5 text-left ${isMe ? "text-white" : "text-gray-850"}`}>
+                            <div className={`flex items-center gap-1.5 text-xs font-extrabold border-b pb-2 ${isMe ? "text-emerald-100 border-white/20" : "text-[#2E7D32] border-gray-150"}`}>
+                              <FaExchangeAlt className="text-sm" />
+                              <span>SWAP PROPOSAL</span>
+                            </div>
+
+                            <div className="grid grid-cols-5 gap-1.5 items-center my-1.5">
+                              <div className="col-span-2 flex flex-col items-center text-center">
+                                <div className="w-14 h-14 rounded-xl bg-gray-50 overflow-hidden border border-gray-150 shadow-2xs">
+                                  <img src={offer.offerProductImage} alt={offer.offerProductName} className="w-full h-full object-cover" />
+                                </div>
+                                <span className={`text-[10px] font-bold truncate w-full mt-1.5 ${isMe ? "text-white" : "text-gray-700"}`}>{offer.offerProductName}</span>
+                                <span className={`text-[8px] font-bold uppercase tracking-wider mt-0.5 ${isMe ? "text-emerald-100/80" : "text-gray-400"}`}>Offered</span>
                               </div>
-                              <span className={`text-[10px] font-bold truncate w-full mt-1.5 ${isMe ? "text-white" : "text-gray-700"}`}>{offer.offerProductName}</span>
-                              <span className={`text-[8px] font-bold uppercase tracking-wider mt-0.5 ${isMe ? "text-emerald-100/80" : "text-gray-400"}`}>Offered</span>
-                            </div>
 
-                            <div className={`col-span-1 flex justify-center text-lg ${isMe ? "text-emerald-200/80" : "text-gray-400"}`}>
-                              ⇄
-                            </div>
-
-                            <div className="col-span-2 flex flex-col items-center text-center">
-                              <div className="w-14 h-14 rounded-xl bg-gray-50 overflow-hidden border border-gray-150 shadow-2xs">
-                                <img src={offer.targetProductImage} alt={offer.targetProductName} className="w-full h-full object-cover" />
+                              <div className={`col-span-1 flex justify-center text-lg ${isMe ? "text-emerald-200/80" : "text-gray-400"}`}>
+                                ⇄
                               </div>
-                              <span className={`text-[10px] font-bold truncate w-full mt-1.5 ${isMe ? "text-white" : "text-gray-700"}`}>{offer.targetProductName}</span>
-                              <span className={`text-[8px] font-bold uppercase tracking-wider mt-0.5 ${isMe ? "text-emerald-100/80" : "text-gray-400"}`}>Requested</span>
-                            </div>
-                          </div>
 
-                          <div className={`mt-1 border-t pt-2.5 flex flex-col gap-2 ${isMe ? "border-white/20" : "border-gray-150"}`}>
-                            {offer.status === "pending" ? (
-                              !isMe ? (
-                                <div className="flex gap-2 w-full">
-                                  <button
-                                    onClick={() => onUpdateSwapStatus("declined")}
-                                    className="flex-1 py-1.5 rounded-xl border border-red-200 text-red-600 hover:bg-red-50 text-[10px] font-extrabold cursor-pointer transition-colors text-center"
-                                  >
-                                    Decline
-                                  </button>
-                                  <button
-                                    onClick={() => onUpdateSwapStatus("accepted")}
-                                    className="flex-1 py-1.5 rounded-xl bg-[#2E7D32] hover:bg-[#1E5621] text-white text-[10px] font-extrabold cursor-pointer transition-all shadow-xs text-center"
-                                  >
-                                    Accept Swap
-                                  </button>
+                              <div className="col-span-2 flex flex-col items-center text-center">
+                                <div className="w-14 h-14 rounded-xl bg-gray-50 overflow-hidden border border-gray-150 shadow-2xs">
+                                  <img src={offer.targetProductImage} alt={offer.targetProductName} className="w-full h-full object-cover" />
+                                </div>
+                                <span className={`text-[10px] font-bold truncate w-full mt-1.5 ${isMe ? "text-white" : "text-gray-700"}`}>{offer.targetProductName}</span>
+                                <span className={`text-[8px] font-bold uppercase tracking-wider mt-0.5 ${isMe ? "text-emerald-100/80" : "text-gray-400"}`}>Requested</span>
+                              </div>
+                            </div>
+
+                            <div className={`mt-1 border-t pt-2.5 flex flex-col gap-2 ${isMe ? "border-white/20" : "border-gray-150"}`}>
+                              {offer.status === "pending" ? (
+                                !isMe ? (
+                                  <div className="flex gap-2 w-full">
+                                    <button
+                                      onClick={() => onUpdateSwapStatus("declined")}
+                                      className="flex-1 py-1.5 rounded-xl border border-red-200 text-red-600 hover:bg-red-50 text-[10px] font-extrabold cursor-pointer transition-colors text-center"
+                                    >
+                                      Decline
+                                    </button>
+                                    <button
+                                      onClick={() => onUpdateSwapStatus("accepted")}
+                                      className="flex-1 py-1.5 rounded-xl bg-[#2E7D32] hover:bg-[#1E5621] text-white text-[10px] font-extrabold cursor-pointer transition-all shadow-xs text-center"
+                                    >
+                                      Accept Swap
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <div className="text-center py-1 bg-yellow-50 border border-yellow-100 rounded-xl">
+                                    <span className="text-[9px] font-extrabold text-yellow-600 uppercase tracking-wide">Waiting for response</span>
+                                  </div>
+                                )
+                              ) : offer.status === "accepted" ? (
+                                <div className="text-center py-1.5 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center justify-center gap-1">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                                  <span className="text-[9px] font-extrabold text-[#2E7D32] uppercase tracking-wide">Swap Accepted</span>
                                 </div>
                               ) : (
-                                <div className="text-center py-1 bg-yellow-50 border border-yellow-100 rounded-xl">
-                                  <span className="text-[9px] font-extrabold text-yellow-600 uppercase tracking-wide">Waiting for response</span>
+                                <div className="text-center py-1.5 bg-red-50 border border-red-100 rounded-xl">
+                                  <span className="text-[9px] font-extrabold text-red-600 uppercase tracking-wide">Swap Declined</span>
                                 </div>
-                              )
-                            ) : offer.status === "accepted" ? (
-                              <div className="text-center py-1.5 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center justify-center gap-1">
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                                <span className="text-[9px] font-extrabold text-[#2E7D32] uppercase tracking-wide">Swap Accepted</span>
-                              </div>
-                            ) : (
-                              <div className="text-center py-1.5 bg-red-50 border border-red-100 rounded-xl">
-                                <span className="text-[9px] font-extrabold text-red-600 uppercase tracking-wide">Swap Declined</span>
-                              </div>
-                            )}
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      );
-                    } catch (e) {
-                      return <p className="whitespace-pre-wrap text-left leading-relaxed break-all inline">{msg.text}</p>;
-                    }
-                  })() : msg.text.startsWith("data:image/") ? (
-                    <div className="relative rounded-xl overflow-hidden cursor-pointer max-w-[240px] sm:max-w-[300px]" onClick={() => setPreviewImage(msg.text)}>
-                      <img src={msg.text} alt="Shared Photo" className="w-full h-auto object-cover max-h-60 rounded-xl" />
-                    </div>
-                  ) : msg.text.startsWith("data:video/") ? (
-                    <div className="relative rounded-xl overflow-hidden max-w-[245px] sm:max-w-[320px] bg-black">
-                      <video src={msg.text} controls className="w-full h-auto max-h-60 rounded-xl" />
-                    </div>
-                  ) : (
-                    <p className="whitespace-pre-wrap text-left leading-relaxed break-all inline">{msg.text}</p>
-                  )}
-                  
-                  {/* Message Timestamp and Read Status inside the bubble */}
-                  <span className={`inline-flex items-center gap-0.5 text-[9px] font-bold select-none float-right ml-2.5 mt-2.5 -mr-1 -mb-1 translate-y-[3px] opacity-75 ${isMe ? "text-emerald-100/90" : "text-gray-400"}`}>
-                    {formatMessageTime(msg.createdAt)}
-                    {isMe && (
-                      <DoubleCheckSVG isRead={msg.isRead} isMe={isMe} className="shrink-0 scale-90" />
+                        );
+                      } catch (e) {
+                        return <p className="whitespace-pre-wrap text-left leading-relaxed break-all inline">{msg.text}</p>;
+                      }
+                    })() : msg.text.startsWith("data:image/") ? (
+                      <div className="relative rounded-xl overflow-hidden cursor-pointer max-w-[240px] sm:max-w-[300px]" onClick={() => setPreviewImage(msg.text)}>
+                        <img src={msg.text} alt="Shared Photo" className="w-full h-auto object-cover max-h-60 rounded-xl" />
+                      </div>
+                    ) : msg.text.startsWith("data:video/") ? (
+                      <div className="relative rounded-xl overflow-hidden max-w-[245px] sm:max-w-[320px] bg-black">
+                        <video src={msg.text} controls className="w-full h-auto max-h-60 rounded-xl" />
+                      </div>
+                    ) : (
+                      <p className="whitespace-pre-wrap text-left leading-relaxed break-all inline">{msg.text}</p>
                     )}
-                  </span>
-                </>
-              )}
-            </div>
 
-            {/* Message Action Menu (Visible on hover for Other messages) */}
-            {!isMe && !isSelectionMode && (
-              <div className="opacity-0 group-hover:opacity-100 flex gap-1.5 transition-opacity bg-white/95 backdrop-blur-md px-2 py-1 rounded-xl shadow-md border border-gray-100 absolute -right-14 z-20">
-                <button
-                  onClick={() => setReplyingTo({ text: msg.text, senderName: displaySenderName })}
-                  className="text-gray-400 hover:text-blue-500 transition-colors p-0.5 cursor-pointer"
-                  title="Reply"
-                >
-                  <FaReply className="text-[10px]" />
-                </button>
+                    {/* Message Timestamp and Read Status inside the bubble */}
+                    <span className={isMedia 
+                    ? "absolute bottom-3 right-3 bg-black/50 text-white backdrop-blur-xs px-1.5 py-0.5 rounded-full inline-flex items-center gap-0.5 text-[9px] font-bold select-none z-10"
+                    : `inline-flex items-center gap-0.5 text-[9px] font-bold select-none float-right ml-2.5 mt-2.5 -mr-1 -mb-1 translate-y-[3px] opacity-75 ${isMe ? "text-emerald-100/90" : "text-gray-400"}`
+                  }>
+                      {formatMessageTime(msg.createdAt)}
+                      {isMe && (
+                        <DoubleCheckSVG isRead={msg.isRead} isMe={isMe} className={`shrink-0 scale-90 ${isMedia ? "text-sky-350" : ""}`} />
+                      )}
+                    </span>
+                  </>
+                )}
               </div>
-            )}
 
+              {/* Message Action Menu (Visible on hover for Other messages) */}
+              {!isMe && !isSelectionMode && (
+                <div className="opacity-0 group-hover:opacity-100 flex gap-1.5 transition-opacity bg-white/95 backdrop-blur-md px-2 py-1 rounded-xl shadow-md border border-gray-100 absolute -right-14 z-20">
+                  <button
+                    onClick={() => setReplyingTo({ text: msg.text, senderName: displaySenderName })}
+                    className="text-gray-400 hover:text-blue-500 transition-colors p-0.5 cursor-pointer"
+                    title="Reply"
+                  >
+                    <FaReply className="text-[10px]" />
+                  </button>
+                </div>
+              )}
+
+            </div>
           </div>
-        </div>
 
+        </div>
       </div>
     </div>
-  </div>
   );
 };
 
@@ -451,6 +455,7 @@ const ChatWindow = ({
   isTyping,
   onTyping,
   onBackToList,
+  isLoading,
 }) => {
   const navigate = useNavigate();
   const [editingIndex, setEditingIndex] = useState(null);
@@ -618,12 +623,12 @@ const ChatWindow = ({
 
   const handleDeleteForEveryone = () => {
     if (selectedMsgIndices.length === 0) return;
-    
+
     const sortedIndices = [...selectedMsgIndices].sort((a, b) => b - a);
     sortedIndices.forEach((idx) => {
       onDeleteMessage(idx);
     });
-    
+
     setShowDeleteDialog(false);
     setIsSelectionMode(false);
     setSelectedMsgIndices([]);
@@ -632,7 +637,7 @@ const ChatWindow = ({
 
   const handleDeleteForMe = () => {
     if (selectedMsgIndices.length === 0) return;
-    
+
     const updated = [...deletedMsgIds];
     selectedMsgIndices.forEach((idx) => {
       const msg = messages[idx];
@@ -641,10 +646,10 @@ const ChatWindow = ({
         updated.push(msgKey);
       }
     });
-    
+
     setDeletedMsgIds(updated);
     localStorage.setItem(`deleted_msgs_${activeChat._id}`, JSON.stringify(updated));
-    
+
     setShowDeleteDialog(false);
     setIsSelectionMode(false);
     setSelectedMsgIndices([]);
@@ -653,13 +658,13 @@ const ChatWindow = ({
 
   const handleCopySelectedMessages = () => {
     if (selectedMsgIndices.length === 0) return;
-    
+
     const sortedIndices = [...selectedMsgIndices].sort((a, b) => a - b);
     const textPieces = sortedIndices.map((idx) => {
       const msg = messages[idx];
       const isMe = (msg.sender?._id || msg.sender) === currentUser?._id;
       const senderName = msg.sender?.name || (isMe ? currentUser?.name : otherUser.name);
-      
+
       let bodyText = msg.text;
       if (msg.text.startsWith('{"type":"swapOffer"')) {
         try {
@@ -671,7 +676,7 @@ const ChatWindow = ({
       }
       return `[${senderName}]: ${bodyText}`;
     });
-    
+
     navigator.clipboard.writeText(textPieces.join("\n"));
     toast.success("Messages copied!");
     setIsSelectionMode(false);
@@ -692,7 +697,7 @@ const ChatWindow = ({
       toast.error("Please select both products to propose a swap!");
       return;
     }
-    
+
     setIsSubmittingOffer(true);
     try {
       const response = await axios.post("/swapProduct", {
@@ -700,9 +705,9 @@ const ChatWindow = ({
         requestedProduct: selectedTheirProduct._id,
         offeredProduct: selectedMyProduct._id,
       });
-      
+
       const swapItem = response.data.swapItem;
-      
+
       const offerPayload = {
         type: "swapOffer",
         swapRequestId: swapItem._id,
@@ -714,9 +719,9 @@ const ChatWindow = ({
         targetProductImage: selectedTheirProduct.image,
         status: "pending"
       };
-      
+
       onSendMessage(JSON.stringify(offerPayload));
-      
+
       setShowSwapOffer(false);
       setSelectedMyProduct(null);
       setSelectedTheirProduct(null);
@@ -732,21 +737,21 @@ const ChatWindow = ({
   const handleUpdateSwapOfferStatus = async (msg, msgIndex, newStatus) => {
     try {
       const offer = JSON.parse(msg.text);
-      
+
       if (newStatus === "accepted") {
         await axios.put(`/acceptSwapRequest/${offer.swapRequestId}`);
       } else {
         await axios.put(`/rejectSwapRequest/${offer.swapRequestId}`);
       }
-      
+
       offer.status = newStatus;
-      
+
       await axios.put("/updateMessage", {
         chatId: activeChat._id,
         messageIndex: msgIndex,
         text: JSON.stringify(offer)
       });
-      
+
       toast.success(`Swap offer ${newStatus}!`);
     } catch (err) {
       console.error("Error updating swap status:", err);
@@ -803,8 +808,22 @@ const ChatWindow = ({
     backgroundRepeat: isImageWallpaper ? "no-repeat" : undefined,
   };
 
+  if (!activeChat) {
+    return (
+      <div className="flex-1 h-full flex flex-col items-center justify-center bg-[#f8f9fa] p-8 text-center">
+        <div className="w-16 h-16 rounded-full bg-emerald-50 flex items-center justify-center text-2xl mb-3 shadow-xs border border-emerald-100/50">
+          💬
+        </div>
+        <h3 className="text-sm font-extrabold text-gray-800">Select a Conversation</h3>
+        <p className="text-xs text-gray-500 mt-1.5 max-w-[240px] leading-relaxed">
+          Choose a contact from the sidebar to view their profile and start swapping items.
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <div 
+    <div
       className="flex-1 w-full min-w-0 h-full flex flex-col bg-slate-50/40 relative overflow-hidden"
       style={messageListStyle}
     >
@@ -844,150 +863,141 @@ const ChatWindow = ({
 
         {/* Header Right Actions */}
         <div className="flex items-center gap-3">
-          {/* Selection Mode Actions */}
-          {isSelectionMode && (
-            <div className="flex items-center gap-3.5 mr-2 animate-fade-in shrink-0">
-              <span className="text-xs font-bold text-gray-500">
-                {selectedMsgIndices.length} selected
-              </span>
-              
-              {selectedMsgIndices.length > 0 && (
-                <>
-                  <button
-                    onClick={handleCopySelectedMessages}
-                    className="text-xs font-extrabold text-[#2E7D32] hover:text-[#1E5621] transition-colors cursor-pointer"
-                  >
-                    Copy
-                  </button>
-                  <button
-                    onClick={() => setShowDeleteDialog(true)}
-                    className="text-xs font-extrabold text-red-500 hover:text-red-700 transition-colors cursor-pointer"
-                  >
-                    Delete
-                  </button>
-                </>
-              )}
-              
-              <button
-                onClick={() => {
-                  setIsSelectionMode(false);
-                  setSelectedMsgIndices([]);
-                }}
-                className="text-xs font-extrabold text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
-              >
-                Cancel
-              </button>
-              <div className="h-4 w-px bg-gray-200" />
-            </div>
-          )}
-
           {/* 3-Dot Options Dropdown Menu */}
           <div className="relative" ref={menuRef}>
-          <button
-            onClick={() => {
-              setShowMenu(!showMenu);
-              setShowConfirmClear(false);
-            }}
-            className="text-gray-400 hover:text-gray-600 p-2 rounded-xl hover:bg-gray-100 active:scale-95 transition-all cursor-pointer flex items-center justify-center"
-            title="Chat Options"
-          >
-            <FaEllipsisV className="text-sm" />
-          </button>
+            <button
+              onClick={() => {
+                setShowMenu(!showMenu);
+                setShowConfirmClear(false);
+              }}
+              className="text-gray-400 hover:text-gray-600 p-2 rounded-xl hover:bg-gray-100 active:scale-95 transition-all cursor-pointer flex items-center justify-center"
+              title="Chat Options"
+            >
+              <FaEllipsisV className="text-sm" />
+            </button>
 
-          {showMenu && (
-            <div className="absolute right-0 mt-2 w-64 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-gray-100 p-4 z-50 animate-fade-in text-left">
-              {/* Presets Grid */}
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Select Wallpaper</p>
-              <div className="grid grid-cols-5 gap-2 mb-3.5">
-                {WALLPAPER_PRESETS.map((preset) => (
-                  <button
-                    key={preset.id}
-                    onClick={() => selectPresetWallpaper(preset.value)}
-                    title={preset.name}
-                    className={`w-7 h-7 rounded-full border border-gray-200 cursor-pointer hover:scale-110 active:scale-95 transition-transform ${
-                      wallpaper === preset.value ? "ring-2 ring-emerald-500 ring-offset-1" : ""
-                    }`}
-                    style={{
-                      backgroundImage: preset.value.includes("gradient") || preset.value.startsWith("url") ? preset.value : undefined,
-                      backgroundColor: preset.value.includes("gradient") || preset.value.startsWith("url") ? undefined : preset.value,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center"
-                    }}
+            {showMenu && (
+              <div className="absolute right-0 mt-2 w-64 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-gray-100 p-4 z-50 animate-fade-in text-left">
+                {/* Presets Grid */}
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Select Wallpaper</p>
+                <div className="grid grid-cols-5 gap-2 mb-3.5">
+                  {WALLPAPER_PRESETS.map((preset) => (
+                    <button
+                      key={preset.id}
+                      onClick={() => selectPresetWallpaper(preset.value)}
+                      title={preset.name}
+                      className={`w-7 h-7 rounded-full border border-gray-200 cursor-pointer hover:scale-110 active:scale-95 transition-transform ${wallpaper === preset.value ? "ring-2 ring-emerald-500 ring-offset-1" : ""
+                        }`}
+                      style={{
+                        backgroundImage: preset.value.includes("gradient") || preset.value.startsWith("url") ? preset.value : undefined,
+                        backgroundColor: preset.value.includes("gradient") || preset.value.startsWith("url") ? undefined : preset.value,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center"
+                      }}
+                    />
+                  ))}
+                </div>
+
+                {/* Camera Upload Button */}
+                <div className="mb-3">
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleCustomWallpaperUpload}
+                    accept="image/*"
+                    className="hidden"
                   />
-                ))}
-              </div>
-
-              {/* Camera Upload Button */}
-              <div className="mb-3">
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={handleCustomWallpaperUpload}
-                  accept="image/*"
-                  className="hidden"
-                />
-                <button
-                  onClick={() => fileInputRef.current?.click()}
-                  className="w-full flex items-center justify-center gap-2 py-2 px-3 bg-emerald-50 hover:bg-emerald-100 text-[#2E7D32] rounded-xl text-xs font-bold transition-colors cursor-pointer border border-emerald-100"
-                >
-                  <FaCamera className="text-xs" />
-                  Choose from Gallery
-                </button>
-              </div>
-
-              <button
-                onClick={() => {
-                  setIsSelectionMode(true);
-                  setSelectedMsgIndices([]);
-                  setShowMenu(false);
-                }}
-                className="w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-50 rounded-xl text-xs font-bold transition-all cursor-pointer mb-1"
-              >
-                Select Messages
-              </button>
-
-              <div className="border-t border-gray-100 my-2" />
-
-              {/* Clear Chat Buttons */}
-              {!showConfirmClear ? (
-                <button
-                  onClick={() => setShowConfirmClear(true)}
-                  className="w-full text-left py-2 px-3 text-red-600 hover:bg-red-50 rounded-xl text-xs font-bold transition-all cursor-pointer"
-                >
-                  Clear Chat
-                </button>
-              ) : (
-                <div className="flex flex-col gap-1.5 p-1 bg-red-50/50 rounded-xl">
-                  <p className="text-[10px] text-red-600 font-bold leading-tight px-2 mt-1">Are you sure you want to clear all messages?</p>
                   <button
-                    onClick={() => {
-                      handleClearChat();
-                      setShowMenu(false);
-                      setShowConfirmClear(false);
-                    }}
-                    className="w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer text-center shadow-xs"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-full flex items-center justify-center gap-2 py-2 px-3 bg-emerald-50 hover:bg-emerald-100 text-[#2E7D32] rounded-xl text-xs font-bold transition-colors cursor-pointer border border-emerald-100"
                   >
-                    Confirm Clear Chat
-                  </button>
-                  <button
-                    onClick={() => setShowConfirmClear(false)}
-                    className="w-full py-1 text-gray-500 hover:bg-gray-100 rounded-xl text-[10px] font-semibold transition-all cursor-pointer text-center"
-                  >
-                    Cancel
+                    <FaCamera className="text-xs" />
+                    Choose from Gallery
                   </button>
                 </div>
-              )}
-            </div>
-          )}
+
+                <button
+                  onClick={() => {
+                    setIsSelectionMode(true);
+                    setSelectedMsgIndices([]);
+                    setShowMenu(false);
+                  }}
+                  className="w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-50 rounded-xl text-xs font-bold transition-all cursor-pointer mb-1"
+                >
+                  Select Messages
+                </button>
+
+                <div className="border-t border-gray-100 my-2" />
+
+                {/* Clear Chat Buttons */}
+                {!showConfirmClear ? (
+                  <button
+                    onClick={() => setShowConfirmClear(true)}
+                    className="w-full text-left py-2 px-3 text-red-600 hover:bg-red-50 rounded-xl text-xs font-bold transition-all cursor-pointer"
+                  >
+                    Clear Chat
+                  </button>
+                ) : (
+                  <div className="flex flex-col gap-1.5 p-1 bg-red-50/50 rounded-xl">
+                    <p className="text-[10px] text-red-600 font-bold leading-tight px-2 mt-1">Are you sure you want to clear all messages?</p>
+                    <button
+                      onClick={() => {
+                        handleClearChat();
+                        setShowMenu(false);
+                        setShowConfirmClear(false);
+                      }}
+                      className="w-full py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer text-center shadow-xs"
+                    >
+                      Confirm Clear Chat
+                    </button>
+                    <button
+                      onClick={() => setShowConfirmClear(false)}
+                      className="w-full py-1 text-gray-500 hover:bg-gray-100 rounded-xl text-[10px] font-semibold transition-all cursor-pointer text-center"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
 
       {/* Message List */}
       <div
         className="flex-1 overflow-y-auto p-4 space-y-4"
       >
-        {messages.length === 0 ? (
+        {isLoading ? (
+          <div className="flex flex-col gap-4 w-full h-full justify-start p-2 animate-pulse">
+            {/* Shimmer Incoming Message */}
+            <div className="flex justify-start w-full">
+              <div className="flex flex-col items-start gap-1.5 max-w-[70%]">
+                <div className="h-3 w-16 bg-gray-300/40 rounded-md" />
+                <div className="h-10 w-44 bg-gray-250/50 rounded-2xl" />
+              </div>
+            </div>
+            {/* Shimmer Outgoing Message */}
+            <div className="flex justify-end w-full">
+              <div className="flex flex-col items-end gap-1.5 max-w-[70%]">
+                <div className="h-12 w-60 bg-emerald-300/20 rounded-2xl" />
+              </div>
+            </div>
+            {/* Shimmer Incoming Message */}
+            <div className="flex justify-start w-full">
+              <div className="flex flex-col items-start gap-1.5 max-w-[70%]">
+                <div className="h-3 w-20 bg-gray-300/40 rounded-md" />
+                <div className="h-14 w-52 bg-gray-250/50 rounded-2xl" />
+              </div>
+            </div>
+            {/* Shimmer Outgoing Message */}
+            <div className="flex justify-end w-full">
+              <div className="flex flex-col items-end gap-1.5 max-w-[70%]">
+                <div className="h-10 w-36 bg-emerald-300/20 rounded-2xl" />
+              </div>
+            </div>
+          </div>
+        ) : messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center p-8 h-full text-center">
             <span className="text-3xl">👋</span>
             <h3 className="text-sm font-bold text-gray-800 mt-2">Say Hello to {otherUser.name}!</h3>
@@ -1038,7 +1048,7 @@ const ChatWindow = ({
         })()}
         <div ref={messagesEndRef} />
       </div>
- 
+
       {/* Typing Indicator */}
       {isTyping && (
         <div className="flex items-center gap-1.5 text-xs text-gray-400 font-semibold px-6 py-1.5 animate-pulse shrink-0 bg-transparent">
@@ -1048,31 +1058,74 @@ const ChatWindow = ({
           <span className="ml-1">{otherUser.name.split(" ")[0]} is typing...</span>
         </div>
       )}
-  
-      {/* Replying Preview Bar */}
-      {replyingTo && (
-        <div className="px-4 py-2 bg-white/50 backdrop-blur-md border-t border-white/20 flex items-center justify-between animate-fade-in shrink-0">
-          <div className="border-l-4 border-[#2E7D32] pl-3 py-1 text-left">
-            <p className="text-[10px] font-bold text-[#2E7D32]">Replying to {replyingTo.senderName}</p>
-            <p className="text-xs text-gray-600 line-clamp-1 truncate">
-              {getMessagePreviewText(replyingTo.text)}
-            </p>
-          </div>
-          <button
-            onClick={() => setReplyingTo(null)}
-            className="text-gray-400 hover:text-red-500 p-1.5 hover:bg-gray-200 rounded-full transition-colors cursor-pointer"
-          >
-            <FaTimes className="text-xs" />
-          </button>
-        </div>
-      )}
 
-      {/* Input Form */}
-      <MessageInput 
-        onSendMessage={handleSendMessageWithReply} 
-        onTyping={onTyping} 
-        onToggleSwapOffer={() => setShowSwapOffer(!showSwapOffer)}
-      />
+      {isSelectionMode ? (
+        <div className="h-16 bg-[#f0f2f5] border-t border-gray-200 px-6 flex items-center justify-between shadow-xs shrink-0 animate-fade-in">
+          <div className="flex items-center gap-4.5">
+            <button
+              onClick={() => {
+                setIsSelectionMode(false);
+                setSelectedMsgIndices([]);
+              }}
+              className="text-gray-500 hover:text-red-500 transition-colors p-1.5 hover:bg-gray-200/50 rounded-xl cursor-pointer flex items-center justify-center"
+              title="Cancel Selection"
+            >
+              <FaTimes className="text-base" />
+            </button>
+            <span className="text-sm font-bold text-gray-700 select-none">
+              {selectedMsgIndices.length} selected
+            </span>
+          </div>
+
+          <div className="flex items-center gap-5">
+            {selectedMsgIndices.length > 0 && (
+              <>
+                <button
+                  onClick={handleCopySelectedMessages}
+                  className="text-gray-500 hover:text-[#00a884] p-2 hover:bg-gray-250/20 rounded-xl transition-all cursor-pointer flex items-center justify-center"
+                  title="Copy Messages"
+                >
+                  <FaRegCopy className="text-base" />
+                </button>
+                <button
+                  onClick={() => setShowDeleteDialog(true)}
+                  className="text-gray-500 hover:text-red-600 p-2 hover:bg-gray-250/20 rounded-xl transition-all cursor-pointer flex items-center justify-center"
+                  title="Delete Messages"
+                >
+                  <FaTrash className="text-base" />
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      ) : (
+        <>
+          {/* Replying Preview Bar */}
+          {replyingTo && (
+            <div className="px-4 py-2 bg-white/50 backdrop-blur-md border-t border-white/20 flex items-center justify-between animate-fade-in shrink-0">
+              <div className="border-l-4 border-[#2E7D32] pl-3 py-1 text-left">
+                <p className="text-[10px] font-bold text-[#2E7D32]">Replying to {replyingTo.senderName}</p>
+                <p className="text-xs text-gray-600 line-clamp-1 truncate">
+                  {getMessagePreviewText(replyingTo.text)}
+                </p>
+              </div>
+              <button
+                onClick={() => setReplyingTo(null)}
+                className="text-gray-400 hover:text-red-500 p-1.5 hover:bg-gray-200 rounded-full transition-colors cursor-pointer"
+              >
+                <FaTimes className="text-xs" />
+              </button>
+            </div>
+          )}
+
+          {/* Input Form */}
+          <MessageInput
+            onSendMessage={handleSendMessageWithReply}
+            onTyping={onTyping}
+            onToggleSwapOffer={() => setShowSwapOffer(!showSwapOffer)}
+          />
+        </>
+      )}
 
       {/* Swap Offer Creation Modal */}
       {showSwapOffer && (
@@ -1099,11 +1152,10 @@ const ChatWindow = ({
                     <div
                       key={p._id}
                       onClick={() => setSelectedTheirProduct(p)}
-                      className={`flex flex-col items-center text-center p-2 rounded-2xl border-2 cursor-pointer shrink-0 w-24 hover:scale-105 transition-all relative ${
-                        selectedTheirProduct?._id === p._id
+                      className={`flex flex-col items-center text-center p-2 rounded-2xl border-2 cursor-pointer shrink-0 w-24 hover:scale-105 transition-all relative ${selectedTheirProduct?._id === p._id
                           ? "border-[#2E7D32] bg-emerald-50/30 shadow-xs"
                           : "border-gray-150 bg-white"
-                      }`}
+                        }`}
                     >
                       {/* Checkmark Circle on top-right */}
                       {selectedTheirProduct?._id === p._id && (
@@ -1130,11 +1182,10 @@ const ChatWindow = ({
                     <div
                       key={p._id}
                       onClick={() => setSelectedMyProduct(p)}
-                      className={`flex flex-col items-center text-center p-2 rounded-2xl border-2 cursor-pointer shrink-0 w-24 hover:scale-105 transition-all relative ${
-                        selectedMyProduct?._id === p._id
+                      className={`flex flex-col items-center text-center p-2 rounded-2xl border-2 cursor-pointer shrink-0 w-24 hover:scale-105 transition-all relative ${selectedMyProduct?._id === p._id
                           ? "border-[#2E7D32] bg-emerald-50/30 shadow-xs"
                           : "border-gray-150 bg-white"
-                      }`}
+                        }`}
                     >
                       {/* Checkmark Circle on top-right */}
                       {selectedMyProduct?._id === p._id && (
@@ -1186,10 +1237,10 @@ const ChatWindow = ({
             </button>
             <h2 className="text-base font-extrabold text-gray-900">About {otherUser.name.split(" ")[0]}</h2>
           </div>
- 
+
           {/* Profile Content Body */}
           <div className="flex-grow overflow-y-auto p-6 space-y-6 max-w-2xl mx-auto w-full">
-            
+
             {/* Top Section: Avatar, Name & Email */}
             <div className="flex flex-col items-center text-center pb-6 border-b border-gray-200">
               <div className="relative group cursor-pointer mb-4" onClick={() => {
@@ -1244,7 +1295,7 @@ const ChatWindow = ({
               <h4 className="text-sm font-extrabold text-gray-900 text-left uppercase tracking-wider text-gray-400">
                 Listed items ({userProducts.length})
               </h4>
-              
+
               {userProducts.length === 0 ? (
                 <div className="bg-gray-100 rounded-3xl p-8 text-center shadow-xs">
                   <p className="text-xs font-bold text-gray-400">No active listings posted by this member.</p>
@@ -1283,43 +1334,46 @@ const ChatWindow = ({
       )}
 
       {/* WhatsApp-Style Deletion Dialog */}
-      {showDeleteDialog && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-fade-in" onClick={() => setShowDeleteDialog(false)}>
-          <div className="bg-white rounded-2xl shadow-xl max-w-xs w-full p-5 animate-bounce-in text-left border border-gray-150 flex flex-col gap-3" onClick={(e) => e.stopPropagation()}>
-            <h4 className="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-1">Delete Message?</h4>
-            
-            <div className="flex flex-col gap-2">
-              {/* Delete for everyone (only available if all selected messages were sent by current user) */}
-              {selectedMsgIndices.length > 0 && selectedMsgIndices.every((idx) => {
-                const msg = messages[idx];
-                const msgSenderId = msg?.sender?._id || msg?.sender;
-                return msgSenderId === currentUser?._id;
-              }) && (
+      {showDeleteDialog && (() => {
+        const allSelectedAreMine = selectedMsgIndices.length > 0 && selectedMsgIndices.every((idx) => {
+          const msg = messages[idx];
+          const msgSenderId = msg?.sender?._id || msg?.sender;
+          return msgSenderId === currentUser?._id;
+        });
+
+        return (
+          <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-fade-in" onClick={() => setShowDeleteDialog(false)}>
+            <div className="bg-white rounded-[24px] shadow-2xl max-w-sm w-full p-6 animate-bounce-in text-left border border-gray-100 flex flex-col gap-5" onClick={(e) => e.stopPropagation()}>
+              <h4 className="text-sm font-bold text-gray-800">Delete message?</h4>
+
+              <div className="flex justify-end items-center gap-3">
                 <button
-                  onClick={handleDeleteForEveryone}
-                  className="w-full text-left py-2 px-3 hover:bg-red-50 text-red-655 text-xs font-extrabold rounded-xl transition-colors cursor-pointer"
+                  onClick={() => setShowDeleteDialog(false)}
+                  className="px-5 py-2.5 rounded-full border border-gray-250 text-[#00a884] hover:bg-[#00a884]/5 font-bold text-xs cursor-pointer transition-colors"
                 >
-                  Delete for Everyone
+                  Cancel
                 </button>
-              )}
-              
-              <button
-                onClick={handleDeleteForMe}
-                className="w-full text-left py-2 px-3 hover:bg-gray-50 text-gray-700 text-xs font-bold rounded-xl transition-colors cursor-pointer"
-              >
-                Delete for Me
-              </button>
-              
-              <button
-                onClick={() => setShowDeleteDialog(false)}
-                className="w-full text-left py-2 px-3 hover:bg-gray-50 text-gray-450 text-xs font-semibold rounded-xl transition-colors cursor-pointer border-t border-gray-100 mt-1"
-              >
-                Cancel
-              </button>
+                
+                {allSelectedAreMine && (
+                  <button
+                    onClick={handleDeleteForEveryone}
+                    className="px-5 py-2.5 rounded-full bg-[#00a884] hover:bg-[#008f72] text-white font-bold text-xs cursor-pointer transition-colors shadow-2xs"
+                  >
+                    Delete for everyone
+                  </button>
+                )}
+                
+                <button
+                  onClick={handleDeleteForMe}
+                  className="px-5 py-2.5 rounded-full bg-[#00a884] hover:bg-[#008f72] text-white font-bold text-xs cursor-pointer transition-colors shadow-2xs"
+                >
+                  Delete for me
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Image Preview Modal */}
       {previewImage && (

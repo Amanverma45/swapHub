@@ -13,6 +13,7 @@ const Chat = () => {
   const [chats, setChats] = useState([]);
   const [activeChat, setActiveChat] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [typingUsers, setTypingUsers] = useState({});
   const [viewportHeight, setViewportHeight] = useState(
     typeof window !== "undefined" ? window.innerHeight : 600
@@ -331,10 +332,12 @@ const Chat = () => {
 
   const handleSelectChat = async (chat) => {
     setActiveChat(chat);
+    setMessages([]);
+    setIsLoadingMessages(true);
     try {
       const response = await axios.get(`/getMessages/${chat._id}?userId=${currentUser._id}`);
       setMessages(response.data);
-
+      
       // Explicitly emit joinRoom on select click for safety
       if (socket.current) {
         console.log("DEBUG: Explicitly joining room on select click:", chat._id);
@@ -343,6 +346,8 @@ const Chat = () => {
     } catch (error) {
       console.error("Fetch messages error:", error);
       toast.error("Could not load messages");
+    } finally {
+      setIsLoadingMessages(false);
     }
   };
 
@@ -472,6 +477,7 @@ const Chat = () => {
           isTyping={!!typingUsers[activeChat?._id]}
           onTyping={handleTypingStatus}
           onBackToList={() => setActiveChat(null)}
+          isLoading={isLoadingMessages}
         />
       </div>
 
