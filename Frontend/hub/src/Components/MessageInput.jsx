@@ -1,11 +1,12 @@
 import { useState, useRef } from "react";
-import { FaPaperPlane, FaSmile } from "react-icons/fa";
+import { FaPaperPlane, FaSmile, FaCamera } from "react-icons/fa";
 
 const MessageInput = ({ onSendMessage, onTyping }) => {
   const [text, setText] = useState("");
   const [showEmojis, setShowEmojis] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const typingTimeout = useRef(null);
+  const fileInputRef = useRef(null);
 
   const quickEmojis = ["🤝", "😊", "👍", "💡", "📦", "🔥", "❓", "✅"];
 
@@ -47,8 +48,23 @@ const MessageInput = ({ onSendMessage, onTyping }) => {
     setText((prev) => prev + emoji);
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        onSendMessage(reader.result);
+      }
+    };
+    reader.onerror = (error) => console.error("Error reading file:", error);
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="p-4 bg-white border-t border-gray-100 relative w-full">
+    <form onSubmit={handleSubmit} className="p-4 bg-transparent border-t-0 relative w-full">
       {/* Emoji Selector Panel */}
       {showEmojis && (
         <div className="absolute bottom-18 left-4 bg-white/95 backdrop-blur-md border border-gray-100 rounded-2xl shadow-xl p-3 flex gap-2 z-50 animate-bounce-in">
@@ -65,7 +81,7 @@ const MessageInput = ({ onSendMessage, onTyping }) => {
         </div>
       )}
 
-      <div className="w-full flex items-center gap-3 bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-2 focus-within:bg-white focus-within:border-[#2E7D32] focus-within:ring-4 focus-within:ring-[#2E7D32]/10 transition-all duration-200">
+      <div className="w-full flex items-center gap-3 bg-white border border-gray-200 rounded-2xl px-4 py-2 focus-within:border-[#2E7D32] focus-within:ring-4 focus-within:ring-[#2E7D32]/10 transition-all duration-200">
         {/* Emoji Button */}
         <button
           type="button"
@@ -83,6 +99,23 @@ const MessageInput = ({ onSendMessage, onTyping }) => {
           onChange={handleInputChange}
           placeholder="Message"
           className="flex-1 min-w-0 bg-transparent text-gray-800 text-sm outline-none border-none py-1.5"
+        />
+
+        {/* Camera Upload Button */}
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          className="text-gray-400 hover:text-[#2E7D32] transition-colors p-1 cursor-pointer shrink-0"
+          title="Send Photo/Video"
+        >
+          <FaCamera className="text-xl" />
+        </button>
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          accept="image/*,video/*"
+          className="hidden"
         />
 
         {/* Send Button */}

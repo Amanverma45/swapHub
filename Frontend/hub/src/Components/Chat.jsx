@@ -17,10 +17,7 @@ const Chat = () => {
   const [viewportHeight, setViewportHeight] = useState(
     typeof window !== "undefined" ? window.innerHeight : 600
   );
-  const [viewportOffsetTop, setViewportOffsetTop] = useState(0);
-  const [profilePreviewUser, setProfilePreviewUser] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
-  const [previewUserProducts, setPreviewUserProducts] = useState([]);
   
   const socket = useRef(null);
   const location = useLocation();
@@ -33,19 +30,15 @@ const Chat = () => {
   const chatsRef = useRef([]);
   const activeChatRef = useRef(null);
 
-  // Fetch listed products of user being previewed in direct list preview
-  useEffect(() => {
-    if (profilePreviewUser?._id) {
-      axios.get("/getProduct")
-        .then((res) => {
-          const filtered = res.data.filter((p) => p.owner === profilePreviewUser._id);
-          setPreviewUserProducts(filtered);
-        })
-        .catch((err) => console.error("Error fetching preview user products:", err));
+  const [viewportOffsetTop, setViewportOffsetTop] = useState(0);
+
+  const handleViewAvatar = (profileImage) => {
+    if (profileImage) {
+      setPreviewImage(profileImage);
     } else {
-      setPreviewUserProducts([]);
+      toast.error("No profile photo uploaded by this user");
     }
-  }, [profilePreviewUser?._id]);
+  };
 
   useEffect(() => {
     chatsRef.current = chats;
@@ -457,14 +450,14 @@ const Chat = () => {
       }}
       className="fixed inset-0 w-full bg-white overflow-hidden flex flex-col md:flex-row z-50 transition-transform duration-100 ease-out"
     >
-      <div className={`h-full md:w-80 md:border-r border-gray-100 shrink-0 ${activeChat ? "hidden md:flex" : "w-full flex"}`}>
+      <div className={`h-full md:w-80 md:border-r border-gray-200/80 shrink-0 shadow-xs ${activeChat ? "hidden md:flex" : "w-full flex"}`}>
         <ChatList
           chats={chats}
           activeChat={activeChat}
           onSelectChat={handleSelectChat}
           currentUser={currentUser}
           onExitChat={() => navigate("/welcome")}
-          onViewProfile={setProfilePreviewUser}
+          onViewAvatar={handleViewAvatar}
         />
       </div>
       <div className={`h-full flex-grow min-w-0 ${activeChat ? "w-full flex flex-col" : "hidden md:flex"}`}>
@@ -481,116 +474,6 @@ const Chat = () => {
           onBackToList={() => setActiveChat(null)}
         />
       </div>
-
-      {/* Read-Only Member Profile Overlay (Chat List direct view) */}
-      {profilePreviewUser && (
-        <div className="absolute inset-0 bg-gray-50 flex flex-col z-50 animate-fade-in text-left">
-          {/* Profile Header */}
-          <div className="h-16 border-b border-gray-100 bg-white px-4 flex items-center gap-3 shadow-xs shrink-0">
-            <button
-              onClick={() => setProfilePreviewUser(null)}
-              className="text-gray-500 hover:text-[#2E7D32] p-1.5 rounded-xl hover:bg-gray-100 cursor-pointer flex items-center justify-center shrink-0"
-              title="Back"
-            >
-              <FaArrowLeft className="text-base" />
-            </button>
-            <h2 className="text-base font-extrabold text-gray-900">About {profilePreviewUser.name.split(" ")[0]}</h2>
-          </div>
-
-          {/* Profile Content Body */}
-          <div className="flex-grow overflow-y-auto p-6 space-y-6 max-w-2xl mx-auto w-full">
-            
-            {/* Top Section: Avatar, Name & Email */}
-            <div className="flex flex-col items-center text-center pb-6 border-b border-gray-200">
-              <div className="relative group cursor-pointer mb-4" onClick={() => {
-                if (profilePreviewUser.profileImage) {
-                  setPreviewImage(profilePreviewUser.profileImage);
-                } else {
-                  toast.error("No profile photo uploaded by this user");
-                }
-              }}>
-                {profilePreviewUser.profileImage ? (
-                  <img
-                    src={profilePreviewUser.profileImage}
-                    alt={profilePreviewUser.name}
-                    className="w-24 h-24 rounded-full object-cover border-2 border-emerald-500 shadow-md group-hover:scale-105 transition-transform duration-300"
-                  />
-                ) : (
-                  <div className="w-24 h-24 rounded-full flex items-center justify-center text-white text-3xl font-extrabold bg-gradient-to-br from-emerald-400 to-teal-500 shadow-lg">
-                    {profilePreviewUser.name?.split(" ").map((p) => p[0]).join("").toUpperCase().slice(0, 2) || "?"}
-                  </div>
-                )}
-                {profilePreviewUser.profileImage && (
-                  <div className="absolute inset-0 rounded-full bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold">
-                    🔍 View Photo
-                  </div>
-                )}
-              </div>
-
-              <h3 className="text-xl font-extrabold text-gray-900 leading-tight">{profilePreviewUser.name}</h3>
-              <p className="text-xs text-gray-500 mt-1 font-semibold">{profilePreviewUser.email}</p>
-            </div>
-
-            {/* Middle Section: Phone & Location Details */}
-            <div className="space-y-4 pb-6 border-b border-gray-200">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="text-left border-b border-gray-100 sm:border-b-0 pb-3 sm:pb-0">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Phone Number</span>
-                  <p className="text-sm font-extrabold text-gray-800 mt-0.5">
-                    {profilePreviewUser.phone || "Not Shared"}
-                  </p>
-                </div>
-                <div className="text-left">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Location / City</span>
-                  <p className="text-sm font-extrabold text-gray-800 mt-0.5">
-                    {profilePreviewUser.location || "Not Specified"}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Section: Listed Products */}
-            <div className="space-y-4">
-              <h4 className="text-sm font-extrabold text-gray-900 text-left uppercase tracking-wider text-gray-400">
-                Listed items ({previewUserProducts.length})
-              </h4>
-              
-              {previewUserProducts.length === 0 ? (
-                <div className="bg-gray-100 rounded-3xl p-8 text-center shadow-xs">
-                  <p className="text-xs font-bold text-gray-400">No active listings posted by this member.</p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                  {previewUserProducts.map((p) => (
-                    <div
-                      key={p._id}
-                      onClick={() => {
-                        setProfilePreviewUser(null);
-                        navigate(`/product/${p._id}`);
-                      }}
-                      className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all p-3 cursor-pointer text-left"
-                    >
-                      <div className="w-full h-24 sm:h-28 rounded-xl bg-gray-50 overflow-hidden border border-gray-50">
-                        <img
-                          src={p.image}
-                          alt={p.productName}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <h5 className="text-xs font-bold text-gray-900 mt-2 truncate">
-                        {p.productName}
-                      </h5>
-                      <span className="text-[10px] font-semibold text-gray-400 mt-0.5 inline-block">
-                        {p.category}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Direct Zoom Image Modal */}
       {previewImage && (

@@ -8,9 +8,15 @@ import toast from "react-hot-toast";
 const DEFAULT_AVATAR = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
 
 // WhatsApp-style double check marks SVG
-const DoubleCheckSVG = ({ isRead, className }) => (
+const DoubleCheckSVG = ({ isRead, className, isMe }) => (
   <svg
-    className={`${className} ${isRead ? "text-sky-400" : "text-gray-400"}`}
+    className={`${className} ${
+      isRead
+        ? "text-sky-400"
+        : isMe
+          ? "text-white/60"
+          : "text-gray-400"
+    }`}
     width="15"
     height="11"
     viewBox="0 0 15 11"
@@ -33,6 +39,46 @@ const DoubleCheckSVG = ({ isRead, className }) => (
     />
   </svg>
 );
+
+// Helper to format date headers (Today, Yesterday, Day Name, or DD-Month-YYYY)
+const getMessageDateHeader = (dateStr) => {
+  if (!dateStr) return null;
+  const date = new Date(dateStr);
+  const today = new Date();
+  
+  const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const msgMidnight = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  
+  const diffTime = todayMidnight.getTime() - msgMidnight.getTime();
+  const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+  
+  if (diffDays === 0) {
+    return "Today";
+  } else if (diffDays === 1) {
+    return "Yesterday";
+  } else if (diffDays < 7) {
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    return days[date.getDay()];
+  } else {
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  }
+};
+
+// Helper to format message time (e.g., 5.02 pm instead of 05:02 PM)
+const formatMessageTime = (dateStr) => {
+  if (!dateStr) return "";
+  const date = new Date(dateStr);
+  let hours = date.getHours();
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const ampm = hours >= 12 ? "pm" : "am";
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  return `${hours}.${minutes} ${ampm}`;
+};
 
 // Preset wallpapers (colors, gradients, devotional and nature images)
 const WALLPAPER_PRESETS = [
@@ -63,6 +109,7 @@ const MessageItem = ({
   handleSaveEdit,
   handleDelete,
   setReplyingTo,
+  setPreviewImage,
 }) => {
   const [dragOffset, setDragOffset] = useState(0);
   const touchStart = useRef(0);
@@ -74,19 +121,22 @@ const MessageItem = ({
   };
 
   const handleTouchMove = (e) => {
-    if (!isSwiping.current || editingIndex === index) return;
+    if (!isSwiping.current) return;
     const diff = e.touches[0].clientX - touchStart.current;
-    // Only allow swipe right for replying
-    if (diff > 0 && diff < 100) {
+    if (diff > 0 && diff < 80) {
       setDragOffset(diff);
     }
   };
 
   const handleTouchEnd = () => {
     isSwiping.current = false;
-    if (dragOffset > 50) {
+    if (dragOffset > 45) {
       setReplyingTo({
-        text: msg.text,
+        text: msg.text.startsWith("data:image/")
+          ? "📷 Photo"
+          : msg.text.startsWith("data:video/")
+          ? "🎥 Video"
+          : msg.text,
         senderName: isMe ? "You" : (senderName ? senderName.split(" ")[0] : ""),
       });
     }
@@ -154,10 +204,10 @@ const MessageItem = ({
 
             {/* Bubble Content */}
             <div
-              className={`px-4 py-2.5 rounded-2xl text-sm shadow-2xs break-words w-full ${
+              className={`px-4 py-2.5 rounded-2xl text-sm shadow-2xs break-words w-fit max-w-full relative ${
                 isMe
-                  ? "bg-gradient-to-br from-[#2E7D32] to-[#1E5621] text-white rounded-tr-none"
-                  : "bg-white text-gray-800 border border-gray-100 rounded-tl-none"
+                  ? "bg-gradient-to-br from-[#2E7D32] to-[#1E5621] text-white"
+                  : "bg-white text-gray-800 border border-gray-100"
               }`}
             >
               {/* Quoted Message (if replying) */}
@@ -203,7 +253,27 @@ const MessageItem = ({
                   </div>
                 </div>
               ) : (
-                <p className="whitespace-pre-wrap text-left leading-relaxed break-all">{msg.text}</p>
+                <>
+                  {msg.text.startsWith("data:image/") ? (
+                    <div className="relative rounded-xl overflow-hidden cursor-pointer max-w-[240px] sm:max-w-[300px]" onClick={() => setPreviewImage(msg.text)}>
+                      <img src={msg.text} alt="Shared Photo" className="w-full h-auto object-cover max-h-60 rounded-xl" />
+                    </div>
+                  ) : msg.text.startsWith("data:video/") ? (
+                    <div className="relative rounded-xl overflow-hidden max-w-[245px] sm:max-w-[320px] bg-black">
+                      <video src={msg.text} controls className="w-full h-auto max-h-60 rounded-xl" />
+                    </div>
+                  ) : (
+                    <p className="whitespace-pre-wrap text-left leading-relaxed break-all inline">{msg.text}</p>
+                  )}
+                  
+                  {/* Message Timestamp and Read Status inside the bubble */}
+                  <span className={`inline-flex items-center gap-0.5 text-[9px] font-bold select-none float-right ml-2.5 mt-2.5 -mr-1 -mb-1 translate-y-[3px] opacity-75 ${isMe ? "text-emerald-100/90" : "text-gray-400"}`}>
+                    {formatMessageTime(msg.createdAt)}
+                    {isMe && (
+                      <DoubleCheckSVG isRead={msg.isRead} isMe={isMe} className="shrink-0 scale-90" />
+                    )}
+                  </span>
+                </>
               )}
             </div>
 
@@ -222,21 +292,9 @@ const MessageItem = ({
 
           </div>
 
-          {/* Message Timestamp and Read Status */}
-          <span className="text-[9px] text-gray-400 font-medium mt-1 flex items-center gap-1.5 px-1 select-none">
-            <FaRegClock className="text-[8px]" />
-            {new Date(msg.createdAt || Date.now()).toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-            {isMe && (
-              <DoubleCheckSVG isRead={msg.isRead} className="ml-1 shrink-0" />
-            )}
-          </span>
-
-        </div>
       </div>
     </div>
+  </div>
   );
 };
 
@@ -425,9 +483,12 @@ const ChatWindow = ({
   };
 
   return (
-    <div className="flex-1 w-full min-w-0 h-full flex flex-col bg-slate-50/40 relative overflow-hidden">
+    <div 
+      className="flex-1 w-full min-w-0 h-full flex flex-col bg-slate-50/40 relative overflow-hidden"
+      style={messageListStyle}
+    >
       {/* Header */}
-      <div className="h-16 border-b border-gray-100 bg-white px-4 flex items-center justify-between shadow-xs shrink-0 z-10">
+      <div className="h-16 border-b border-gray-200/60 bg-white px-4 flex items-center justify-between shadow-xs shrink-0 z-10">
         <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setShowProfile(true)} title="View Profile">
           {onBackToList && (
             <button
@@ -553,7 +614,6 @@ const ChatWindow = ({
       {/* Message List */}
       <div
         className="flex-1 overflow-y-auto p-4 space-y-4"
-        style={messageListStyle}
       >
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center p-8 h-full text-center">
@@ -561,45 +621,58 @@ const ChatWindow = ({
             <h3 className="text-sm font-bold text-gray-800 mt-2">Say Hello to {otherUser.name}!</h3>
             <p className="text-xs text-gray-500 mt-1 max-w-[240px]">Start the conversation about exchanging items.</p>
           </div>
-        ) : (
-          messages.map((msg, index) => {
+        ) : (() => {
+          let lastDateHeader = null;
+          return messages.map((msg, index) => {
             const isMe = (msg.sender?._id || msg.sender) === currentUser?._id;
             const senderName = msg.sender?.name || (isMe ? currentUser?.name : otherUser.name);
+            const dateHeader = getMessageDateHeader(msg.createdAt);
+            const showDateDivider = dateHeader !== lastDateHeader;
+            lastDateHeader = dateHeader;
 
             return (
-              <MessageItem
-                key={msg._id || index}
-                msg={msg}
-                index={index}
-                isMe={isMe}
-                senderName={senderName}
-                editingIndex={editingIndex}
-                editText={editText}
-                setEditText={setEditText}
-                handleStartEdit={handleStartEdit}
-                handleSaveEdit={handleSaveEdit}
-                handleDelete={handleDelete}
-                setReplyingTo={setReplyingTo}
-              />
+              <div key={msg._id || index} className="w-full flex flex-col shrink-0">
+                {showDateDivider && (
+                  <div className="flex justify-center my-3 shrink-0">
+                    <span className="bg-white/85 backdrop-blur-xs text-gray-500 text-[10px] font-bold px-3 py-1 rounded-full shadow-xs border border-gray-200/50 uppercase tracking-wide">
+                      {dateHeader}
+                    </span>
+                  </div>
+                )}
+                <MessageItem
+                  msg={msg}
+                  index={index}
+                  isMe={isMe}
+                  senderName={senderName}
+                  editingIndex={editingIndex}
+                  editText={editText}
+                  setEditText={setEditText}
+                  handleStartEdit={handleStartEdit}
+                  handleSaveEdit={handleSaveEdit}
+                  handleDelete={handleDelete}
+                  setReplyingTo={setReplyingTo}
+                  setPreviewImage={setPreviewImage}
+                />
+              </div>
             );
-          })
-        )}
+          });
+        })()}
         <div ref={messagesEndRef} />
       </div>
-
+ 
       {/* Typing Indicator */}
       {isTyping && (
-        <div className="flex items-center gap-1.5 text-xs text-gray-400 font-semibold px-6 py-1.5 animate-pulse shrink-0 bg-white/40">
+        <div className="flex items-center gap-1.5 text-xs text-gray-400 font-semibold px-6 py-1.5 animate-pulse shrink-0 bg-transparent">
           <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '0ms' }} />
           <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '150ms' }} />
           <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '300ms' }} />
           <span className="ml-1">{otherUser.name.split(" ")[0]} is typing...</span>
         </div>
       )}
-
+  
       {/* Replying Preview Bar */}
       {replyingTo && (
-        <div className="px-4 py-2 bg-gray-100 border-t border-gray-200 flex items-center justify-between animate-fade-in shrink-0">
+        <div className="px-4 py-2 bg-white/50 backdrop-blur-md border-t border-white/20 flex items-center justify-between animate-fade-in shrink-0">
           <div className="border-l-4 border-[#2E7D32] pl-3 py-1 text-left">
             <p className="text-[10px] font-bold text-[#2E7D32]">Replying to {replyingTo.senderName}</p>
             <p className="text-xs text-gray-600 line-clamp-1 truncate">{replyingTo.text}</p>

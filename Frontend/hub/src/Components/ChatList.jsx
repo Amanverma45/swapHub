@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FaSearch, FaComments } from "react-icons/fa";
 
-const ChatList = ({ chats, activeChat, onSelectChat, currentUser, onExitChat, onViewProfile }) => {
+const ChatList = ({ chats, activeChat, onSelectChat, currentUser, onExitChat, onViewAvatar }) => {
   const [search, setSearch] = useState("");
 
   const getInitialsAvatar = (name) => {
@@ -73,6 +73,9 @@ const ChatList = ({ chats, activeChat, onSelectChat, currentUser, onExitChat, on
             const lastMsg = chat.messages?.[chat.messages.length - 1];
             const isActive = activeChat?._id === chat._id;
             const { initials, gradient } = getInitialsAvatar(otherUser.name);
+            const unreadCount = chat.messages
+              ? chat.messages.filter((msg) => msg.sender !== currentUser?._id && !msg.isRead).length
+              : 0;
 
             return (
               <div
@@ -83,11 +86,11 @@ const ChatList = ({ chats, activeChat, onSelectChat, currentUser, onExitChat, on
                     : "border-l-transparent bg-white"
                 }`}
               >
-                {/* Left Side: Clickable Avatar to View Profile */}
+                {/* Left Side: Clickable Avatar to Zoom Photo */}
                 <div
                   onClick={(e) => {
                     e.stopPropagation();
-                    onViewProfile && onViewProfile(otherUser);
+                    onViewAvatar && onViewAvatar(otherUser.profileImage || null);
                   }}
                   className={`w-10 h-10 rounded-full shrink-0 flex items-center justify-center bg-gradient-to-br ${gradient} text-white font-bold text-xs shadow-xs hover:scale-105 transition-transform cursor-pointer relative z-10`}
                 >
@@ -121,16 +124,23 @@ const ChatList = ({ chats, activeChat, onSelectChat, currentUser, onExitChat, on
                     )}
                   </div>
                   <p className="text-[11px] text-gray-400 truncate mt-0.5">{otherUser.email}</p>
-                  <p className="text-xs text-gray-500 font-semibold truncate mt-1.5 flex items-center gap-1">
-                    {lastMsg ? (
-                      <>
-                        {lastMsg.sender === currentUser?._id && <span className="text-[#2E7D32]">You:</span>}
-                        <span>{lastMsg.text}</span>
-                      </>
-                    ) : (
-                      <span className="text-gray-400 italic">No messages yet</span>
+                  <div className="flex items-center justify-between mt-1.5 gap-2">
+                    <p className="text-xs text-gray-500 font-semibold truncate flex items-center gap-1 min-w-0 flex-1">
+                      {lastMsg ? (
+                        <>
+                          {lastMsg.sender === currentUser?._id && <span className="text-[#2E7D32] shrink-0">You:</span>}
+                          <span className="truncate">{lastMsg.text}</span>
+                        </>
+                      ) : (
+                        <span className="text-gray-400 italic">No messages yet</span>
+                      )}
+                    </p>
+                    {unreadCount > 0 && (
+                      <span className="w-5 h-5 rounded-full bg-[#2E7D32] text-white font-extrabold text-[10px] flex items-center justify-center shrink-0 shadow-xs animate-pulse">
+                        {unreadCount}
+                      </span>
                     )}
-                  </p>
+                  </div>
                 </div>
               </div>
             );
