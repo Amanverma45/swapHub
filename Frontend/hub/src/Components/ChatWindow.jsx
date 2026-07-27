@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaTrashAlt, FaPen, FaTimes, FaExchangeAlt, FaRegClock, FaArrowLeft, FaReply, FaEllipsisV, FaCamera } from "react-icons/fa";
+import { FaTrashAlt, FaPen, FaTimes, FaExchangeAlt, FaRegClock, FaArrowLeft, FaReply, FaEllipsisV, FaCamera, FaCheckSquare } from "react-icons/fa";
 import MessageInput from "./MessageInput";
 import axios from "../utils/axiosInstance";
 import toast from "react-hot-toast";
@@ -69,15 +69,28 @@ const getMessageDateHeader = (dateStr) => {
 };
 
 // Helper to format message time (e.g., 5.02 pm instead of 05:02 PM)
-const formatMessageTime = (dateStr) => {
-  if (!dateStr) return "";
-  const date = new Date(dateStr);
+const formatMessageTime = (dateString) => {
+  if (!dateString) return "";
+  const date = new Date(dateString);
   let hours = date.getHours();
   const minutes = String(date.getMinutes()).padStart(2, "0");
   const ampm = hours >= 12 ? "pm" : "am";
   hours = hours % 12;
   hours = hours ? hours : 12;
   return `${hours}.${minutes} ${ampm}`;
+};
+
+const getMessagePreviewText = (text) => {
+  if (!text) return "";
+  if (text.startsWith('{"type":"swapOffer"')) {
+    try {
+      const offer = JSON.parse(text);
+      return `⇄ Swap Proposal: ${offer.offerProductName} for ${offer.targetProductName}`;
+    } catch (e) {
+      return text;
+    }
+  }
+  return text;
 };
 
 // Preset wallpapers (colors, gradients, devotional and nature images)
@@ -111,17 +124,30 @@ const MessageItem = ({
   setReplyingTo,
   setPreviewImage,
   onUpdateSwapStatus,
+  isSelected,
+  onSelectMessage,
 }) => {
   const [dragOffset, setDragOffset] = useState(0);
   const touchStart = useRef(0);
   const isSwiping = useRef(false);
+  const displaySenderName = isMe ? "You" : (senderName ? senderName.split(" ")[0] : "");
+  const isSwapOffer = msg.text.startsWith('{"type":"swapOffer"');
+  const longPressTimeout = useRef(null);
 
   const handleTouchStart = (e) => {
     touchStart.current = e.touches[0].clientX;
     isSwiping.current = true;
+    if (longPressTimeout.current) clearTimeout(longPressTimeout.current);
+    longPressTimeout.current = setTimeout(() => {
+      onSelectMessage();
+    }, 600);
   };
 
   const handleTouchMove = (e) => {
+    if (longPressTimeout.current) {
+      clearTimeout(longPressTimeout.current);
+      longPressTimeout.current = null;
+    }
     if (!isSwiping.current) return;
     const diff = e.touches[0].clientX - touchStart.current;
     if (diff > 0 && diff < 80) {
@@ -130,6 +156,10 @@ const MessageItem = ({
   };
 
   const handleTouchEnd = () => {
+    if (longPressTimeout.current) {
+      clearTimeout(longPressTimeout.current);
+      longPressTimeout.current = null;
+    }
     isSwiping.current = false;
     if (dragOffset > 45) {
       setReplyingTo({
@@ -144,15 +174,29 @@ const MessageItem = ({
     setDragOffset(0);
   };
 
-  const displaySenderName = isMe ? "You" : (senderName ? senderName.split(" ")[0] : "");
-  const isSwapOffer = msg.text.startsWith('{"type":"swapOffer"');
+  const handleMouseDown = () => {
+    if (longPressTimeout.current) clearTimeout(longPressTimeout.current);
+    longPressTimeout.current = setTimeout(() => {
+      onSelectMessage();
+    }, 600);
+  };
+
+  const handleMouseUp = () => {
+    if (longPressTimeout.current) {
+      clearTimeout(longPressTimeout.current);
+      longPressTimeout.current = null;
+    }
+  };
 
   return (
     <div
-      className="w-full relative group animate-fade-in"
+      className={`w-full relative group animate-fade-in py-1.5 transition-colors duration-150 ${isSelected ? "bg-[#2E7D32]/10" : ""}`}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onDoubleClick={onSelectMessage}
     >
       {/* Swipe Background Reply Icon */}
       {dragOffset > 10 && (
@@ -179,7 +223,7 @@ const MessageItem = ({
             
             {/* Message Action Menu (Visible on hover for Own messages) */}
             {isMe && editingIndex !== index && (
-              <div className="opacity-0 group-hover:opacity-100 flex gap-1.5 transition-opacity bg-white/95 backdrop-blur-md px-2 py-1 rounded-xl shadow-md border border-gray-100 absolute -left-20 z-20">
+              <div className="opacity-0 group-hover:opacity-100 flex gap-1.5 transition-opacity bg-white/95 backdrop-blur-md px-2 py-1 rounded-xl shadow-md border border-gray-100 absolute -left-24 z-20">
                 <button
                   onClick={() => setReplyingTo({ text: msg.text, senderName: "You" })}
                   className="text-gray-400 hover:text-blue-500 transition-colors p-0.5 cursor-pointer"
@@ -200,6 +244,13 @@ const MessageItem = ({
                   title="Delete"
                 >
                   <FaTrashAlt className="text-[10px]" />
+                </button>
+                <button
+                  onClick={onSelectMessage}
+                  className="text-gray-400 hover:text-emerald-600 transition-colors p-0.5 cursor-pointer"
+                  title="Select Message"
+                >
+                  <FaCheckSquare className="text-[10px]" />
                 </button>
               </div>
             )}
@@ -223,7 +274,7 @@ const MessageItem = ({
                     {msg.replyTo.senderName}
                   </p>
                   <p className="line-clamp-2 truncate opacity-85">
-                    {msg.replyTo.text}
+                    {getMessagePreviewText(msg.replyTo.text)}
                   </p>
                 </div>
               )}
@@ -351,13 +402,20 @@ const MessageItem = ({
 
             {/* Message Action Menu (Visible on hover for Other messages) */}
             {!isMe && (
-              <div className="opacity-0 group-hover:opacity-100 flex gap-1.5 transition-opacity bg-white/95 backdrop-blur-md px-2 py-1 rounded-xl shadow-md border border-gray-100 absolute -right-8 z-20">
+              <div className="opacity-0 group-hover:opacity-100 flex gap-1.5 transition-opacity bg-white/95 backdrop-blur-md px-2 py-1 rounded-xl shadow-md border border-gray-100 absolute -right-14 z-20">
                 <button
                   onClick={() => setReplyingTo({ text: msg.text, senderName: displaySenderName })}
                   className="text-gray-400 hover:text-blue-500 transition-colors p-0.5 cursor-pointer"
                   title="Reply"
                 >
                   <FaReply className="text-[10px]" />
+                </button>
+                <button
+                  onClick={onSelectMessage}
+                  className="text-gray-400 hover:text-emerald-600 transition-colors p-0.5 cursor-pointer"
+                  title="Select Message"
+                >
+                  <FaCheckSquare className="text-[10px]" />
                 </button>
               </div>
             )}
@@ -389,6 +447,11 @@ const ChatWindow = ({
   const [showProfile, setShowProfile] = useState(false);
   const [userProducts, setUserProducts] = useState([]);
   const [previewImage, setPreviewImage] = useState(null);
+
+  // Selected Message & Deletion States
+  const [selectedMsgIndex, setSelectedMsgIndex] = useState(null);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [deletedMsgIds, setDeletedMsgIds] = useState([]);
 
   // Swap Offer States
   const [showSwapOffer, setShowSwapOffer] = useState(false);
@@ -460,6 +523,15 @@ const ChatWindow = ({
     setUserProducts([]);
   }, [activeChat?._id]);
 
+  // Load deleted for me messages on activeChat load
+  useEffect(() => {
+    if (activeChat?._id) {
+      const saved = JSON.parse(localStorage.getItem(`deleted_msgs_${activeChat._id}`) || "[]");
+      setDeletedMsgIds(saved);
+      setSelectedMsgIndex(null);
+    }
+  }, [activeChat?._id]);
+
   // Fetch listed products when swap offer is toggled open
   useEffect(() => {
     if (showSwapOffer && currentUser?._id && otherUser?._id) {
@@ -518,6 +590,46 @@ const ChatWindow = ({
     if (window.confirm("Are you sure you want to delete this message?")) {
       onDeleteMessage(index);
     }
+  };
+
+  const handleDeleteForEveryone = () => {
+    if (selectedMsgIndex === null) return;
+    onDeleteMessage(selectedMsgIndex);
+    setShowDeleteDialog(false);
+    setSelectedMsgIndex(null);
+  };
+
+  const handleDeleteForMe = () => {
+    if (selectedMsgIndex === null) return;
+    const msg = messages[selectedMsgIndex];
+    const msgKey = msg._id || selectedMsgIndex;
+    
+    const updated = [...deletedMsgIds, msgKey];
+    setDeletedMsgIds(updated);
+    localStorage.setItem(`deleted_msgs_${activeChat._id}`, JSON.stringify(updated));
+    
+    setShowDeleteDialog(false);
+    setSelectedMsgIndex(null);
+    toast.success("Message deleted for you");
+  };
+
+  const handleCopySelectedMessage = () => {
+    if (selectedMsgIndex === null) return;
+    const msg = messages[selectedMsgIndex];
+    
+    let textToCopy = msg.text;
+    if (msg.text.startsWith('{"type":"swapOffer"')) {
+      try {
+        const offer = JSON.parse(msg.text);
+        textToCopy = `Swap Proposal: ${offer.offerProductName} for ${offer.targetProductName}`;
+      } catch (e) {
+        textToCopy = msg.text;
+      }
+    }
+    
+    navigator.clipboard.writeText(textToCopy);
+    toast.success("Message copied!");
+    setSelectedMsgIndex(null);
   };
 
   const handleClearChat = () => {
@@ -684,8 +796,35 @@ const ChatWindow = ({
           </div>
         </div>
 
-        {/* 3-Dot Options Dropdown Menu */}
-        <div className="relative" ref={menuRef}>
+        {/* Header Right Actions */}
+        <div className="flex items-center gap-3">
+          {/* Selected Message Actions */}
+          {selectedMsgIndex !== null && (
+            <div className="flex items-center gap-3.5 mr-2 animate-fade-in shrink-0">
+              <button
+                onClick={handleCopySelectedMessage}
+                className="text-xs font-extrabold text-gray-500 hover:text-[#2E7D32] transition-colors cursor-pointer"
+              >
+                Copy
+              </button>
+              <button
+                onClick={() => setShowDeleteDialog(true)}
+                className="text-xs font-extrabold text-red-500 hover:text-red-700 transition-colors cursor-pointer"
+              >
+                Delete
+              </button>
+              <button
+                onClick={() => setSelectedMsgIndex(null)}
+                className="text-xs font-extrabold text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <div className="h-4 w-px bg-gray-200" />
+            </div>
+          )}
+
+          {/* 3-Dot Options Dropdown Menu */}
+          <div className="relative" ref={menuRef}>
           <button
             onClick={() => {
               setShowMenu(!showMenu);
@@ -773,6 +912,7 @@ const ChatWindow = ({
           )}
         </div>
       </div>
+    </div>
 
       {/* Message List */}
       <div
@@ -787,6 +927,9 @@ const ChatWindow = ({
         ) : (() => {
           let lastDateHeader = null;
           return messages.map((msg, index) => {
+            const msgKey = msg._id || index;
+            if (deletedMsgIds.includes(msgKey)) return null;
+
             const isMe = (msg.sender?._id || msg.sender) === currentUser?._id;
             const senderName = msg.sender?.name || (isMe ? currentUser?.name : otherUser.name);
             const dateHeader = getMessageDateHeader(msg.createdAt);
@@ -816,6 +959,8 @@ const ChatWindow = ({
                   setReplyingTo={setReplyingTo}
                   setPreviewImage={setPreviewImage}
                   onUpdateSwapStatus={(status) => handleUpdateSwapOfferStatus(msg, index, status)}
+                  isSelected={selectedMsgIndex === index}
+                  onSelectMessage={() => setSelectedMsgIndex(index)}
                 />
               </div>
             );
@@ -839,7 +984,9 @@ const ChatWindow = ({
         <div className="px-4 py-2 bg-white/50 backdrop-blur-md border-t border-white/20 flex items-center justify-between animate-fade-in shrink-0">
           <div className="border-l-4 border-[#2E7D32] pl-3 py-1 text-left">
             <p className="text-[10px] font-bold text-[#2E7D32]">Replying to {replyingTo.senderName}</p>
-            <p className="text-xs text-gray-600 line-clamp-1 truncate">{replyingTo.text}</p>
+            <p className="text-xs text-gray-600 line-clamp-1 truncate">
+              {getMessagePreviewText(replyingTo.text)}
+            </p>
           </div>
           <button
             onClick={() => setReplyingTo(null)}
@@ -1060,6 +1207,41 @@ const ChatWindow = ({
                   ))}
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* WhatsApp-Style Deletion Dialog */}
+      {showDeleteDialog && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-fade-in" onClick={() => setShowDeleteDialog(false)}>
+          <div className="bg-white rounded-2xl shadow-xl max-w-xs w-full p-5 animate-bounce-in text-left border border-gray-150 flex flex-col gap-3" onClick={(e) => e.stopPropagation()}>
+            <h4 className="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-1">Delete Message?</h4>
+            
+            <div className="flex flex-col gap-2">
+              {/* Delete for everyone (only available if we are the sender) */}
+              {selectedMsgIndex !== null && (messages[selectedMsgIndex]?.sender?._id || messages[selectedMsgIndex]?.sender) === currentUser?._id && (
+                <button
+                  onClick={handleDeleteForEveryone}
+                  className="w-full text-left py-2 px-3 hover:bg-red-50 text-red-655 text-xs font-extrabold rounded-xl transition-colors cursor-pointer"
+                >
+                  Delete for Everyone
+                </button>
+              )}
+              
+              <button
+                onClick={handleDeleteForMe}
+                className="w-full text-left py-2 px-3 hover:bg-gray-50 text-gray-700 text-xs font-bold rounded-xl transition-colors cursor-pointer"
+              >
+                Delete for Me
+              </button>
+              
+              <button
+                onClick={() => setShowDeleteDialog(false)}
+                className="w-full text-left py-2 px-3 hover:bg-gray-50 text-gray-450 text-xs font-semibold rounded-xl transition-colors cursor-pointer border-t border-gray-100 mt-1"
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
