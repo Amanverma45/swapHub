@@ -145,6 +145,7 @@ const MessageItem = ({
   };
 
   const displaySenderName = isMe ? "You" : (senderName ? senderName.split(" ")[0] : "");
+  const isSwapOffer = msg.text.startsWith('{"type":"swapOffer"');
 
   return (
     <div
@@ -167,14 +168,14 @@ const MessageItem = ({
         className={`flex ${isMe ? "justify-end" : "justify-start"} w-full transition-transform duration-100 ease-out`}
         style={{ transform: `translateX(${dragOffset}px)` }}
       >
-        <div className={`flex flex-col max-w-[70%] sm:max-w-[50%] ${isMe ? "items-end" : "items-start"} min-w-[80px]`}>
+        <div className={`flex flex-col ${isSwapOffer ? "max-w-[90%] sm:max-w-[70%]" : "max-w-[70%] sm:max-w-[50%]"} ${isMe ? "items-end" : "items-start"} min-w-[80px]`}>
           
           {/* Sender Name */}
           <span className="text-[10px] text-gray-400 font-semibold mb-0.5 px-1">
             {displaySenderName}
           </span>
 
-          <div className="relative flex items-center gap-2 w-full">
+          <div className={`relative flex items-center gap-2 w-full ${isMe ? "justify-end" : "justify-start"}`}>
             
             {/* Message Action Menu (Visible on hover for Own messages) */}
             {isMe && editingIndex !== index && (
@@ -259,8 +260,8 @@ const MessageItem = ({
                     try {
                       const offer = JSON.parse(msg.text);
                       return (
-                        <div className="flex flex-col gap-3 min-w-[260px] max-w-[320px] p-1.5 text-left text-gray-800">
-                          <div className="flex items-center gap-1.5 text-xs font-extrabold text-[#2E7D32] border-b border-gray-150 pb-2">
+                        <div className={`flex flex-col gap-3 w-[220px] sm:w-[280px] p-1.5 text-left ${isMe ? "text-white" : "text-gray-850"}`}>
+                          <div className={`flex items-center gap-1.5 text-xs font-extrabold border-b pb-2 ${isMe ? "text-emerald-100 border-white/20" : "text-[#2E7D32] border-gray-150"}`}>
                             <FaExchangeAlt className="text-sm" />
                             <span>SWAP PROPOSAL</span>
                           </div>
@@ -270,11 +271,11 @@ const MessageItem = ({
                               <div className="w-14 h-14 rounded-xl bg-gray-50 overflow-hidden border border-gray-150 shadow-2xs">
                                 <img src={offer.offerProductImage} alt={offer.offerProductName} className="w-full h-full object-cover" />
                               </div>
-                              <span className="text-[10px] font-bold text-gray-700 truncate w-full mt-1.5">{offer.offerProductName}</span>
-                              <span className="text-[8px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">Offered</span>
+                              <span className={`text-[10px] font-bold truncate w-full mt-1.5 ${isMe ? "text-white" : "text-gray-700"}`}>{offer.offerProductName}</span>
+                              <span className={`text-[8px] font-bold uppercase tracking-wider mt-0.5 ${isMe ? "text-emerald-100/80" : "text-gray-400"}`}>Offered</span>
                             </div>
 
-                            <div className="col-span-1 flex justify-center text-gray-400 text-lg">
+                            <div className={`col-span-1 flex justify-center text-lg ${isMe ? "text-emerald-200/80" : "text-gray-400"}`}>
                               ⇄
                             </div>
 
@@ -282,12 +283,12 @@ const MessageItem = ({
                               <div className="w-14 h-14 rounded-xl bg-gray-50 overflow-hidden border border-gray-150 shadow-2xs">
                                 <img src={offer.targetProductImage} alt={offer.targetProductName} className="w-full h-full object-cover" />
                               </div>
-                              <span className="text-[10px] font-bold text-gray-700 truncate w-full mt-1.5">{offer.targetProductName}</span>
-                              <span className="text-[8px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">Requested</span>
+                              <span className={`text-[10px] font-bold truncate w-full mt-1.5 ${isMe ? "text-white" : "text-gray-700"}`}>{offer.targetProductName}</span>
+                              <span className={`text-[8px] font-bold uppercase tracking-wider mt-0.5 ${isMe ? "text-emerald-100/80" : "text-gray-400"}`}>Requested</span>
                             </div>
                           </div>
 
-                          <div className="mt-1 border-t border-gray-150 pt-2.5 flex flex-col gap-2">
+                          <div className={`mt-1 border-t pt-2.5 flex flex-col gap-2 ${isMe ? "border-white/20" : "border-gray-150"}`}>
                             {offer.status === "pending" ? (
                               !isMe ? (
                                 <div className="flex gap-2 w-full">
