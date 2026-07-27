@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
-import { FaPaperPlane, FaSmile, FaCamera } from "react-icons/fa";
+import { FaPaperPlane, FaSmile, FaCamera, FaExchangeAlt } from "react-icons/fa";
 
-const MessageInput = ({ onSendMessage, onTyping }) => {
+const MessageInput = ({ onSendMessage, onTyping, onToggleSwapOffer }) => {
   const [text, setText] = useState("");
   const [showEmojis, setShowEmojis] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
@@ -100,6 +100,16 @@ const MessageInput = ({ onSendMessage, onTyping }) => {
           placeholder="Message"
           className="flex-1 min-w-0 bg-transparent text-gray-800 text-sm outline-none border-none py-1.5"
         />
+
+        {/* Swap Offer Propose Button */}
+        <button
+          type="button"
+          onClick={onToggleSwapOffer}
+          className="text-gray-400 hover:text-[#2E7D32] transition-colors p-1 cursor-pointer shrink-0"
+          title="Send Swap Offer"
+        >
+          <FaExchangeAlt className="text-xl" />
+        </button>
 
         {/* Camera Upload Button */}
         <button
