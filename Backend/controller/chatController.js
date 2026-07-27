@@ -87,13 +87,10 @@ const sendMessage = async (req, res) => {
 };
 const getMessages = async (req, res) => {
     try {
-
         const { chatId } = req.params;
+        const { userId } = req.query;
 
-        const chat = await chatModel
-            .findById(chatId)
-            .populate("messages.sender", "name email");
-        console.log(chat.messages);
+        const chat = await chatModel.findById(chatId);
 
         if (!chat) {
             return res.status(404).json({
@@ -101,7 +98,30 @@ const getMessages = async (req, res) => {
             });
         }
 
-        return res.status(200).json(chat.messages);
+        // Mark messages as read if userId is provided
+        if (userId) {
+            let updated = false;
+            chat.messages.forEach((msg) => {
+                if (msg.sender.toString() !== userId && !msg.isRead) {
+                    msg.isRead = true;
+                    updated = true;
+                }
+            });
+            if (updated) {
+                await chat.save();
+                const io = getIo();
+                if (io) {
+                    io.to(chatId).emit("messagesRead", { chatId, readBy: userId });
+                }
+            }
+        }
+
+        const populatedChat = await chatModel.populate(chat, {
+            path: "messages.sender",
+            select: "name email"
+        });
+
+        return res.status(200).json(populatedChat.messages);
 
     } catch (error) {
         return res.status(500).json({
@@ -116,7 +136,7 @@ const getMyChats = async (req, res) => {
 
         const chats = await chatModel
             .find({ users: userId })
-            .populate("users", "name email");
+            .populate("users", "name email profileImage phone location");
 
         return res.status(200).json(chats);
 
@@ -220,10 +240,17 @@ const deleteChat = async (req, res) => {
             });
         }
 
-        await chat.deleteOne();
+        chat.messages = [];
+        await chat.save();
+
+        const io = getIo();
+        if (io) {
+            io.to(chatId).emit("chatCleared", { chatId });
+        }
 
         return res.status(200).json({
-            message: "Chat deleted successfully"
+            message: "Chat cleared successfully",
+            chat
         });
 
     } catch (error) {
@@ -232,4 +259,96 @@ const deleteChat = async (req, res) => {
         });
     }
 };
-module.exports = { createChat, sendMessage, getMessages, getMyChats, deleteMessage, updateMessage, deleteChat };
+
+const markMessagesAsRead = async (req, res) => {
+    try {
+        const { chatId, userId } = req.body;
+
+        if (!chatId || !userId) {
+            return res.status(400).json({ message: "chatId and userId are required" });
+        }
+
+        const chat = await chatModel.findById(chatId);
+        if (!chat) {
+            return res.status(404).json({ message: "Chat not found" });
+        }
+
+        let updated = false;
+        chat.messages.forEach((msg) => {
+            if (msg.sender.toString() !== userId && !msg.isRead) {
+                msg.isRead = true;
+                updated = true;
+            }
+        });
+
+        if (updated) {
+            await chat.save();
+            const io = getIo();
+            if (io) {
+                io.to(chatId).emit("messagesRead", { chatId, readBy: userId });
+            }
+        }
+
+        return res.status(200).json({ message: "Messages marked as read successfully" });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+const reactToMessage = async (req, res) => {
+    try {
+        const { chatId, messageIndex, emoji, senderId } = req.body;
+
+        if (!chatId || messageIndex === undefined || !senderId) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
+
+        const chat = await chatModel.findById(chatId);
+        if (!chat) {
+            return res.status(404).json({ message: "Chat not found" });
+        }
+
+        const msg = chat.messages[messageIndex];
+        if (!msg) {
+            return res.status(404).json({ message: "Message not found" });
+        }
+
+        if (!msg.reactions) {
+            msg.reactions = [];
+        }
+
+        const existingReactionIndex = msg.reactions.findIndex((r) => r.senderId === senderId);
+
+        if (existingReactionIndex > -1) {
+            const currentReaction = msg.reactions[existingReactionIndex];
+            if (currentReaction.emoji === emoji) {
+                msg.reactions.splice(existingReactionIndex, 1);
+            } else {
+                currentReaction.emoji = emoji;
+            }
+        } else {
+            msg.reactions.push({ emoji, senderId });
+        }
+
+        await chat.save();
+
+        const io = getIo();
+        if (io) {
+            io.to(chatId).emit("messageReactionUpdated", {
+                chatId,
+                messageIndex,
+                reactions: msg.reactions
+            });
+        }
+
+        return res.status(200).json({
+            message: "Reaction updated successfully",
+            reactions: msg.reactions
+        });
+
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = { createChat, sendMessage, getMessages, getMyChats, deleteMessage, updateMessage, deleteChat, markMessagesAsRead, reactToMessage };
