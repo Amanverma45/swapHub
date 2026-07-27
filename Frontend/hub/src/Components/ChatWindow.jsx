@@ -11,10 +11,10 @@ const DEFAULT_AVATAR = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/20
 const DoubleCheckSVG = ({ isRead, className, isMe }) => (
   <svg
     className={`${className} ${isRead
-        ? "text-sky-400"
-        : isMe
-          ? "text-white/60"
-          : "text-gray-400"
+      ? "text-sky-400"
+      : isMe
+        ? "text-white/60"
+        : "text-gray-400"
       }`}
     width="15"
     height="11"
@@ -208,7 +208,6 @@ const MessageItem = ({
       onDoubleClick={isSelectionMode ? undefined : onToggleSelect}
       onClick={handleRowClick}
     >
-      {/* Swipe Background Reply Icon */}
       {dragOffset > 10 && (
         <div
           className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center text-emerald-600 transition-opacity"
@@ -294,19 +293,18 @@ const MessageItem = ({
 
               {/* Bubble Content */}
               <div
-                className={`rounded-2xl text-sm shadow-2xs break-words w-fit max-w-full relative ${
-                  isMedia
+                className={`rounded-2xl text-sm shadow-2xs break-words w-fit max-w-full relative ${isMedia
                     ? "p-1 bg-white border border-gray-200/80 shadow-xs"
                     : isMe
                       ? "px-4 py-2.5 bg-gradient-to-br from-[#2E7D32] to-[#1E5621] text-white"
                       : "px-4 py-2.5 bg-white text-gray-800 border border-gray-100"
-                }`}
+                  }`}
               >
                 {/* Quoted Message (if replying) */}
                 {msg.replyTo && msg.replyTo.text && (
                   <div className={`mb-2 p-2 rounded-lg border-l-4 text-xs text-left ${isMe
-                      ? "bg-[#1E5621]/45 border-emerald-300 text-emerald-100"
-                      : "bg-gray-50 border-[#2E7D32] text-gray-600"
+                    ? "bg-[#1E5621]/45 border-emerald-300 text-emerald-100"
+                    : "bg-gray-50 border-[#2E7D32] text-gray-600"
                     }`}>
                     <p className="font-bold text-[9px] mb-0.5 opacity-90">
                       {msg.replyTo.senderName}
@@ -428,10 +426,10 @@ const MessageItem = ({
                     )}
 
                     {/* Message Timestamp and Read Status inside the bubble */}
-                    <span className={isMedia 
-                    ? "absolute bottom-3 right-3 bg-black/50 text-white backdrop-blur-xs px-1.5 py-0.5 rounded-full inline-flex items-center gap-0.5 text-[9px] font-bold select-none z-10"
-                    : `inline-flex items-center gap-0.5 text-[9px] font-bold select-none float-right ml-2.5 mt-2.5 -mr-1 -mb-1 translate-y-[3px] opacity-75 ${isMe ? "text-emerald-100/90" : "text-gray-400"}`
-                  }>
+                    <span className={isMedia
+                      ? "absolute bottom-3 right-3 bg-black/50 text-white backdrop-blur-xs px-1.5 py-0.5 rounded-full inline-flex items-center gap-0.5 text-[9px] font-bold select-none z-10"
+                      : `inline-flex items-center gap-0.5 text-[9px] font-bold select-none float-right ml-2.5 mt-2.5 -mr-1 -mb-1 translate-y-[3px] opacity-75 ${isMe ? "text-emerald-100/90" : "text-gray-400"}`
+                    }>
                       {formatMessageTime(msg.createdAt)}
                       {isMe && (
                         <DoubleCheckSVG isRead={msg.isRead} isMe={isMe} className={`shrink-0 scale-90 ${isMedia ? "text-sky-350" : ""}`} />
@@ -1195,8 +1193,8 @@ const ChatWindow = ({
                       key={p._id}
                       onClick={() => setSelectedTheirProduct(p)}
                       className={`flex flex-col items-center text-center p-2 rounded-2xl border-2 cursor-pointer shrink-0 w-24 hover:scale-105 transition-all relative ${selectedTheirProduct?._id === p._id
-                          ? "border-[#2E7D32] bg-emerald-50/30 shadow-xs"
-                          : "border-gray-150 bg-white"
+                        ? "border-[#2E7D32] bg-emerald-50/30 shadow-xs"
+                        : "border-gray-150 bg-white"
                         }`}
                     >
                       {/* Checkmark Circle on top-right */}
@@ -1225,8 +1223,8 @@ const ChatWindow = ({
                       key={p._id}
                       onClick={() => setSelectedMyProduct(p)}
                       className={`flex flex-col items-center text-center p-2 rounded-2xl border-2 cursor-pointer shrink-0 w-24 hover:scale-105 transition-all relative ${selectedMyProduct?._id === p._id
-                          ? "border-[#2E7D32] bg-emerald-50/30 shadow-xs"
-                          : "border-gray-150 bg-white"
+                        ? "border-[#2E7D32] bg-emerald-50/30 shadow-xs"
+                        : "border-gray-150 bg-white"
                         }`}
                     >
                       {/* Checkmark Circle on top-right */}
@@ -1395,7 +1393,7 @@ const ChatWindow = ({
                 >
                   Cancel
                 </button>
-                
+
                 {allSelectedAreMine && (
                   <button
                     onClick={handleDeleteForEveryone}
@@ -1404,7 +1402,7 @@ const ChatWindow = ({
                     Delete for everyone
                   </button>
                 )}
-                
+
                 <button
                   onClick={handleDeleteForMe}
                   className="px-5 py-2.5 rounded-full bg-[#00a884] hover:bg-[#008f72] text-white font-bold text-xs cursor-pointer transition-colors shadow-2xs"
