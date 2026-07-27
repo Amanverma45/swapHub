@@ -124,8 +124,9 @@ const MessageItem = ({
   setReplyingTo,
   setPreviewImage,
   onUpdateSwapStatus,
+  isSelectionMode,
   isSelected,
-  onSelectMessage,
+  onToggleSelect,
 }) => {
   const [dragOffset, setDragOffset] = useState(0);
   const touchStart = useRef(0);
@@ -139,7 +140,7 @@ const MessageItem = ({
     isSwiping.current = true;
     if (longPressTimeout.current) clearTimeout(longPressTimeout.current);
     longPressTimeout.current = setTimeout(() => {
-      onSelectMessage();
+      onToggleSelect();
     }, 600);
   };
 
@@ -177,7 +178,7 @@ const MessageItem = ({
   const handleMouseDown = () => {
     if (longPressTimeout.current) clearTimeout(longPressTimeout.current);
     longPressTimeout.current = setTimeout(() => {
-      onSelectMessage();
+      onToggleSelect();
     }, 600);
   };
 
@@ -188,15 +189,23 @@ const MessageItem = ({
     }
   };
 
+  const handleRowClick = (e) => {
+    if (isSelectionMode) {
+      e.stopPropagation();
+      onToggleSelect();
+    }
+  };
+
   return (
     <div
-      className={`w-full relative group animate-fade-in py-1.5 transition-colors duration-150 ${isSelected ? "bg-[#2E7D32]/10" : ""}`}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onDoubleClick={onSelectMessage}
+      className={`w-full relative group animate-fade-in py-1.5 transition-colors duration-150 ${isSelected ? "bg-[#2E7D32]/10" : ""} ${isSelectionMode ? "cursor-pointer" : ""}`}
+      onTouchStart={isSelectionMode ? undefined : handleTouchStart}
+      onTouchMove={isSelectionMode ? undefined : handleTouchMove}
+      onTouchEnd={isSelectionMode ? undefined : handleTouchEnd}
+      onMouseDown={isSelectionMode ? undefined : handleMouseDown}
+      onMouseUp={isSelectionMode ? undefined : handleMouseUp}
+      onDoubleClick={isSelectionMode ? undefined : onToggleSelect}
+      onClick={handleRowClick}
     >
       {/* Swipe Background Reply Icon */}
       {dragOffset > 10 && (
@@ -209,10 +218,26 @@ const MessageItem = ({
       )}
 
       <div
-        className={`flex ${isMe ? "justify-end" : "justify-start"} w-full transition-transform duration-100 ease-out`}
+        className="flex items-center w-full transition-transform duration-100 ease-out"
         style={{ transform: `translateX(${dragOffset}px)` }}
       >
-        <div className={`flex flex-col ${isSwapOffer ? "max-w-[90%] sm:max-w-[70%]" : "max-w-[70%] sm:max-w-[50%]"} ${isMe ? "items-end" : "items-start"} min-w-[80px]`}>
+        {/* Checkbox (Visible in Selection Mode) */}
+        {isSelectionMode && (
+          <div className="flex items-center justify-center pr-3 pl-2 shrink-0">
+            <input
+              type="checkbox"
+              checked={isSelected}
+              onChange={(e) => {
+                e.stopPropagation();
+                onToggleSelect();
+              }}
+              className="w-4 h-4 rounded-sm accent-[#2E7D32] border-gray-300 text-[#2E7D32] focus:ring-[#2E7D32] cursor-pointer"
+            />
+          </div>
+        )}
+
+        <div className={`flex ${isMe ? "justify-end" : "justify-start"} flex-1 min-w-0`}>
+          <div className={`flex flex-col ${isSwapOffer ? "max-w-[90%] sm:max-w-[70%]" : "max-w-[70%] sm:max-w-[50%]"} ${isMe ? "items-end" : "items-start"} min-w-[80px]`}>
           
           {/* Sender Name */}
           <span className="text-[10px] text-gray-400 font-semibold mb-0.5 px-1">
@@ -222,7 +247,7 @@ const MessageItem = ({
           <div className={`relative flex items-center gap-2 w-full ${isMe ? "justify-end" : "justify-start"}`}>
             
             {/* Message Action Menu (Visible on hover for Own messages) */}
-            {isMe && editingIndex !== index && (
+            {isMe && editingIndex !== index && !isSelectionMode && (
               <div className="opacity-0 group-hover:opacity-100 flex gap-1.5 transition-opacity bg-white/95 backdrop-blur-md px-2 py-1 rounded-xl shadow-md border border-gray-100 absolute -left-24 z-20">
                 <button
                   onClick={() => setReplyingTo({ text: msg.text, senderName: "You" })}
@@ -244,13 +269,6 @@ const MessageItem = ({
                   title="Delete"
                 >
                   <FaTrashAlt className="text-[10px]" />
-                </button>
-                <button
-                  onClick={onSelectMessage}
-                  className="text-gray-400 hover:text-emerald-600 transition-colors p-0.5 cursor-pointer"
-                  title="Select Message"
-                >
-                  <FaCheckSquare className="text-[10px]" />
                 </button>
               </div>
             )}
@@ -401,7 +419,7 @@ const MessageItem = ({
             </div>
 
             {/* Message Action Menu (Visible on hover for Other messages) */}
-            {!isMe && (
+            {!isMe && !isSelectionMode && (
               <div className="opacity-0 group-hover:opacity-100 flex gap-1.5 transition-opacity bg-white/95 backdrop-blur-md px-2 py-1 rounded-xl shadow-md border border-gray-100 absolute -right-14 z-20">
                 <button
                   onClick={() => setReplyingTo({ text: msg.text, senderName: displaySenderName })}
@@ -410,17 +428,11 @@ const MessageItem = ({
                 >
                   <FaReply className="text-[10px]" />
                 </button>
-                <button
-                  onClick={onSelectMessage}
-                  className="text-gray-400 hover:text-emerald-600 transition-colors p-0.5 cursor-pointer"
-                  title="Select Message"
-                >
-                  <FaCheckSquare className="text-[10px]" />
-                </button>
               </div>
             )}
 
           </div>
+        </div>
 
       </div>
     </div>
@@ -449,7 +461,8 @@ const ChatWindow = ({
   const [previewImage, setPreviewImage] = useState(null);
 
   // Selected Message & Deletion States
-  const [selectedMsgIndex, setSelectedMsgIndex] = useState(null);
+  const [isSelectionMode, setIsSelectionMode] = useState(false);
+  const [selectedMsgIndices, setSelectedMsgIndices] = useState([]);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deletedMsgIds, setDeletedMsgIds] = useState([]);
 
@@ -528,7 +541,8 @@ const ChatWindow = ({
     if (activeChat?._id) {
       const saved = JSON.parse(localStorage.getItem(`deleted_msgs_${activeChat._id}`) || "[]");
       setDeletedMsgIds(saved);
-      setSelectedMsgIndex(null);
+      setIsSelectionMode(false);
+      setSelectedMsgIndices([]);
     }
   }, [activeChat?._id]);
 
@@ -592,44 +606,76 @@ const ChatWindow = ({
     }
   };
 
+  const handleToggleSelectMessage = (index) => {
+    setSelectedMsgIndices((prev) => {
+      if (prev.includes(index)) {
+        return prev.filter((i) => i !== index);
+      } else {
+        return [...prev, index];
+      }
+    });
+  };
+
   const handleDeleteForEveryone = () => {
-    if (selectedMsgIndex === null) return;
-    onDeleteMessage(selectedMsgIndex);
+    if (selectedMsgIndices.length === 0) return;
+    
+    const sortedIndices = [...selectedMsgIndices].sort((a, b) => b - a);
+    sortedIndices.forEach((idx) => {
+      onDeleteMessage(idx);
+    });
+    
     setShowDeleteDialog(false);
-    setSelectedMsgIndex(null);
+    setIsSelectionMode(false);
+    setSelectedMsgIndices([]);
+    toast.success("Selected messages deleted for everyone");
   };
 
   const handleDeleteForMe = () => {
-    if (selectedMsgIndex === null) return;
-    const msg = messages[selectedMsgIndex];
-    const msgKey = msg._id || selectedMsgIndex;
+    if (selectedMsgIndices.length === 0) return;
     
-    const updated = [...deletedMsgIds, msgKey];
+    const updated = [...deletedMsgIds];
+    selectedMsgIndices.forEach((idx) => {
+      const msg = messages[idx];
+      const msgKey = msg._id || idx;
+      if (!updated.includes(msgKey)) {
+        updated.push(msgKey);
+      }
+    });
+    
     setDeletedMsgIds(updated);
     localStorage.setItem(`deleted_msgs_${activeChat._id}`, JSON.stringify(updated));
     
     setShowDeleteDialog(false);
-    setSelectedMsgIndex(null);
-    toast.success("Message deleted for you");
+    setIsSelectionMode(false);
+    setSelectedMsgIndices([]);
+    toast.success("Selected messages deleted for you");
   };
 
-  const handleCopySelectedMessage = () => {
-    if (selectedMsgIndex === null) return;
-    const msg = messages[selectedMsgIndex];
+  const handleCopySelectedMessages = () => {
+    if (selectedMsgIndices.length === 0) return;
     
-    let textToCopy = msg.text;
-    if (msg.text.startsWith('{"type":"swapOffer"')) {
-      try {
-        const offer = JSON.parse(msg.text);
-        textToCopy = `Swap Proposal: ${offer.offerProductName} for ${offer.targetProductName}`;
-      } catch (e) {
-        textToCopy = msg.text;
+    const sortedIndices = [...selectedMsgIndices].sort((a, b) => a - b);
+    const textPieces = sortedIndices.map((idx) => {
+      const msg = messages[idx];
+      const isMe = (msg.sender?._id || msg.sender) === currentUser?._id;
+      const senderName = msg.sender?.name || (isMe ? currentUser?.name : otherUser.name);
+      
+      let bodyText = msg.text;
+      if (msg.text.startsWith('{"type":"swapOffer"')) {
+        try {
+          const offer = JSON.parse(msg.text);
+          bodyText = `⇄ Swap Proposal: ${offer.offerProductName} for ${offer.targetProductName}`;
+        } catch (e) {
+          bodyText = msg.text;
+        }
       }
-    }
+      return `[${senderName}]: ${bodyText}`;
+    });
     
-    navigator.clipboard.writeText(textToCopy);
-    toast.success("Message copied!");
-    setSelectedMsgIndex(null);
+    navigator.clipboard.writeText(textPieces.join("\n"));
+    toast.success("Messages copied!");
+    setIsSelectionMode(false);
+    setSelectedMsgIndices([]);
   };
 
   const handleClearChat = () => {
@@ -798,23 +844,35 @@ const ChatWindow = ({
 
         {/* Header Right Actions */}
         <div className="flex items-center gap-3">
-          {/* Selected Message Actions */}
-          {selectedMsgIndex !== null && (
+          {/* Selection Mode Actions */}
+          {isSelectionMode && (
             <div className="flex items-center gap-3.5 mr-2 animate-fade-in shrink-0">
+              <span className="text-xs font-bold text-gray-500">
+                {selectedMsgIndices.length} selected
+              </span>
+              
+              {selectedMsgIndices.length > 0 && (
+                <>
+                  <button
+                    onClick={handleCopySelectedMessages}
+                    className="text-xs font-extrabold text-[#2E7D32] hover:text-[#1E5621] transition-colors cursor-pointer"
+                  >
+                    Copy
+                  </button>
+                  <button
+                    onClick={() => setShowDeleteDialog(true)}
+                    className="text-xs font-extrabold text-red-500 hover:text-red-700 transition-colors cursor-pointer"
+                  >
+                    Delete
+                  </button>
+                </>
+              )}
+              
               <button
-                onClick={handleCopySelectedMessage}
-                className="text-xs font-extrabold text-gray-500 hover:text-[#2E7D32] transition-colors cursor-pointer"
-              >
-                Copy
-              </button>
-              <button
-                onClick={() => setShowDeleteDialog(true)}
-                className="text-xs font-extrabold text-red-500 hover:text-red-700 transition-colors cursor-pointer"
-              >
-                Delete
-              </button>
-              <button
-                onClick={() => setSelectedMsgIndex(null)}
+                onClick={() => {
+                  setIsSelectionMode(false);
+                  setSelectedMsgIndices([]);
+                }}
                 className="text-xs font-extrabold text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
               >
                 Cancel
@@ -876,6 +934,17 @@ const ChatWindow = ({
                   Choose from Gallery
                 </button>
               </div>
+
+              <button
+                onClick={() => {
+                  setIsSelectionMode(true);
+                  setSelectedMsgIndices([]);
+                  setShowMenu(false);
+                }}
+                className="w-full text-left py-2 px-3 text-gray-700 hover:bg-gray-50 rounded-xl text-xs font-bold transition-all cursor-pointer mb-1"
+              >
+                Select Messages
+              </button>
 
               <div className="border-t border-gray-100 my-2" />
 
@@ -959,8 +1028,9 @@ const ChatWindow = ({
                   setReplyingTo={setReplyingTo}
                   setPreviewImage={setPreviewImage}
                   onUpdateSwapStatus={(status) => handleUpdateSwapOfferStatus(msg, index, status)}
-                  isSelected={selectedMsgIndex === index}
-                  onSelectMessage={() => setSelectedMsgIndex(index)}
+                  isSelectionMode={isSelectionMode}
+                  isSelected={selectedMsgIndices.includes(index)}
+                  onToggleSelect={() => handleToggleSelectMessage(index)}
                 />
               </div>
             );
@@ -1219,8 +1289,12 @@ const ChatWindow = ({
             <h4 className="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-1">Delete Message?</h4>
             
             <div className="flex flex-col gap-2">
-              {/* Delete for everyone (only available if we are the sender) */}
-              {selectedMsgIndex !== null && (messages[selectedMsgIndex]?.sender?._id || messages[selectedMsgIndex]?.sender) === currentUser?._id && (
+              {/* Delete for everyone (only available if all selected messages were sent by current user) */}
+              {selectedMsgIndices.length > 0 && selectedMsgIndices.every((idx) => {
+                const msg = messages[idx];
+                const msgSenderId = msg?.sender?._id || msg?.sender;
+                return msgSenderId === currentUser?._id;
+              }) && (
                 <button
                   onClick={handleDeleteForEveryone}
                   className="w-full text-left py-2 px-3 hover:bg-red-50 text-red-655 text-xs font-extrabold rounded-xl transition-colors cursor-pointer"
