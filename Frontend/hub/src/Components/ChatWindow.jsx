@@ -126,6 +126,7 @@ const MessageItem = ({
   isSelectionMode,
   isSelected,
   onToggleSelect,
+  onReactMessage,
 }) => {
   const [dragOffset, setDragOffset] = useState(0);
   const touchStart = useRef(0);
@@ -198,7 +199,7 @@ const MessageItem = ({
 
   return (
     <div
-      className={`w-full relative group animate-fade-in py-1.5 transition-colors duration-150 ${isSelected ? "bg-[#2E7D32]/10" : ""} ${isSelectionMode ? "cursor-pointer" : ""}`}
+      className={`w-full relative group animate-fade-in py-1.5 transition-colors duration-150 ${isSelected ? "bg-[#2E7D32]/10" : ""} ${isSelectionMode ? "cursor-pointer" : ""} ${msg.reactions && msg.reactions.length > 0 ? "mb-2.5" : ""}`}
       onTouchStart={isSelectionMode ? undefined : handleTouchStart}
       onTouchMove={isSelectionMode ? undefined : handleTouchMove}
       onTouchEnd={isSelectionMode ? undefined : handleTouchEnd}
@@ -273,9 +274,27 @@ const MessageItem = ({
                 </div>
               )}
 
+              {/* Emojis Reactions Picker (Visible on hover above bubble) */}
+              {!isSelectionMode && editingIndex !== index && (
+                <div className={`opacity-0 group-hover:opacity-100 absolute -top-8.5 ${isMe ? "right-2" : "left-2"} flex gap-1 bg-white border border-gray-150 shadow-md px-1.5 py-0.5 rounded-full z-30 transition-opacity`}>
+                  {["👍", "❤️", "😂", "😮", "😢", "🙏"].map((emoji) => (
+                    <button
+                      key={emoji}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onReactMessage(index, emoji);
+                      }}
+                      className="hover:scale-130 transition-transform cursor-pointer text-xs leading-none p-0.5"
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+              )}
+
               {/* Bubble Content */}
               <div
-                className={`rounded-2xl text-sm shadow-2xs break-words w-fit max-w-full relative overflow-hidden ${
+                className={`rounded-2xl text-sm shadow-2xs break-words w-fit max-w-full relative ${
                   isMedia
                     ? "p-1 bg-white border border-gray-200/80 shadow-xs"
                     : isMe
@@ -420,6 +439,27 @@ const MessageItem = ({
                     </span>
                   </>
                 )}
+
+                {/* Reactions Badge */}
+                {msg.reactions && msg.reactions.length > 0 && (
+                  <div
+                    className={`absolute -bottom-2.5 ${isMe ? "left-3.5" : "right-3.5"} flex items-center gap-0.5 bg-white border border-gray-150 shadow-2xs px-1.5 py-0.5 rounded-full z-20 text-[10px] select-none hover:scale-105 transition-transform cursor-pointer`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const myReaction = msg.reactions.find((r) => r.senderId === currentUser?._id);
+                      if (myReaction) {
+                        onReactMessage(index, myReaction.emoji);
+                      }
+                    }}
+                  >
+                    {Array.from(new Set(msg.reactions.map((r) => r.emoji))).slice(0, 3).map((emoji) => (
+                      <span key={emoji} className="leading-none">{emoji}</span>
+                    ))}
+                    {msg.reactions.length > 1 && (
+                      <span className="text-[8px] font-extrabold text-gray-500 ml-0.5 leading-none">{msg.reactions.length}</span>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Message Action Menu (Visible on hover for Other messages) */}
@@ -456,6 +496,7 @@ const ChatWindow = ({
   onTyping,
   onBackToList,
   isLoading,
+  onReactMessage,
 }) => {
   const navigate = useNavigate();
   const [editingIndex, setEditingIndex] = useState(null);
@@ -1041,6 +1082,7 @@ const ChatWindow = ({
                   isSelectionMode={isSelectionMode}
                   isSelected={selectedMsgIndices.includes(index)}
                   onToggleSelect={() => handleToggleSelectMessage(index)}
+                  onReactMessage={onReactMessage}
                 />
               </div>
             );

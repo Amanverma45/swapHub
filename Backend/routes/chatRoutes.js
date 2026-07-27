@@ -10,6 +10,7 @@ router.get("/myChats/:userId", chatController.getMyChats);
 router.delete("/deleteMessage", chatController.deleteMessage);
 router.put("/updateMessage", chatController.updateMessage);
 router.put("/markAsRead", chatController.markMessagesAsRead);
+router.put("/reactToMessage", chatController.reactToMessage);
 router.delete("/deleteChat/:chatId", chatController.deleteChat);
 
 module.exports = router;

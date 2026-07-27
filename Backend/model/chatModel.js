@@ -24,6 +24,13 @@ const messageSchema = new mongoose.Schema(
             senderName: { type: String }
         },
 
+        reactions: [
+            {
+                emoji: { type: String },
+                senderId: { type: String }
+            }
+        ],
+
         createdAt: {
             type: Date,
             default: Date.now,

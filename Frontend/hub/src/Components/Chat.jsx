@@ -14,6 +14,7 @@ const Chat = () => {
   const [activeChat, setActiveChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
+  const [isInitialLoadingChats, setIsInitialLoadingChats] = useState(true);
   const [typingUsers, setTypingUsers] = useState({});
   const [viewportHeight, setViewportHeight] = useState(
     typeof window !== "undefined" ? window.innerHeight : 600
@@ -210,6 +211,19 @@ const Chat = () => {
       }
     });
 
+    // Real-time message reaction handler
+    socket.current.on("messageReactionUpdated", (data) => {
+      console.log("DEBUG: messageReactionUpdated socket event received!", data);
+      const active = activeChatRef.current;
+      if (active && active._id === data.chatId) {
+        setMessages((prev) =>
+          prev.map((msg, i) =>
+            i === data.messageIndex ? { ...msg, reactions: data.reactions } : msg
+          )
+        );
+      }
+    });
+
     // Real-time chat clear handler
     socket.current.on("chatCleared", (data) => {
       console.log("DEBUG: chatCleared socket event received!", data);
@@ -245,6 +259,7 @@ const Chat = () => {
         socket.current.off("receiveMessage");
         socket.current.off("messageUpdated");
         socket.current.off("messageDeleted");
+        socket.current.off("messageReactionUpdated");
         socket.current.off("messagesRead");
         socket.current.off("chatCleared");
         socket.current.off("typing");
@@ -300,6 +315,7 @@ const Chat = () => {
   // Fetch all chats user is part of
   const getChats = async (selectChatIdAfterFetch = null) => {
     if (!currentUser?._id) return;
+    setIsInitialLoadingChats(true);
     try {
       const response = await axios.get(`/myChats/${currentUser._id}`);
       setChats(response.data);
@@ -321,6 +337,8 @@ const Chat = () => {
     } catch (error) {
       console.error("Fetch chats error:", error);
       toast.error("Could not fetch conversations");
+    } finally {
+      setIsInitialLoadingChats(false);
     }
   };
 
@@ -424,6 +442,21 @@ const Chat = () => {
     }
   };
 
+  const handleReactToMessage = async (messageIndex, emoji) => {
+    if (!activeChat) return;
+    try {
+      await axios.put("/reactToMessage", {
+        chatId: activeChat._id,
+        messageIndex,
+        emoji,
+        senderId: currentUser._id,
+      });
+    } catch (error) {
+      console.error("React to message error:", error);
+      toast.error("Reaction failed");
+    }
+  };
+
   const handleDeleteChat = async (chatId) => {
     try {
       await axios.delete(`/deleteChat/${chatId}`);
@@ -446,6 +479,21 @@ const Chat = () => {
       socket.current.emit("stopTyping", { chatId: activeChat._id });
     }
   };
+
+  if (isInitialLoadingChats) {
+    return (
+      <div className="fixed inset-0 w-full h-full bg-[#f8f9fa] flex flex-col items-center justify-center z-50 p-6 text-center select-none animate-fade-in">
+        <div className="w-14 h-14 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center shadow-xs mb-4">
+          <svg className="animate-spin h-7 w-7 text-[#00a884]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
+        <h3 className="text-sm font-extrabold text-gray-800">Loading chats, please wait...</h3>
+        <p className="text-[11px] text-gray-400 mt-1 max-w-[200px]">Securing your connection & syncing messages...</p>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -478,6 +526,7 @@ const Chat = () => {
           onTyping={handleTypingStatus}
           onBackToList={() => setActiveChat(null)}
           isLoading={isLoadingMessages}
+          onReactMessage={handleReactToMessage}
         />
       </div>
 
