@@ -9,3 +9,57 @@
 body{
   background-color: #F5F5F5;
 }
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes pulse-glow-green {
+  0%, 100% {
+    box-shadow: 0 10px 20px -5px rgba(46, 125, 50, 0.3), 0 0 10px rgba(46, 125, 50, 0.2);
+  }
+  50% {
+    box-shadow: 0 15px 30px -5px rgba(46, 125, 50, 0.5), 0 0 20px rgba(46, 125, 50, 0.4);
+  }
+}
+
+@keyframes pulse-glow-orange {
+  0%, 100% {
+    box-shadow: 0 10px 20px -5px rgba(244, 162, 97, 0.3), 0 0 10px rgba(244, 162, 97, 0.2);
+  }
+  50% {
+    box-shadow: 0 15px 30px -5px rgba(244, 162, 97, 0.5), 0 0 20px rgba(244, 162, 97, 0.4);
+  }
+}
+
+.shimmer-sweep {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translateX(-100%);
+}
+
+.group:hover .shimmer-sweep {
+  animation: shimmer 1.5s infinite;
+}
+
+.btn-glow-green:hover {
+  animation: pulse-glow-green 2s infinite;
+}
+
+.btn-glow-orange:hover {
+  animation: pulse-glow-orange 2s infinite;
+}

@@ -1,10 +1,17 @@
 import { Link } from "react-router-dom";
 import { FaEnvelope, FaMapMarkerAlt, FaExchangeAlt, FaHeart } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const Footer = () => {
   const token = localStorage.getItem("token");
   return (
-    <footer className="bg-white/95 backdrop-blur-xl border-t-4 border-t-[#2E7D32] shadow-xl mt-12 sm:mt-16">
+    <motion.footer 
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.05 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="bg-white/95 backdrop-blur-xl border-t-4 border-t-[#2E7D32] shadow-xl mt-12 sm:mt-16"
+    >
       <div className="w-[90%] max-w-6xl mx-auto py-10 sm:py-12">
         
         {/* Main Flex Row Container with Wide Spacing */}
@@ -12,10 +19,14 @@ const Footer = () => {
           
           {/* Logo & Tagline */}
           <div className="max-w-xs text-left">
-            <Link to="/" className="inline-flex items-center gap-2">
-              <span className="w-9 h-9 rounded-2xl bg-gradient-to-br from-[#2E7D32] to-[#1E5621] text-white flex items-center justify-center font-extrabold shadow-md shadow-[#2E7D32]/20 text-sm">
+            <Link to="/" className="inline-flex items-center gap-2 group">
+              <motion.span 
+                whileHover={{ rotate: 15, scale: 1.1 }}
+                transition={{ type: "spring", stiffness: 300 }}
+                className="w-9 h-9 rounded-2xl bg-gradient-to-br from-[#2E7D32] to-[#1E5621] text-white flex items-center justify-center font-extrabold shadow-md shadow-[#2E7D32]/20 text-sm"
+              >
                 <FaExchangeAlt />
-              </span>
+              </motion.span>
               <h2 className="text-2xl font-extrabold text-[#2E7D32] tracking-tight">
                 Swap<span className="text-[#F4A261]">Hub</span>
               </h2>
@@ -35,30 +46,30 @@ const Footer = () => {
                 Quick Links
               </h3>
               <div className="flex flex-col gap-2.5 text-xs sm:text-sm font-semibold text-gray-600">
-                <Link to="/" className="hover:text-[#2E7D32] hover:translate-x-1 transition-all">
+                <Link to="/" className="hover:text-[#2E7D32] hover:translate-x-1.5 transition-all duration-300 ease-out">
                   Home
                 </Link>
-                <Link to="/products" className="hover:text-[#2E7D32] hover:translate-x-1 transition-all">
+                <Link to="/products" className="hover:text-[#2E7D32] hover:translate-x-1.5 transition-all duration-300 ease-out">
                   Products
                 </Link>
                 {!token ? (
                   <>
-                    <Link to="/login" className="hover:text-[#2E7D32] hover:translate-x-1 transition-all">
+                    <Link to="/login" className="hover:text-[#2E7D32] hover:translate-x-1.5 transition-all duration-300 ease-out">
                       Login
                     </Link>
-                    <Link to="/register" className="hover:text-[#2E7D32] hover:translate-x-1 transition-all">
+                    <Link to="/register" className="hover:text-[#2E7D32] hover:translate-x-1.5 transition-all duration-300 ease-out">
                       Register
                     </Link>
                   </>
                 ) : (
                   <>
-                    <Link to="/addProduct" className="hover:text-[#2E7D32] hover:translate-x-1 transition-all">
+                    <Link to="/addProduct" className="hover:text-[#2E7D32] hover:translate-x-1.5 transition-all duration-300 ease-out">
                       Add Product
                     </Link>
-                    <Link to="/swapRequest" className="hover:text-[#2E7D32] hover:translate-x-1 transition-all">
+                    <Link to="/swapRequest" className="hover:text-[#2E7D32] hover:translate-x-1.5 transition-all duration-300 ease-out">
                       Swap Requests
                     </Link>
-                    <Link to="/profile" className="hover:text-[#2E7D32] hover:translate-x-1 transition-all">
+                    <Link to="/profile" className="hover:text-[#2E7D32] hover:translate-x-1.5 transition-all duration-300 ease-out">
                       Profile
                     </Link>
                   </>
@@ -74,7 +85,7 @@ const Footer = () => {
               <div className="flex flex-col gap-2.5 text-xs sm:text-sm font-semibold text-gray-600">
                 <a
                   href="mailto:support@swaphub.com"
-                  className="inline-flex items-center gap-2 hover:text-[#2E7D32] transition-colors"
+                  className="inline-flex items-center gap-2 hover:text-[#2E7D32] hover:translate-x-1 transition-all duration-300 ease-out"
                 >
                   <span className="p-1.5 rounded-lg bg-emerald-50 text-[#2E7D32]">
                     <FaEnvelope />
@@ -98,12 +109,20 @@ const Footer = () => {
         <div className="border-t border-gray-100 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-400 font-semibold">
           <p>© 2026 SwapHub. All Rights Reserved.</p>
           <p className="flex items-center gap-1">
-            Built with <FaHeart className="text-red-500 text-xs" /> for smart exchanges.
+            Built with{" "}
+            <motion.span
+              animate={{ scale: [1, 1.25, 1] }}
+              transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
+              className="inline-block"
+            >
+              <FaHeart className="text-red-500 text-xs" />
+            </motion.span>{" "}
+            for smart exchanges.
           </p>
         </div>
 
       </div>
-    </footer>
+    </motion.footer>
   );
 };
 

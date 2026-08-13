@@ -3,6 +3,7 @@ import axios from "../utils/axiosInstance.js";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { FaCamera } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const AddProduct = () => {
     const [image, setImage] = useState(null);
@@ -155,9 +156,19 @@ const AddProduct = () => {
             <div className="absolute top-1/4 -left-20 w-96 h-96 bg-emerald-400/20 rounded-full blur-3xl pointer-events-none animate-pulse" />
             <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-[#F4A261]/25 rounded-full blur-3xl pointer-events-none animate-pulse" />
 
-            <div className="relative max-w-3xl mx-auto bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl shadow-emerald-950/10 border border-white/80 ring-1 ring-black/5 p-6 sm:p-10">
+            <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+                className="relative max-w-3xl mx-auto bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl shadow-emerald-950/10 border border-white/80 ring-1 ring-black/5 p-6 sm:p-10"
+            >
 
-                <div className="text-center sm:text-left mb-8">
+                <motion.div 
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.45, ease: "easeOut" }}
+                    className="text-center sm:text-left mb-8"
+                >
                     <span className="inline-block px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-50 text-[#2E7D32] border border-emerald-200/60 mb-3 shadow-xs">
                         Product Listing
                     </span>
@@ -168,12 +179,16 @@ const AddProduct = () => {
                     <p className="text-gray-500 text-sm mt-2 font-medium">
                         List your product and start exchanging with others in the community.
                     </p>
-                </div>
+                </motion.div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
 
                     {/* Product Image */}
-                    <div>
+                    <motion.div
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1, duration: 0.45, ease: "easeOut" }}
+                    >
                         <div className="flex items-center justify-between mb-2">
                             <label className="block text-xs font-bold uppercase tracking-wider text-gray-700">
                                 Product Image
@@ -209,9 +224,9 @@ const AddProduct = () => {
                                     <div className="flex justify-center sm:justify-start">
                                         <label
                                             htmlFor="productImage"
-                                            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl bg-emerald-50/90 text-[#2E7D32] border border-emerald-200/80 hover:bg-[#2E7D32] hover:text-white transition-all duration-200 font-bold text-xs sm:text-sm cursor-pointer shadow-xs active:scale-95"
+                                            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl bg-emerald-50/90 text-[#2E7D32] border border-emerald-200/80 hover:bg-[#2E7D32] hover:text-white hover:-translate-y-0.5 hover:shadow-md transition-all duration-300 font-bold text-xs sm:text-sm cursor-pointer shadow-xs active:scale-95 ease-out"
                                         >
-                                            <FaCamera className="text-sm" />
+                                            <FaCamera className="text-sm animate-pulse" />
                                             <span>Change Product Image</span>
                                         </label>
                                     </div>
@@ -219,13 +234,13 @@ const AddProduct = () => {
                             ) : (
                                 <label
                                     htmlFor="productImage"
-                                    className="w-full h-48 md:h-60 border-2 border-dashed border-emerald-300/80 hover:border-[#2E7D32] bg-emerald-50/40 hover:bg-emerald-50/80 rounded-3xl cursor-pointer flex flex-col items-center justify-center transition-all duration-300 overflow-hidden shadow-inner p-4 text-center"
+                                    className="group w-full h-48 md:h-60 border-2 border-dashed border-emerald-300/80 hover:border-[#2E7D32] bg-emerald-50/40 hover:bg-emerald-50/80 rounded-3xl cursor-pointer flex flex-col items-center justify-center transition-all duration-300 ease-out hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.99] overflow-hidden shadow-inner p-4 text-center"
                                 >
-                                    <div className="w-14 h-14 mx-auto mb-2.5 rounded-2xl bg-emerald-100/80 text-[#2E7D32] flex items-center justify-center text-2xl shadow-xs">
+                                    <div className="w-14 h-14 mx-auto mb-2.5 rounded-2xl bg-emerald-100/80 text-[#2E7D32] flex items-center justify-center text-2xl shadow-xs group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300">
                                         <FaCamera />
                                     </div>
 
-                                    <p className="font-bold text-gray-800 text-sm sm:text-base">
+                                    <p className="font-bold text-gray-800 text-sm sm:text-base group-hover:text-[#2E7D32] transition-colors">
                                         Upload Product Image
                                     </p>
 
@@ -235,9 +250,15 @@ const AddProduct = () => {
                                 </label>
                             )}
                         </div>
-                    </div>
+                    </motion.div>
 
-                    <div className="grid sm:grid-cols-2 gap-5">
+                    {/* Product Name & Category */}
+                    <motion.div 
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.18, duration: 0.45, ease: "easeOut" }}
+                        className="grid sm:grid-cols-2 gap-5"
+                    >
                         {/* Product Name */}
                         <div>
                             <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
@@ -249,7 +270,7 @@ const AddProduct = () => {
                                 value={productName}
                                 onChange={(e) => setProductName(e.target.value)}
                                 placeholder="Enter product title"
-                                className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-gray-800 text-sm outline-none transition-all duration-200 focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10"
+                                className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-gray-800 text-sm outline-none transition-all duration-300 focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10 focus:-translate-y-0.5 focus:shadow-sm"
                             />
                         </div>
 
@@ -262,7 +283,7 @@ const AddProduct = () => {
                             <select
                                 value={category}
                                 onChange={(e) => setCategory(e.target.value)}
-                                className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-gray-800 text-sm outline-none transition-all duration-200 focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10"
+                                className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-gray-800 text-sm outline-none transition-all duration-300 focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10 focus:-translate-y-0.5 focus:shadow-sm"
                             >
                                 <option value="">Select Category</option>
                                 <option value="Books">Books</option>
@@ -273,9 +294,15 @@ const AddProduct = () => {
                                 <option value="Home Items">Home Items</option>
                             </select>
                         </div>
-                    </div>
+                    </motion.div>
 
-                    <div className="grid sm:grid-cols-2 gap-5">
+                    {/* Swap With & Location */}
+                    <motion.div 
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.26, duration: 0.45, ease: "easeOut" }}
+                        className="grid sm:grid-cols-2 gap-5"
+                    >
                         {/* Exchange For */}
                         <div>
                             <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
@@ -287,7 +314,7 @@ const AddProduct = () => {
                                 onChange={(e) => setExchangeFor(e.target.value)}
                                 type="text"
                                 placeholder="e.g. Laptop, Gaming Console, Books"
-                                className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-gray-800 text-sm outline-none transition-all duration-200 focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10"
+                                className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-gray-800 text-sm outline-none transition-all duration-300 focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10 focus:-translate-y-0.5 focus:shadow-sm"
                             />
                         </div>
 
@@ -302,13 +329,17 @@ const AddProduct = () => {
                                 onChange={(e) => setLocation(e.target.value)}
                                 type="text"
                                 placeholder="Enter your city"
-                                className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-gray-800 text-sm outline-none transition-all duration-200 focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10"
+                                className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-gray-800 text-sm outline-none transition-all duration-300 focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10 focus:-translate-y-0.5 focus:shadow-sm"
                             />
                         </div>
-                    </div>
+                    </motion.div>
 
                     {/* Description */}
-                    <div>
+                    <motion.div
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.34, duration: 0.45, ease: "easeOut" }}
+                    >
                         <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
                             Product Description
                         </label>
@@ -318,27 +349,33 @@ const AddProduct = () => {
                             onChange={(e) => setDescription(e.target.value)}
                             rows="4"
                             placeholder="Describe item condition, usage details and swap preferences..."
-                            className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-gray-800 text-sm outline-none resize-none transition-all duration-200 focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10"
+                            className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-gray-800 text-sm outline-none resize-none transition-all duration-300 focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10 focus:-translate-y-0.5 focus:shadow-sm"
                         ></textarea>
-                    </div>
+                    </motion.div>
 
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full bg-gradient-to-r from-[#2E7D32] to-[#1E5621] hover:from-[#256728] hover:to-[#164219] text-white font-bold py-4 rounded-2xl shadow-lg shadow-[#2E7D32]/25 hover:shadow-xl hover:shadow-[#2E7D32]/35 hover:scale-[1.01] active:scale-[0.98] disabled:opacity-70 transition-all duration-200 text-sm sm:text-base mt-2"
+                    <motion.div
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.42, duration: 0.45, ease: "easeOut" }}
                     >
-                        {loading ? (
-                            <span className="flex items-center justify-center gap-2">
-                                <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                                Adding Product...
-                            </span>
-                        ) : (
-                            "Publish Product Listing"
-                        )}
-                    </button>
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full bg-gradient-to-r from-[#2E7D32] to-[#1E5621] hover:from-[#256728] hover:to-[#164219] text-white font-bold py-4 rounded-2xl shadow-lg shadow-[#2E7D32]/25 hover:shadow-xl hover:shadow-[#2E7D32]/35 hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-70 transition-all duration-300 ease-out text-sm sm:text-base mt-2 cursor-pointer"
+                        >
+                            {loading ? (
+                                <span className="flex items-center justify-center gap-2">
+                                    <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                                    Adding Product...
+                                </span>
+                            ) : (
+                                "Publish Product Listing"
+                            )}
+                        </button>
+                    </motion.div>
 
                 </form>
-            </div>
+            </motion.div>
             {showPreview && (
                 <div className="fixed inset-0 bg-black/75 backdrop-blur-md flex items-center justify-center z-50 px-4">
 

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaTrashAlt, FaPen, FaTimes, FaExchangeAlt, FaRegClock, FaArrowLeft, FaReply, FaEllipsisV, FaCamera, FaCheckSquare, FaRegCopy, FaTrash } from "react-icons/fa";
+import { FaTrashAlt, FaPen, FaTimes, FaExchangeAlt, FaRegClock, FaArrowLeft, FaReply, FaEllipsisV, FaCamera, FaCheckSquare, FaRegCopy, FaTrash, FaPlay, FaPause, FaUserCircle, FaMicrophone } from "react-icons/fa";
 import MessageInput from "./MessageInput";
 import axios from "../utils/axiosInstance";
 import toast from "react-hot-toast";
@@ -81,6 +81,9 @@ const formatMessageTime = (dateString) => {
 
 const getMessagePreviewText = (text) => {
   if (!text) return "";
+  if (text.startsWith("data:image/")) return "📷 Photo";
+  if (text.startsWith("data:video/")) return "🎥 Video";
+  if (text.startsWith("data:audio/")) return "🎙️ Voice Message";
   if (text.startsWith('{"type":"swapOffer"')) {
     try {
       const offer = JSON.parse(text);
@@ -108,6 +111,162 @@ const WALLPAPER_PRESETS = [
   { id: "beach", name: "Tropical Beach", value: "url(/wallpapers/beach.png)" }
 ];
 
+// Custom WhatsApp-themed voice message player
+const VoiceMessagePlayer = ({ msg, isMe, currentUser, otherUser }) => {
+  const src = msg?.text;
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    const audio = new Audio(src);
+    audioRef.current = audio;
+
+    const onLoadedMetadata = () => {
+      setDuration(audio.duration || 0);
+    };
+
+    const onTimeUpdate = () => {
+      setCurrentTime(audio.currentTime || 0);
+    };
+
+    const onEnded = () => {
+      setIsPlaying(false);
+      setCurrentTime(0);
+    };
+
+    audio.addEventListener("loadedmetadata", onLoadedMetadata);
+    audio.addEventListener("timeupdate", onTimeUpdate);
+    audio.addEventListener("ended", onEnded);
+
+    if (audio.readyState >= 1) {
+      setDuration(audio.duration);
+    }
+
+    return () => {
+      audio.pause();
+      audio.removeEventListener("loadedmetadata", onLoadedMetadata);
+      audio.removeEventListener("timeupdate", onTimeUpdate);
+      audio.removeEventListener("ended", onEnded);
+    };
+  }, [src]);
+
+  const togglePlay = () => {
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current.play().catch((err) => console.error("Error playing audio:", err));
+      setIsPlaying(true);
+    }
+  };
+
+  const handleSeek = (e) => {
+    if (!audioRef.current || !duration) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const width = rect.width;
+    const newPercentage = clickX / width;
+    const newTime = newPercentage * duration;
+    audioRef.current.currentTime = newTime;
+    setCurrentTime(newTime);
+  };
+
+  const formatTime = (time) => {
+    if (isNaN(time)) return "0:00";
+    const mins = Math.floor(time / 60);
+    const secs = Math.floor(time % 60).toString().padStart(2, "0");
+    return `${mins}:${secs}`;
+  };
+
+  const progressPercent = duration ? (currentTime / duration) * 100 : 0;
+
+  const profileImg = msg?.sender?.profileImage || (isMe ? currentUser?.profileImage : otherUser?.profileImage);
+  const displayName = msg?.sender?.name || (isMe ? currentUser?.name : otherUser?.name);
+
+  return (
+    <div className={`flex items-center gap-3 w-[240px] sm:w-[280px] p-1 bg-transparent ${isMe ? "text-white" : "text-gray-800"}`}>
+      {/* Profile Avatar / Mic Indicator */}
+      <div className={`relative shrink-0 w-8.5 h-8.5 rounded-full flex items-center justify-center border shadow-xs ${
+        isMe ? "bg-white/10 border-white/20" : "bg-emerald-50 border-emerald-100"
+      }`}>
+        {profileImg ? (
+          <img
+            src={profileImg}
+            alt={displayName}
+            className="w-full h-full object-cover rounded-full"
+          />
+        ) : (
+          <FaUserCircle className={`text-xl ${isMe ? "text-white/80" : "text-emerald-700"}`} />
+        )}
+        <div className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border flex items-center justify-center shadow-2xs ${
+          isMe ? "bg-[#1E5621] border-[#2E7D32]" : "bg-emerald-600 border-white"
+        }`}>
+          <FaMicrophone className="text-[7px] text-white" />
+        </div>
+      </div>
+
+      {/* Play/Pause & Seekbar Controls */}
+      <div className="flex-1 flex flex-col justify-center">
+        <div className="flex items-center gap-2">
+          {/* Play/Pause Button */}
+          <button
+            type="button"
+            onClick={togglePlay}
+            className={`text-xs w-7 h-7 rounded-full flex items-center justify-center shrink-0 hover:scale-105 active:scale-95 transition-all cursor-pointer ${
+              isMe ? "bg-white/15 hover:bg-white/25 text-white" : "bg-emerald-50 hover:bg-emerald-100 text-[#2E7D32]"
+            }`}
+          >
+            {isPlaying ? (
+              <FaPause className="text-[9px]" />
+            ) : (
+              <FaPlay className="text-[9px] translate-x-[0.5px]" />
+            )}
+          </button>
+
+          {/* Dotted Seekbar Track */}
+          <div
+            onClick={handleSeek}
+            className="flex-1 h-3 flex items-center cursor-pointer relative"
+          >
+            <div className={`w-full border-b border-dotted ${isMe ? "border-white/30" : "border-gray-300"}`} />
+            {/* Active progress */}
+            <div
+              className={`absolute left-0 border-b border-dotted ${isMe ? "border-white" : "border-[#2E7D32]"}`}
+              style={{ width: `${progressPercent}%` }}
+            />
+            {/* Slider thumb */}
+            <div
+              className={`absolute w-3 h-3 rounded-full shadow-md -translate-x-1/2 ${
+                isMe ? "bg-white" : "bg-[#2E7D32]"
+              }`}
+              style={{ left: `${progressPercent}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Bottom Metadata Row: Progress Time + Sent Time & Checkmarks */}
+        <div className="flex items-center justify-between mt-1 px-1 shrink-0 select-none">
+          {/* Playback Timer */}
+          <span className={`text-[9px] font-bold ${isMe ? "text-emerald-100/80" : "text-gray-400"}`}>
+            {formatTime(currentTime || duration)}
+          </span>
+
+          {/* Sent Time & Checkmarks */}
+          <span className={`inline-flex items-center gap-0.5 text-[9px] font-bold opacity-75 ${isMe ? "text-emerald-100/90" : "text-gray-400"}`}>
+            {formatMessageTime(msg.createdAt)}
+            {isMe && (
+              <DoubleCheckSVG isRead={msg.isRead} isMe={isMe} className="shrink-0 scale-90" />
+            )}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Individual Message Item with Swipe to Reply gesture control
 const MessageItem = ({
   msg,
@@ -127,6 +286,8 @@ const MessageItem = ({
   isSelected,
   onToggleSelect,
   onReactMessage,
+  currentUser,
+  otherUser,
 }) => {
   const [dragOffset, setDragOffset] = useState(0);
   const touchStart = useRef(0);
@@ -134,6 +295,7 @@ const MessageItem = ({
   const displaySenderName = isMe ? "You" : (senderName ? senderName.split(" ")[0] : "");
   const isSwapOffer = msg.text.startsWith('{"type":"swapOffer"');
   const isMedia = msg.text.startsWith("data:image/") || msg.text.startsWith("data:video/");
+  const isAudio = msg.text.startsWith("data:audio/");
   const longPressTimeout = useRef(null);
 
   const handleTouchStart = (e) => {
@@ -169,7 +331,9 @@ const MessageItem = ({
           ? "📷 Photo"
           : msg.text.startsWith("data:video/")
             ? "🎥 Video"
-            : msg.text,
+            : msg.text.startsWith("data:audio/")
+              ? "🎙️ Voice Message"
+              : msg.text,
         senderName: isMe ? "You" : (senderName ? senderName.split(" ")[0] : ""),
       });
     }
@@ -293,12 +457,17 @@ const MessageItem = ({
 
               {/* Bubble Content */}
               <div
-                className={`rounded-2xl text-sm shadow-2xs break-words w-fit max-w-full relative ${isMedia
+                className={`rounded-2xl text-sm shadow-2xs break-words w-fit max-w-full relative ${
+                  isMedia
                     ? "p-1 bg-white border border-gray-200/80 shadow-xs"
-                    : isMe
-                      ? "px-4 py-2.5 bg-gradient-to-br from-[#2E7D32] to-[#1E5621] text-white"
-                      : "px-4 py-2.5 bg-white text-gray-800 border border-gray-100"
-                  }`}
+                    : isAudio
+                      ? isMe
+                        ? "p-2 pb-1.5 bg-gradient-to-br from-[#2E7D32] to-[#1E5621] text-white"
+                        : "p-2 pb-1.5 bg-white border border-gray-200/80 text-gray-800"
+                      : isMe
+                        ? "px-4 py-2.5 bg-gradient-to-br from-[#2E7D32] to-[#1E5621] text-white"
+                        : "px-4 py-2.5 bg-white border border-gray-200/80 text-gray-800"
+                }`}
               >
                 {/* Quoted Message (if replying) */}
                 {msg.replyTo && msg.replyTo.text && (
@@ -421,20 +590,24 @@ const MessageItem = ({
                       <div className="relative rounded-xl overflow-hidden max-w-[245px] sm:max-w-[320px] bg-black">
                         <video src={msg.text} controls className="w-full h-auto max-h-60 rounded-xl" />
                       </div>
+                    ) : msg.text.startsWith("data:audio/") ? (
+                      <VoiceMessagePlayer msg={msg} isMe={isMe} currentUser={currentUser} otherUser={otherUser} />
                     ) : (
                       <p className="whitespace-pre-wrap text-left leading-relaxed break-all inline">{msg.text}</p>
                     )}
 
                     {/* Message Timestamp and Read Status inside the bubble */}
-                    <span className={isMedia
-                      ? "absolute bottom-3 right-3 bg-black/50 text-white backdrop-blur-xs px-1.5 py-0.5 rounded-full inline-flex items-center gap-0.5 text-[9px] font-bold select-none z-10"
-                      : `inline-flex items-center gap-0.5 text-[9px] font-bold select-none float-right ml-2.5 mt-2.5 -mr-1 -mb-1 translate-y-[3px] opacity-75 ${isMe ? "text-emerald-100/90" : "text-gray-400"}`
-                    }>
-                      {formatMessageTime(msg.createdAt)}
-                      {isMe && (
-                        <DoubleCheckSVG isRead={msg.isRead} isMe={isMe} className={`shrink-0 scale-90 ${isMedia ? "text-sky-350" : ""}`} />
-                      )}
-                    </span>
+                    {!isAudio && (
+                      <span className={isMedia
+                        ? "absolute bottom-3 right-3 bg-black/50 text-white backdrop-blur-xs px-1.5 py-0.5 rounded-full inline-flex items-center gap-0.5 text-[9px] font-bold select-none z-10"
+                        : `inline-flex items-center gap-0.5 text-[9px] font-bold select-none float-right ml-2.5 mt-2.5 -mr-1 -mb-1 translate-y-[3px] opacity-75 ${isMe ? "text-emerald-100/90" : "text-gray-400"}`
+                      }>
+                        {formatMessageTime(msg.createdAt)}
+                        {isMe && (
+                          <DoubleCheckSVG isRead={msg.isRead} isMe={isMe} className={`shrink-0 scale-90 ${isMedia ? "text-sky-350" : ""}`} />
+                        )}
+                      </span>
+                    )}
                   </>
                 )}
 
@@ -1081,6 +1254,8 @@ const ChatWindow = ({
                   isSelected={selectedMsgIndices.includes(index)}
                   onToggleSelect={() => handleToggleSelectMessage(index)}
                   onReactMessage={onReactMessage}
+                  currentUser={currentUser}
+                  otherUser={otherUser}
                 />
               </div>
             );

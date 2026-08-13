@@ -67,9 +67,10 @@ const MyProducts = () => {
 
                 {/* Top Banner Section */}
                 <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4 }}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.05 }}
+                    transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
                     className="relative overflow-hidden bg-gradient-to-r from-[#2E7D32] via-[#256728] to-[#1E5621] rounded-3xl p-6 sm:p-10 text-white shadow-xl shadow-[#2E7D32]/15 border border-emerald-600/30 flex flex-col sm:flex-row sm:items-center justify-between gap-6"
                 >
                     {/* Ambient Light Orb */}
@@ -95,7 +96,7 @@ const MyProducts = () => {
                     <div className="relative z-10 shrink-0">
                         <Link
                             to="/addProduct"
-                            className="inline-flex items-center gap-2 bg-white text-[#2E7D32] hover:bg-emerald-50 font-bold px-6 py-3.5 rounded-full text-xs sm:text-sm shadow-lg hover:scale-105 active:scale-95 transition-all duration-200"
+                            className="inline-flex items-center gap-2 bg-white text-[#2E7D32] hover:bg-emerald-50 font-bold px-6 py-3.5 rounded-full text-xs sm:text-sm shadow-lg hover:scale-105 hover:-translate-y-0.5 hover:shadow-emerald-950/20 active:scale-95 transition-all duration-300 ease-out"
                         >
                             <FaPlusCircle className="text-base text-[#2E7D32]" />
                             <span>Add New Product</span>
@@ -136,11 +137,12 @@ const MyProducts = () => {
                     </motion.div>
                 ) : (
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-                        {products.map((product) => (
+                        {products.map((product, index) => (
                             <MyProductCard
                                 key={product._id}
                                 product={product}
                                 handleDelete={handleDelete}
+                                index={index}
                             />
                         ))}
                     </div>

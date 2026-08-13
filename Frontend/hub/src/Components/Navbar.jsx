@@ -135,7 +135,7 @@ const Navbar = () => {
 
                 <Link
                   to="/register"
-                  className="bg-[#2E7D32] border-2 border-[#2E7D32] hover:bg-[#236327] hover:border-[#236327] text-white font-bold px-6 py-2 rounded-full shadow-md shadow-[#2E7D32]/25 hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-200 text-sm"
+                  className="bg-[#2E7D32] border-2 border-[#2E7D32] hover:bg-[#236327] hover:border-[#236327] text-white font-bold px-6 py-2 rounded-full shadow-md shadow-[#2E7D32]/25 hover:scale-105 active:scale-95 transition-all duration-200 text-sm"
                 >
                   Register
                 </Link>
@@ -195,7 +195,7 @@ const Navbar = () => {
 
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-1.5 bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-full text-sm font-semibold shadow-sm hover:shadow-md transition duration-200"
+                  className="flex items-center gap-1.5 bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-full text-sm font-semibold shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
                 >
                   <span>Logout</span>
                   <AiOutlineLogout className="text-base" />
@@ -321,7 +321,7 @@ const Navbar = () => {
                 {/* Row 4: Logout Button */}
                 <button
                   onClick={handleLogout}
-                  className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-2.5 px-4 rounded-2xl font-bold text-sm transition mt-1 shadow-xs"
+                  className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-2.5 px-4 rounded-2xl font-bold text-sm transition mt-1 shadow-xs cursor-pointer"
                 >
                   <span>Logout</span>
                   <AiOutlineLogout className="text-lg" />

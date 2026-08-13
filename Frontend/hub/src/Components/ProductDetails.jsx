@@ -118,6 +118,10 @@ const ProductDetails = () => {
     );
   }
 
+  const orangeCategories = ["mobiles", "gaming", "home items"];
+  const isOrange = product.category && orangeCategories.includes(product.category.toLowerCase());
+  const borderColor = isOrange ? "border-t-[#F4A261]" : "border-t-[#2E7D32]";
+
   return (
     <>
       <div className="w-full min-h-screen bg-gray-50/60 py-8 sm:py-12 px-4 sm:px-6 md:px-8">
@@ -127,19 +131,19 @@ const ProductDetails = () => {
           <div>
             <Link
               to="/products"
-              className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold bg-white text-[#2E7D32] border border-gray-200 shadow-xs hover:shadow-md px-4 py-2 rounded-full hover:bg-emerald-50 hover:-translate-x-1 transition-all cursor-pointer"
+              className="group inline-flex items-center gap-2 text-xs sm:text-sm font-bold bg-white text-[#2E7D32] border border-gray-200 shadow-xs hover:shadow-md hover:shadow-emerald-950/5 px-4 py-2 rounded-full hover:bg-emerald-50 hover:-translate-x-1.5 transition-all duration-300 ease-out cursor-pointer"
             >
-              <FaArrowLeft className="text-xs" />
+              <FaArrowLeft className="text-xs group-hover:-translate-x-0.5 transition-transform duration-300" />
               <span>Back to Products</span>
             </Link>
           </div>
 
           {/* Product Showcase Card */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="w-full max-w-full bg-white/95 backdrop-blur-xl rounded-3xl shadow-xl border border-gray-100 border-t-4 border-t-[#2E7D32] overflow-hidden"
+            transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+            className={`w-full max-w-full bg-white/95 backdrop-blur-xl rounded-3xl shadow-xl border border-gray-100 border-t-4 ${borderColor} overflow-hidden`}
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10 p-6 sm:p-8 md:p-10 items-stretch min-w-0">
 
@@ -150,7 +154,7 @@ const ProductDetails = () => {
                 <img
                   src={product.image}
                   alt={product.productName}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover transition-transform duration-500 scale-125 group-hover:scale-100"
                 />
                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white font-bold text-xs sm:text-sm backdrop-blur-xs">
                   🔍 Click to expand image
@@ -266,7 +270,7 @@ const ProductDetails = () => {
                           <select
                             value={selectedProduct}
                             onChange={(e) => setSelectedProduct(e.target.value)}
-                            className="w-full max-w-full border border-gray-200 rounded-2xl px-4 py-3 text-xs sm:text-sm bg-white font-semibold text-gray-800 focus:outline-none focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10 transition-all shadow-2xs"
+                            className="w-full max-w-full border border-gray-200 rounded-2xl px-4 py-3 text-xs sm:text-sm bg-white font-semibold text-gray-800 focus:outline-none focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10 focus:-translate-y-0.5 transition-all duration-300 shadow-2xs ease-out"
                           >
                             <option value="">-- Choose From Your Listed Products --</option>
                             {myProducts.map((item) => (
@@ -278,7 +282,7 @@ const ProductDetails = () => {
 
                           <button
                             onClick={sendSwapRequest}
-                            className="mt-4 w-full bg-gradient-to-r from-[#2E7D32] to-[#1E5621] hover:from-[#256728] hover:to-[#164219] text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-[#2E7D32]/25 hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-200 text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer"
+                            className="mt-4 w-full bg-gradient-to-r from-[#2E7D32] to-[#1E5621] hover:from-[#256728] hover:to-[#164219] text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-[#2E7D32]/25 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-0.5 active:scale-95 transition-all duration-300 ease-out text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer"
                           >
                             <FaPaperPlane className="text-xs" />
                             <span>Send Swap Request</span>
@@ -286,7 +290,7 @@ const ProductDetails = () => {
 
                           <button
                             onClick={handleStartChat}
-                            className="mt-3 w-full bg-white border border-[#2E7D32] hover:bg-emerald-50 text-[#2E7D32] font-bold py-3.5 rounded-2xl shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200 text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer"
+                            className="mt-3 w-full bg-white border border-[#2E7D32] hover:bg-emerald-50 text-[#2E7D32] font-bold py-3.5 rounded-2xl shadow-md hover:shadow-lg hover:scale-[1.02] hover:-translate-y-0.5 active:scale-95 transition-all duration-300 ease-out text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer"
                           >
                             <FaExchangeAlt className="rotate-90 text-xs" />
                             <span>Chat with Seller</span>

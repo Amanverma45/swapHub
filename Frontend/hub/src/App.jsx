@@ -71,9 +71,10 @@ const BackToTopButton = () => {
 const App = () => {
   const location = useLocation();
   const isChatPage = location.pathname === "/chat";
+  const isDarkPage = ["/chat"].includes(location.pathname);
 
   return (
-    <div className={`w-full ${isChatPage ? "h-screen overflow-hidden fixed inset-0" : "min-h-screen"} flex flex-col bg-gray-50 overflow-x-hidden relative`}>
+    <div className={`w-full ${isChatPage ? "h-screen overflow-hidden fixed inset-0" : "min-h-screen"} flex flex-col ${isDarkPage ? "bg-slate-950" : "bg-gray-50"} overflow-x-hidden relative`}>
       <ScrollToTop />
       {!isChatPage && <Navbar />}
       <main className={`flex-grow w-full ${isChatPage ? "" : "pt-16 sm:pt-20"}`}>

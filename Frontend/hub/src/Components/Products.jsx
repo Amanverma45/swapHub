@@ -68,9 +68,10 @@ const Products = () => {
         
         {/* Top Banner Section */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.05 }}
+          transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
           className="relative overflow-hidden bg-gradient-to-r from-[#2E7D32] via-[#256728] to-[#1E5621] rounded-3xl p-6 sm:p-10 text-white shadow-xl shadow-[#2E7D32]/15 border border-emerald-600/30 text-center"
         >
           {/* Ambient Light Orb */}
@@ -166,8 +167,8 @@ const Products = () => {
         ) : (
           /* Products Grid: 2 columns on Mobile (grid-cols-2) | 3 columns on Desktop (md:grid-cols-3) */
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3.5 sm:gap-6 md:gap-8">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product._id} product={product} />
+            {filteredProducts.map((product, index) => (
+              <ProductCard key={product._id} product={product} index={index} />
             ))}
           </div>
         )}
