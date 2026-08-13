@@ -7,6 +7,7 @@ const router= express.Router()
 
 router.post('/saveUser',userController.saveUser)
 router.post('/loginUser',userController.loginUser)
+router.post('/googleLogin',userController.googleLogin)
 router.put("/updateProfile",authMiddleware,upload.single("profileImage"),userController.updateProfile);
 router.get("/getProfile", authMiddleware, userController.getProfile);
 router.put("/removeProfilePhoto", authMiddleware, userController.removeProfilePhoto);

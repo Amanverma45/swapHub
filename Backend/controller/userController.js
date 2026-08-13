@@ -249,4 +249,61 @@ const resetPassword = async (req, res) => {
     }
 };
 
-module.exports = { saveUser, loginUser, updateProfile, getProfile, removeProfilePhoto, forgotPassword, resetPassword }
+const googleLogin = async (req, res) => {
+    try {
+        const { token } = req.body;
+        if (!token) {
+            return res.status(400).json({ message: "Google token is required" });
+        }
+
+        const verifyResponse = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${token}`);
+        if (!verifyResponse.ok) {
+            return res.status(400).json({ message: "Invalid or expired Google token" });
+        }
+
+        const payload = await verifyResponse.json();
+        const { email, name, picture } = payload;
+
+        if (!email) {
+            return res.status(400).json({ message: "Could not retrieve email from Google token" });
+        }
+
+        const normalizedEmail = email.toLowerCase().trim();
+        let user = await userModel.findOne({ email: normalizedEmail });
+
+        if (!user) {
+            // Create a randomized secure password placeholder
+            const generatedPass = Math.random().toString(36).slice(-8) + Math.random().toString(36).toUpperCase().slice(-8);
+            const hashedPassword = await bcrypt.hash(generatedPass, 10);
+
+            user = new userModel({
+                name: name || "Google User",
+                email: normalizedEmail,
+                password: hashedPassword,
+                profileImage: picture || ""
+            });
+            await user.save();
+        } else if (!user.profileImage && picture) {
+            user.profileImage = picture;
+            await user.save();
+        }
+
+        const jwtToken = jwt.sign(
+            { id: user._id, email: user.email },
+            process.env.JWT_SECRET,
+            { expiresIn: "1d" }
+        );
+
+        return res.status(200).json({
+            message: "Login Successfully",
+            token: jwtToken,
+            user
+        });
+
+    } catch (error) {
+        console.error("GOOGLE LOGIN ERROR:", error.message);
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = { saveUser, loginUser, updateProfile, getProfile, removeProfilePhoto, forgotPassword, resetPassword, googleLogin }
