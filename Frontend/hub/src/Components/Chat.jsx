@@ -95,6 +95,11 @@ const Chat = () => {
     socket.current.on("connect", () => {
       console.log("DEBUG: Socket connected successfully! ID:", socket.current.id);
       
+      if (currentUser?._id) {
+        console.log("DEBUG: Joining personal room on connect:", currentUser._id);
+        socket.current.emit("joinUser", currentUser._id);
+      }
+
       // Rejoin active room on connect/reconnect
       if (activeChatRef.current) {
         console.log("DEBUG: Rejoining active room on connect:", activeChatRef.current._id);
@@ -388,6 +393,7 @@ const Chat = () => {
           _id: currentUser._id,
           name: currentUser.name,
           email: currentUser.email,
+          profileImage: currentUser.profileImage,
         },
       };
 

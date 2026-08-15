@@ -1,4 +1,6 @@
 const chatModel = require("../model/chatModel");
+const userModel = require("../model/userModel");
+const notificationModel = require("../model/notificationModel");
 const { getIo } = require("../socket");
 
 const createChat = async (req, res) => {
@@ -63,7 +65,7 @@ const sendMessage = async (req, res) => {
 
         const populatedChat = await chatModel.populate(chat, {
             path: "messages.sender",
-            select: "name email"
+            select: "name email profileImage"
         });
         const savedMessage = populatedChat.messages[populatedChat.messages.length - 1];
 
@@ -77,6 +79,68 @@ const sendMessage = async (req, res) => {
         } else {
             console.error("BACKEND DEBUG ERROR: Socket.io instance is null or undefined!");
         }
+
+        try {
+            const recipientId = chat.users.find((u) => u.toString() !== senderId.toString());
+            if (recipientId) {
+                const senderUser = await userModel.findById(senderId);
+                const recipientUser = await userModel.findById(recipientId);
+                let snippet = text;
+                if (text.startsWith("data:image/")) snippet = "sent you a photo 📷";
+                else if (text.startsWith("data:video/")) snippet = "sent you a video 🎥";
+                else if (text.startsWith("data:audio/")) snippet = "sent you a voice message 🎙️";
+                else if (text.startsWith('{"type":"swapOffer"')) snippet = "sent you a swap proposal ⇄";
+                else if (snippet.length > 60) snippet = snippet.substring(0, 60) + "...";
+
+                const notification = new notificationModel({
+                    recipient: recipientId,
+                    sender: senderId,
+                    type: "new_chat_message",
+                    message: `${senderUser ? senderUser.name : "Someone"} sent you a message: ${snippet}`,
+                    relatedId: chatId,
+                });
+                await notification.save();
+
+                if (io) {
+                    const populatedNotif = await notificationModel.findById(notification._id)
+                        .populate("sender", "name profileImage");
+                    io.to(recipientId.toString()).emit("newNotification", populatedNotif);
+                }
+
+                // Asynchronously send email notification
+                if (recipientUser && recipientUser.email && senderUser) {
+                    const clientUrl = req.headers.origin || process.env.CLIENT_URL || "https://swaphub45.netlify.app";
+                    const subject = "💬 New Message on SwapHub";
+                    const html = `
+                        <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 25px; border: 1px solid #e5e7eb; border-radius: 16px; background-color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+                            <div style="text-align: center; margin-bottom: 20px;">
+                                <span style="font-size: 40px;">💬</span>
+                            </div>
+                            <h2 style="color: #1e293b; font-size: 20px; font-weight: 800; text-align: center; margin-top: 0; margin-bottom: 20px;">New Message Received</h2>
+                            <p style="color: #475569; font-size: 14px; line-height: 1.6;">
+                                Hello <strong>${recipientUser.name}</strong>,
+                            </p>
+                            <p style="color: #475569; font-size: 14px; line-height: 1.6;">
+                                <strong>${senderUser.name}</strong> sent you a message:
+                            </p>
+                            <blockquote style="background-color: #f8fafc; border-left: 4px solid #2E7D32; padding: 12px 16px; margin: 20px 0; border-radius: 4px; font-style: italic; color: #334155; font-size: 14px;">
+                                "${snippet}"
+                            </blockquote>
+                            <div style="text-align: center; margin-top: 30px; margin-bottom: 10px;">
+                                <a href="${clientUrl}/chat" style="background-color: #2E7D32; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 9999px; font-weight: bold; font-size: 14px; display: inline-block; box-shadow: 0 4px 6px rgba(46, 125, 50, 0.25);">Reply in Chat →</a>
+                            </div>
+                        </div>
+                    `;
+                    const sendEmail = require("../utils/sendEmail.js");
+                    sendEmail(recipientUser.email, subject, html).catch((err) => {
+                        console.error("SMTP error sending chat message email:", err.message);
+                    });
+                }
+            }
+        } catch (err) {
+            console.error("Error creating chat message notification:", err);
+        }
+
         return res.status(200).json(chat);
 
     } catch (error) {
@@ -118,7 +182,7 @@ const getMessages = async (req, res) => {
 
         const populatedChat = await chatModel.populate(chat, {
             path: "messages.sender",
-            select: "name email"
+            select: "name email profileImage"
         });
 
         return res.status(200).json(populatedChat.messages);

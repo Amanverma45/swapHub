@@ -5,36 +5,88 @@ import { AiOutlineLogout } from "react-icons/ai";
 import { FaBell } from "react-icons/fa";
 import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
 import axios from "../utils/axiosInstance";
+import { io } from "socket.io-client";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const token = localStorage.getItem("token");
-  const [notificationCount, setNotificationCount] = useState(0);
+
+  // Notifications states
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [showNotifDropdown, setShowNotifDropdown] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
+
+  const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     navigate("/");
     setIsOpen(false);
+    setShowNotifDropdown(false);
   };
 
-  const getNotificationCount = async () => {
+  const fetchNotifications = async () => {
     try {
-      const response = await axios.get("/notificationCount");
-      setNotificationCount(response.data.count);
+      const response = await axios.get("/notifications");
+      setNotifications(response.data);
+      const unread = response.data.filter((n) => !n.isRead).length;
+      setUnreadCount(unread);
     } catch (error) {
-      console.log(error);
+      console.log("Error fetching notifications:", error);
     }
   };
 
   useEffect(() => {
     if (token) {
-      getNotificationCount();
+      fetchNotifications();
     }
   }, [token]);
+
+  // Real-time socket notification listener
+  useEffect(() => {
+    if (!token || !currentUser?._id) return;
+
+    const socketHost = typeof window !== "undefined" ? window.location.hostname : "localhost";
+    const socketUrl = `http://${socketHost}:5000`;
+    const socket = io(socketUrl);
+
+    socket.on("connect", () => {
+      socket.emit("joinUser", currentUser._id);
+    });
+
+    socket.on("newNotification", (newNotif) => {
+      setNotifications((prev) => [newNotif, ...prev]);
+      setUnreadCount((prev) => prev + 1);
+      toast.success(newNotif.message, { icon: "🔔" });
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [token, currentUser?._id]);
+
+  // Close notifications dropdown on click outside
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      const isClickOnBell = e.target.closest(".bell-btn-trigger");
+      const isClickInsideDropdown = e.target.closest(".notif-dropdown-panel");
+      if (!isClickOnBell && !isClickInsideDropdown) {
+        setShowNotifDropdown(false);
+      }
+    };
+    if (showNotifDropdown) {
+      document.addEventListener("mousedown", handleOutsideClick);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [showNotifDropdown]);
 
   // Window scroll listener for dynamic top space animation
   useEffect(() => {
@@ -48,6 +100,58 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleNotifClick = async (notif) => {
+    if (!notif.isRead) {
+      try {
+        await axios.put(`/notifications/${notif._id}/read`);
+        setNotifications((prev) =>
+          prev.map((n) => (n._id === notif._id ? { ...n, isRead: true } : n))
+        );
+        setUnreadCount((prev) => Math.max(0, prev - 1));
+      } catch (err) {
+        console.error("Error marking notification as read:", err);
+      }
+    }
+
+    setShowNotifDropdown(false);
+
+    if (notif.type === "new_swap_request") {
+      navigate("/swapRequest");
+    } else if (notif.type === "swap_accepted" || notif.type === "swap_rejected") {
+      navigate("/mySwapRequests");
+    } else if (notif.type === "new_chat_message") {
+      navigate("/chat", { state: { activeChatId: notif.relatedId } });
+    }
+  };
+
+  const handleMarkAllAsRead = async () => {
+    try {
+      await axios.put("/notifications/read-all");
+      setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+      setUnreadCount(0);
+      toast.success("All notifications marked as read");
+    } catch (err) {
+      console.error("Error marking all notifications as read:", err);
+      toast.error("Failed to mark all as read");
+    }
+  };
+
+  const formatTimeAgo = (dateStr) => {
+    if (!dateStr) return "";
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffSecs = Math.floor(diffMs / 1000);
+    const diffMins = Math.floor(diffSecs / 60);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffSecs < 60) return "Just now";
+    if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? "s" : ""} ago`;
+    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
+    return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+  };
 
   const isActive = (path) => location.pathname === path;
 
@@ -181,14 +285,14 @@ const Navbar = () => {
                 </Link>
 
                 <div
-                  onClick={() => navigate("/swapRequest")}
-                  className="relative cursor-pointer p-2 rounded-full text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60 transition-colors"
+                  onClick={() => setShowNotifDropdown(!showNotifDropdown)}
+                  className="relative cursor-pointer p-2 rounded-full text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60 transition-colors bell-btn-trigger"
                   title="Notifications"
                 >
                   <FaBell className="text-xl" />
-                  {notificationCount > 0 && (
+                  {unreadCount > 0 && (
                     <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border-2 border-white">
-                      {notificationCount}
+                      {unreadCount}
                     </span>
                   )}
                 </div>
@@ -203,6 +307,62 @@ const Navbar = () => {
               </>
             )}
           </div>
+
+          {/* Premium Notifications Dropdown Panel (Responsive) */}
+          {showNotifDropdown && (
+            <div className="absolute right-4 md:right-16 top-16 w-[calc(100vw-32px)] sm:w-80 max-h-[420px] overflow-y-auto bg-white/95 backdrop-blur-md border border-gray-150 rounded-2xl shadow-xl z-50 p-3 flex flex-col gap-2 select-none animate-fade-in text-left notif-dropdown-panel">
+              <div className="flex items-center justify-between border-b border-gray-100 pb-2 mb-1">
+                <span className="font-extrabold text-sm text-gray-800 flex items-center gap-1.5">
+                  🔔 Notifications
+                </span>
+                {unreadCount > 0 && (
+                  <button
+                    onClick={handleMarkAllAsRead}
+                    className="text-[11px] font-bold text-[#2E7D32] hover:underline cursor-pointer"
+                  >
+                    Mark all as read
+                  </button>
+                )}
+              </div>
+
+              {notifications.length === 0 ? (
+                <div className="text-center py-6 text-gray-400 text-xs font-semibold">
+                  No notifications yet
+                </div>
+              ) : (
+                <div className="flex flex-col gap-1.5 overflow-y-auto max-h-[340px]">
+                  {notifications.map((notif) => (
+                    <div
+                      key={notif._id}
+                      onClick={() => handleNotifClick(notif)}
+                      className={`p-2.5 rounded-xl flex gap-2.5 cursor-pointer transition-colors border ${
+                        !notif.isRead
+                          ? "bg-emerald-50/40 border-emerald-100 hover:bg-emerald-50/80"
+                          : "bg-white border-transparent hover:bg-gray-50"
+                      }`}
+                    >
+                      {/* Icon badge */}
+                      <div className="shrink-0 w-8.5 h-8.5 rounded-full flex items-center justify-center border shadow-3xs bg-white text-base">
+                        {notif.type === "new_swap_request" && "🔄"}
+                        {notif.type === "swap_accepted" && "✅"}
+                        {notif.type === "swap_rejected" && "❌"}
+                        {notif.type === "new_chat_message" && "💬"}
+                      </div>
+
+                      <div className="flex-1 min-w-0 text-left">
+                        <p className={`text-xs text-gray-850 leading-snug break-words ${!notif.isRead ? "font-bold" : "font-medium"}`}>
+                          {notif.message}
+                        </p>
+                        <span className="text-[10px] text-gray-400 font-bold block mt-1">
+                          {formatTimeAgo(notif.createdAt)}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
         </nav>
 
@@ -292,16 +452,16 @@ const Navbar = () => {
 
                   <div
                     onClick={() => {
-                      navigate("/swapRequest");
+                      setShowNotifDropdown(!showNotifDropdown);
                       setIsOpen(false);
                     }}
-                    className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-2xl border transition-colors cursor-pointer ${isActive("/swapRequest") ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]" : "border-gray-200 text-gray-700 hover:border-[#2E7D32]/30"}`}
+                    className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-2xl border transition-colors cursor-pointer bell-btn-trigger ${showNotifDropdown ? "bg-[#2E7D32]/10 border-[#2E7D32]/40 text-[#2E7D32]" : "border-gray-200 text-gray-700 hover:border-[#2E7D32]/30"}`}
                   >
                     <FaBell className="text-base text-[#2E7D32]" />
-                    <span className="font-bold text-sm">Requests</span>
-                    {notificationCount > 0 && (
+                    <span className="font-bold text-sm">Notifications</span>
+                    {unreadCount > 0 && (
                       <span className="bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
-                        {notificationCount}
+                        {unreadCount}
                       </span>
                     )}
                   </div>

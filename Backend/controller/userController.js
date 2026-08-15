@@ -161,7 +161,7 @@ const forgotPassword = async (req, res) => {
             { expiresIn: "15m" }
         );
 
-        const clientUrl = req.headers.origin || process.env.CLIENT_URL || "http://localhost:5174";
+        const clientUrl = req.headers.origin || process.env.CLIENT_URL || "https://swaphub45.netlify.app";
         const resetLink = `${clientUrl}/reset-password/${resetToken}`;
 
         // FIX: Duplicate sendEmail calls hata kar single formatted email bhej rahe hain

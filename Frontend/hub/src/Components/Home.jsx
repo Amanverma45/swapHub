@@ -39,8 +39,9 @@ const Home = () => {
                         </span>
 
                         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-gray-900">
-                            Exchange Products{" "}
-                            <span className="text-[#2E7D32] relative inline-flex w-[140px] sm:w-[180px] md:w-[230px] lg:w-[270px] h-[1.15em] overflow-hidden align-middle items-center">
+                            Exchange Products, <br />
+                            Not Costlier. Make it{" "}
+                            <span className="text-[#2E7D32] relative inline-flex w-[160px] sm:w-[190px] md:w-[235px] lg:w-[280px] h-[1.15em] overflow-hidden align-middle justify-center md:justify-start">
                                 <AnimatePresence mode="wait">
                                     <motion.span
                                         key={words[wordIndex]}
@@ -48,13 +49,12 @@ const Home = () => {
                                         animate={{ y: "0%", opacity: 1 }}
                                         exit={{ y: "-100%", opacity: 0 }}
                                         transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-                                        className="absolute left-0 inline-block w-full text-left"
+                                        className="absolute left-0 right-0 inline-block w-full text-center md:text-left"
                                     >
                                         {words[wordIndex]}
                                     </motion.span>
                                 </AnimatePresence>
-                            </span>,
-                            <br className="hidden lg:inline" /> Not Costlier.
+                            </span>.
                         </h1>
 
                         <p className="text-gray-600 text-sm md:text-lg mt-5 leading-relaxed max-w-xl mx-auto md:mx-0">
@@ -87,27 +87,27 @@ const Home = () => {
                         initial={{ opacity: 0, x: 40 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.6, delay: 0.2 }}
-                        className="flex justify-center items-center w-full relative min-h-[360px] sm:min-h-[440px] md:min-h-[500px]"
+                        className="flex justify-center items-center relative w-[280px] h-[280px] sm:w-[350px] sm:h-[350px] md:w-[420px] md:h-[420px] mx-auto shrink-0 select-none"
                     >
                         {/* Ambient slow-moving background glow orbs */}
                         <motion.div
                             animate={{
-                                x: [0, 30, -20, 0],
-                                y: [0, -40, 20, 0],
-                                scale: [1, 1.15, 0.9, 1]
+                                x: [0, 15, -10, 0],
+                                y: [0, -20, 10, 0],
+                                scale: [1, 1.1, 0.95, 1]
                             }}
                             transition={{
                                 duration: 15,
                                 repeat: Infinity,
                                 ease: "easeInOut"
                             }}
-                            className="absolute w-72 h-72 md:w-96 md:h-96 bg-[#2E7D32]/10 rounded-full blur-3xl -z-10 pointer-events-none"
+                            className="absolute w-56 h-56 md:w-72 md:h-72 bg-[#2E7D32]/10 rounded-full blur-3xl -z-10 pointer-events-none"
                         />
                         <motion.div
                             animate={{
-                                x: [0, -30, 25, 0],
-                                y: [0, 40, -15, 0],
-                                scale: [1, 0.9, 1.1, 1]
+                                x: [0, -15, 12, 0],
+                                y: [0, 20, -8, 0],
+                                scale: [1, 0.95, 1.05, 1]
                             }}
                             transition={{
                                 duration: 18,
@@ -115,19 +115,19 @@ const Home = () => {
                                 ease: "easeInOut",
                                 delay: 2
                             }}
-                            className="absolute w-64 h-64 md:w-80 md:h-80 bg-[#F4A261]/8 rounded-full blur-3xl -z-10 pointer-events-none"
+                            className="absolute w-48 h-48 md:w-64 md:h-64 bg-[#F4A261]/8 rounded-full blur-3xl -z-10 pointer-events-none"
                         />
 
                         {/* Rotating dashed rings */}
                         <motion.div
                             animate={{ rotate: 360 }}
                             transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                            className="absolute w-[280px] h-[280px] sm:w-[350px] sm:h-[350px] md:w-[440px] md:h-[440px] border-2 border-dashed border-[#2E7D32]/15 rounded-full -z-5 pointer-events-none"
+                            className="absolute w-[220px] h-[220px] sm:w-[280px] sm:h-[280px] md:w-[320px] md:h-[320px] border-2 border-dashed border-[#2E7D32]/15 rounded-full -z-5 pointer-events-none"
                         />
                         <motion.div
                             animate={{ rotate: -360 }}
                             transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
-                            className="absolute w-[240px] h-[240px] sm:w-[310px] sm:h-[310px] md:w-[390px] md:h-[390px] border border-dashed border-[#F4A261]/20 rounded-full -z-5 pointer-events-none"
+                            className="absolute w-[180px] h-[180px] sm:w-[230px] sm:h-[230px] md:w-[260px] md:h-[260px] border border-dashed border-[#F4A261]/20 rounded-full -z-5 pointer-events-none"
                         />
 
                         {/* Floating Product Icons */}
@@ -135,7 +135,7 @@ const Home = () => {
                         <motion.div
                             animate={{ y: [0, -12, 0], x: [0, 5, 0] }}
                             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                            className="absolute top-2 left-2 sm:top-6 sm:left-6 md:-top-4 md:left-0 bg-emerald-50 text-[#2E7D32] p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl shadow-xl border-2 border-emerald-200/40 text-xl sm:text-2xl md:text-3xl z-10"
+                            className="absolute top-2 left-2 sm:top-4 sm:left-4 md:top-6 md:left-6 bg-emerald-50 text-[#2E7D32] p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-lg border border-emerald-200/40 text-lg sm:text-xl md:text-2xl z-10"
                         >
                             <FaBook />
                         </motion.div>
@@ -144,7 +144,7 @@ const Home = () => {
                         <motion.div
                             animate={{ y: [0, 12, 0], x: [0, -4, 0] }}
                             transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                            className="absolute top-2 right-2 sm:top-6 sm:right-6 md:-top-4 md:right-0 bg-amber-50 text-[#F4A261] p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl shadow-xl border-2 border-amber-200/40 text-xl sm:text-2xl md:text-3xl z-10"
+                            className="absolute top-2 right-2 sm:top-4 sm:right-4 md:top-6 md:right-6 bg-amber-50 text-[#F4A261] p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-lg border border-amber-200/40 text-lg sm:text-xl md:text-2xl z-10"
                         >
                             <FaMobileAlt />
                         </motion.div>
@@ -153,7 +153,7 @@ const Home = () => {
                         <motion.div
                             animate={{ y: [0, -10, 0], x: [0, -5, 0] }}
                             transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                            className="absolute bottom-2 left-2 sm:bottom-6 sm:left-6 md:-bottom-4 md:left-0 bg-amber-50 text-[#F4A261] p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl shadow-xl border-2 border-amber-200/40 text-xl sm:text-2xl md:text-3xl z-10"
+                            className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4 md:bottom-6 md:left-6 bg-amber-50 text-[#F4A261] p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-lg border border-amber-200/40 text-lg sm:text-xl md:text-2xl z-10"
                         >
                             <FaGamepad />
                         </motion.div>
@@ -162,7 +162,7 @@ const Home = () => {
                         <motion.div
                             animate={{ y: [0, 14, 0], x: [0, 6, 0] }}
                             transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-                            className="absolute bottom-2 right-2 sm:bottom-6 sm:right-6 md:-bottom-4 md:right-0 bg-emerald-50 text-[#2E7D32] p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl shadow-xl border-2 border-emerald-200/40 text-xl sm:text-2xl md:text-3xl z-10"
+                            className="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 md:bottom-6 md:right-6 bg-emerald-50 text-[#2E7D32] p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl shadow-lg border border-emerald-200/40 text-lg sm:text-xl md:text-2xl z-10"
                         >
                             <FaLaptop />
                         </motion.div>
@@ -171,16 +171,16 @@ const Home = () => {
                             src={logo}
                             alt="SwapHub"
                             animate={{
-                                y: [0, -18, 0],
-                                scale: [1, 1.03, 1],
-                                rotate: [0, 1, -1, 0],
+                                y: [0, -10, 0],
+                                scale: [1, 1.02, 1],
+                                rotate: [0, 0.5, -0.5, 0],
                             }}
                             transition={{
                                 duration: 3.5,
                                 repeat: Infinity,
                                 ease: "easeInOut",
                             }}
-                            className="w-full max-w-[260px] sm:max-w-[320px] md:max-w-[380px] lg:max-w-[440px] object-contain select-none drop-shadow-[0_20px_40px_rgba(46,125,50,0.18)]"
+                            className="w-full max-w-[130px] sm:max-w-[160px] md:max-w-[190px] object-contain select-none drop-shadow-[0_15px_30px_rgba(46,125,50,0.15)]"
                         />
                     </motion.div>
                 </div>
