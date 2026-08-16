@@ -2,6 +2,7 @@ const swapModel = require('../model/swapModel.js');
 const userModel = require('../model/userModel.js');
 const notificationModel = require('../model/notificationModel.js');
 const { getIo } = require('../socket.js');
+const getClientUrl = require('../utils/getClientUrl.js');
 const swapProduct = async (req, res) => {
     try {
       const existingRequest = await swapModel.findOne({
@@ -50,7 +51,7 @@ const swapProduct = async (req, res) => {
 
             // Asynchronously send email notification
             if (receiverUser && receiverUser.email && senderUser) {
-                const clientUrl = req.headers.origin || process.env.CLIENT_URL || "https://swaphub45.netlify.app";
+                const clientUrl = getClientUrl(req);
                 const productName = reqProduct ? reqProduct.productName : "your product";
                 const subject = "🔄 New Swap Request on SwapHub";
                 const html = `
@@ -139,7 +140,7 @@ const acceptSwapRequest = async (req, res) => {
 
             // Asynchronously send email notification
             if (senderUser && senderUser.email && receiverUser) {
-                const clientUrl = req.headers.origin || process.env.CLIENT_URL || "https://swaphub45.netlify.app";
+                const clientUrl = getClientUrl(req);
                 const productName = reqProduct ? reqProduct.productName : "your product";
                 const subject = "✅ Swap Request Accepted on SwapHub";
                 const html = `
@@ -220,7 +221,7 @@ const rejectSwapRequest = async(req,res)=>{
 
             // Asynchronously send email notification
             if (senderUser && senderUser.email && receiverUser) {
-                const clientUrl = req.headers.origin || process.env.CLIENT_URL || "https://swaphub45.netlify.app";
+                const clientUrl = getClientUrl(req);
                 const productName = reqProduct ? reqProduct.productName : "your product";
                 const subject = "❌ Swap Request Rejected on SwapHub";
                 const html = `

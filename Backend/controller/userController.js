@@ -2,6 +2,8 @@ const userModel = require('../model/userModel.js')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const sendEmail = require("../utils/sendEmail");
+const getClientUrl = require("../utils/getClientUrl");
+
 
 const saveUser = async (req, res) => {
     try {
@@ -161,7 +163,7 @@ const forgotPassword = async (req, res) => {
             { expiresIn: "15m" }
         );
 
-        const clientUrl = req.headers.origin || process.env.CLIENT_URL || "https://swaphub45.netlify.app";
+        const clientUrl = getClientUrl(req);
         const resetLink = `${clientUrl}/reset-password/${resetToken}`;
 
         // FIX: Duplicate sendEmail calls hata kar single formatted email bhej rahe hain

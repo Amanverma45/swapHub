@@ -2,6 +2,7 @@ const chatModel = require("../model/chatModel");
 const userModel = require("../model/userModel");
 const notificationModel = require("../model/notificationModel");
 const { getIo } = require("../socket");
+const getClientUrl = require("../utils/getClientUrl");
 
 const createChat = async (req, res) => {
     try {
@@ -109,7 +110,7 @@ const sendMessage = async (req, res) => {
 
                 // Asynchronously send email notification
                 if (recipientUser && recipientUser.email && senderUser) {
-                    const clientUrl = req.headers.origin || process.env.CLIENT_URL || "https://swaphub45.netlify.app";
+                    const clientUrl = getClientUrl(req);
                     const subject = "💬 New Message on SwapHub";
                     const html = `
                         <div style="font-family: sans-serif; max-width: 600px; margin: auto; padding: 25px; border: 1px solid #e5e7eb; border-radius: 16px; background-color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
