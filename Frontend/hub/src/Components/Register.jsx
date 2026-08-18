@@ -161,7 +161,7 @@ const Register = () => {
     } else {
       initGoogleGSI();
     }
-  }, []);
+  }, [otpSent]);
 
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center px-4 py-8 sm:py-16 overflow-hidden bg-gradient-to-br from-emerald-50/60 via-slate-50 to-amber-50/50">
