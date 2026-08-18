@@ -17,6 +17,15 @@ const Register = () => {
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
   const [otpLoading, setOtpLoading] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+
+  useEffect(() => {
+    let timer;
+    if (countdown > 0) {
+      timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [countdown]);
 
   // States to drive interactive animations in InteractiveRegisterPortal
   const [isNameFocused, setIsNameFocused] = useState(false);
@@ -39,6 +48,7 @@ const Register = () => {
       });
       toast.success(response.data.message || "OTP sent successfully");
       setOtpSent(true);
+      setCountdown(30);
     } catch (error) {
       console.log(error);
       toast.error(error.response?.data?.message || "Failed to send OTP");
@@ -54,6 +64,7 @@ const Register = () => {
         email: email.trim().toLowerCase(),
       });
       toast.success(response.data.message || "OTP resent successfully");
+      setCountdown(30);
     } catch (error) {
       console.log(error);
       toast.error(error.response?.data?.message || "Failed to resend OTP");
@@ -331,12 +342,16 @@ const Register = () => {
                   </button>
 
                   <button
-                    disabled={otpLoading}
+                    disabled={countdown > 0 || otpLoading}
                     type="button"
                     onClick={handleResendOtp}
-                    className="text-xs font-bold text-[#F4A261] hover:text-[#e76f51] transition disabled:opacity-50"
+                    className="text-xs font-bold text-[#F4A261] hover:text-[#e76f51] transition disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed"
                   >
-                    {otpLoading ? "Resending..." : "Resend OTP"}
+                    {otpLoading
+                      ? "Resending..."
+                      : countdown > 0
+                      ? `Resend OTP in ${countdown}s`
+                      : "Resend OTP"}
                   </button>
                 </div>
               </div>
