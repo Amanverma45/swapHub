@@ -13,6 +13,38 @@ const SwapRequests = () => {
   const [actionLoading, setActionLoading] = useState("");
   const navigate = useNavigate();
 
+  // Rating & Review State
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [reviewSwapId, setReviewSwapId] = useState("");
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewText, setReviewText] = useState("");
+  const [submittingReview, setSubmittingReview] = useState(false);
+
+  const handleSubmitReview = async () => {
+    if (!reviewText.trim()) {
+      toast.error("Please enter a short review");
+      return;
+    }
+    setSubmittingReview(true);
+    try {
+      const response = await axios.post("/reviews", {
+        swapRequestId: reviewSwapId,
+        rating: reviewRating,
+        reviewText: reviewText.trim()
+      });
+      toast.success(response.data.message);
+      setShowReviewModal(false);
+      setReviewText("");
+      setReviewRating(5);
+      getSwapRequests();
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Failed to submit review");
+    } finally {
+      setSubmittingReview(false);
+    }
+  };
+
   const handleStartChat = async (receiverId) => {
     const token = localStorage.getItem("token");
     const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -187,16 +219,20 @@ const SwapRequests = () => {
                             ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                             : request.status === "rejected"
                             ? "bg-red-50 text-red-700 border-red-200"
+                            : request.status === "expired"
+                            ? "bg-gray-100 text-gray-600 border-gray-200"
                             : "bg-amber-50 text-amber-700 border-amber-200"
                         }`}
                       >
                         <span
-                          className={`w-2 h-2 rounded-full animate-pulse ${
+                          className={`w-2 h-2 rounded-full ${
                             request.status === "accepted"
                               ? "bg-emerald-600"
                               : request.status === "rejected"
                               ? "bg-red-600"
-                              : "bg-amber-500"
+                              : request.status === "expired"
+                              ? "bg-gray-500"
+                              : "bg-amber-500 animate-pulse"
                           }`}
                         />
                         {request.status}
@@ -343,6 +379,27 @@ const SwapRequests = () => {
                       </button>
                     </div>
                   )}
+
+                  {/* Rating / Review Action Button for Accepted requests */}
+                  {request.status === "accepted" && (
+                    <div className="flex items-center justify-center gap-3 sm:gap-4 mt-6 pt-5 border-t border-gray-100">
+                      {request.userRating ? (
+                        <div className="flex items-center gap-1.5 bg-amber-50 text-amber-800 border border-amber-200/60 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold shadow-2xs">
+                          <span>You rated: {"⭐".repeat(request.userRating)}</span>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => {
+                            setReviewSwapId(request._id);
+                            setShowReviewModal(true);
+                          }}
+                          className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold py-2.5 px-6 rounded-2xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:scale-105 active:scale-95 transition-all text-xs sm:text-sm flex items-center gap-2 cursor-pointer"
+                        >
+                          <span>⭐ Rate Swap</span>
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </motion.div>
               ))}
             </div>
@@ -369,6 +426,84 @@ const SwapRequests = () => {
             className="max-w-[90%] max-h-[85vh] rounded-3xl shadow-2xl border border-white/20 object-contain"
             onClick={(e) => e.stopPropagation()}
           />
+        </div>
+      )}
+
+      {/* Review/Rating Modal */}
+      {showReviewModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+          <div className="bg-white/95 backdrop-blur-xl w-full max-w-md rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/80 overflow-hidden">
+            <div className="flex items-center justify-between pb-3 mb-5 border-b border-gray-100">
+              <h3 className="font-bold text-gray-900 text-base">Rate & Review Swap</h3>
+              <button
+                onClick={() => {
+                  setShowReviewModal(false);
+                  setReviewText("");
+                  setReviewRating(5);
+                }}
+                className="w-8 h-8 rounded-full bg-gray-100 text-gray-500 hover:bg-red-50 hover:text-red-500 flex items-center justify-center transition font-bold"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-5">
+              {/* Stars Selection */}
+              <div className="text-center">
+                <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+                  Select Rating
+                </label>
+                <div className="flex items-center justify-center gap-2 text-2xl sm:text-3xl">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => setReviewRating(star)}
+                      className={`hover:scale-115 active:scale-95 transition cursor-pointer text-2xl sm:text-3xl ${
+                        star <= reviewRating ? "text-amber-400" : "text-gray-200"
+                      }`}
+                    >
+                      ★
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Review Text */}
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
+                  Your Review
+                </label>
+                <textarea
+                  rows={3}
+                  maxLength={100}
+                  value={reviewText}
+                  onChange={(e) => setReviewText(e.target.value)}
+                  placeholder="Write a short review..."
+                  className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3 text-gray-800 text-sm font-semibold outline-none transition-all focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10 resize-none"
+                />
+                <span className="text-[10px] text-gray-400 font-semibold block text-right mt-1">
+                  {reviewText.length}/100 characters
+                </span>
+              </div>
+
+              {/* Submit */}
+              <button
+                disabled={submittingReview}
+                onClick={handleSubmitReview}
+                className="w-full bg-gradient-to-r from-[#2E7D32] to-[#1E5621] hover:from-[#256728] hover:to-[#164219] text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-[#2E7D32]/25 hover:shadow-xl hover:scale-[1.01] active:scale-[0.98] disabled:opacity-70 transition-all duration-200 text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer"
+              >
+                {submittingReview ? (
+                  <>
+                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                    <span>Submitting...</span>
+                  </>
+                ) : (
+                  <span>Submit Review</span>
+                )}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </>

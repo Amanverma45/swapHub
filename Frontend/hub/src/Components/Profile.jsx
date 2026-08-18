@@ -246,6 +246,12 @@ const Profile = () => {
               <p className="text-xs sm:text-sm text-gray-500 font-medium text-center mt-1 break-all">
                 {profile?.email}
               </p>
+
+              {profile?.avgRating !== undefined && (
+                <div className="flex items-center gap-1.5 mt-2 bg-amber-50 border border-amber-200/60 px-3.5 py-1.5 rounded-full text-xs font-bold text-amber-800 shadow-2xs">
+                  <span>Rating: {profile.avgRating || "0.0"} ⭐ ({profile.reviewCount || 0} reviews)</span>
+                </div>
+              )}
             </div>
 
             {/* Profile Input Form Fields */}
@@ -337,6 +343,55 @@ const Profile = () => {
               </button>
             </div>
           </div>
+
+          {/* Reviews Section */}
+          {profile?.reviews && profile.reviews.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="mt-6 bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl shadow-emerald-950/10 border border-white/80 ring-1 ring-black/5 p-6 sm:p-10"
+            >
+              <h2 className="text-lg sm:text-xl font-extrabold text-gray-900 border-b border-gray-100 pb-4 mb-6">
+                💬 Reviews & Ratings Received ({profile.reviews.length})
+              </h2>
+              <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2">
+                {profile.reviews.map((rev) => (
+                  <div key={rev._id} className="bg-gray-50/60 border border-gray-200/50 rounded-2xl p-4 sm:p-5 hover:bg-gray-50 transition">
+                    <div className="flex items-center justify-between gap-3 flex-wrap">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-full overflow-hidden bg-emerald-50 border border-[#2E7D32]/10 shrink-0">
+                          {rev.reviewer?.profileImage ? (
+                            <img src={rev.reviewer.profileImage} alt="Reviewer" className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-xs font-bold bg-emerald-50 text-[#2E7D32]">
+                              {rev.reviewer?.name?.charAt(0).toUpperCase() || "U"}
+                            </div>
+                          )}
+                        </div>
+                        <div>
+                          <h4 className="text-xs sm:text-sm font-bold text-gray-900 leading-none">
+                            {rev.reviewer?.name || "Anonymous Member"}
+                          </h4>
+                          <span className="text-[10px] text-gray-400 font-semibold mt-0.5 inline-block">
+                            {new Date(rev.createdAt).toLocaleDateString("en-GB")}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center text-amber-500 font-bold text-xs sm:text-sm bg-amber-50 border border-amber-100 px-2.5 py-0.5 rounded-full shadow-2xs">
+                        {"⭐".repeat(rev.rating)} <span className="ml-1 text-amber-800">{rev.rating}</span>
+                      </div>
+                    </div>
+                    
+                    <p className="text-xs sm:text-sm text-gray-600 font-semibold mt-3 italic leading-relaxed">
+                      "{rev.reviewText}"
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
         </div>
       </section>
 

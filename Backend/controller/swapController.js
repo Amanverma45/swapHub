@@ -3,6 +3,25 @@ const userModel = require('../model/userModel.js');
 const notificationModel = require('../model/notificationModel.js');
 const { getIo } = require('../socket.js');
 const getClientUrl = require('../utils/getClientUrl.js');
+const reviewModel = require('../model/reviewModel.js');
+
+const expireOldRequests = async () => {
+    try {
+        const expiryTime = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+        await swapModel.updateMany(
+            {
+                status: "pending",
+                createdAt: { $lt: expiryTime }
+            },
+            {
+                $set: { status: "expired" }
+            }
+        );
+    } catch (err) {
+        console.error("Error auto-expiring old swap requests:", err);
+    }
+};
+
 const swapProduct = async (req, res) => {
     try {
       const existingRequest = await swapModel.findOne({
@@ -89,11 +108,20 @@ const swapProduct = async (req, res) => {
 
 const getSwapRequest = async (req, res) => {
     try {
+       await expireOldRequests();
        const request = await swapModel.find({receiver: req.user.id}).sort({ createdAt: -1 })
           .populate("sender", "name email")
           .populate("requestedProduct","productName image category location")
-          .populate("offeredProduct","productName image category location")
-        return res.status(200).json(request);
+          .populate("offeredProduct","productName image category location");
+
+       const requestWithRating = await Promise.all(request.map(async (item) => {
+           const doc = item.toObject();
+           const review = await reviewModel.findOne({ reviewer: req.user.id, swapRequest: item._id });
+           doc.userRating = review ? review.rating : null;
+           return doc;
+       }));
+
+       return res.status(200).json(requestWithRating);
     } catch (error) {
         console.log(error.message);
         return res.status(500).json({message: "Something went wrong"});
@@ -102,9 +130,14 @@ const getSwapRequest = async (req, res) => {
 
 const acceptSwapRequest = async (req, res) => {
     try {
+        await expireOldRequests();
         const request = await swapModel.findById(req.params.id);
         if (!request) {
             return res.status(404).json({message: "Request not found"});
+        }
+
+        if (request.status === "expired") {
+            return res.status(400).json({message: "This swap request has expired."});
         }
 
         //  Security Check
@@ -178,11 +211,18 @@ const acceptSwapRequest = async (req, res) => {
 
 const rejectSwapRequest = async(req,res)=>{
     try {
+        await expireOldRequests();
         const request = await swapModel.findById(req.params.id);
 
         if (!request) {
             return res.status(404).json({
                 message: "Request not found"
+            });
+        }
+
+        if (request.status === "expired") {
+            return res.status(400).json({
+                message: "This swap request has expired."
             });
         }
 
@@ -265,6 +305,7 @@ const rejectSwapRequest = async(req,res)=>{
 
 const mySwapRequests = async (req, res) => {
     try {
+        await expireOldRequests();
         const requests = await swapModel.find({
             sender: req.user.id
         }).sort({ createdAt: -1 })
@@ -272,7 +313,14 @@ const mySwapRequests = async (req, res) => {
         .populate("requestedProduct", "productName image")
         .populate("offeredProduct", "productName image");
 
-        return res.status(200).json(requests);
+        const requestsWithRating = await Promise.all(requests.map(async (item) => {
+            const doc = item.toObject();
+            const review = await reviewModel.findOne({ reviewer: req.user.id, swapRequest: item._id });
+            doc.userRating = review ? review.rating : null;
+            return doc;
+        }));
+
+        return res.status(200).json(requestsWithRating);
 
     } catch (error) {
         console.log(error.message);
@@ -283,6 +331,7 @@ const mySwapRequests = async (req, res) => {
 };
 const notificationCount = async (req, res) => {
   try {
+    await expireOldRequests();
     const receivedPendingCount = await swapModel.countDocuments({
       receiver: req.user.id,
       status: "pending"

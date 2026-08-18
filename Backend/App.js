@@ -13,6 +13,7 @@ const chatRoutes = require('./routes/chatRoutes.js')
 const productRoutes = require('./routes/productRoutes.js')
 const swapRoutes = require('./routes/swapRoutes.js')
 const notificationRoutes = require('./routes/notificationRoutes.js')
+const reviewRoutes = require('./routes/reviewRoutes.js')
 const port = process.env.PORT || 5000;
 const cors = require('cors')
 app.use(cors({
@@ -29,6 +30,7 @@ app.use('/api',productRoutes)
 app.use('/api',swapRoutes)
 app.use('/api',chatRoutes)
 app.use('/api',notificationRoutes)
+app.use('/api',reviewRoutes)
 
 const io = new Server(server, {
     cors: {

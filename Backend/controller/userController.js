@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const sendEmail = require("../utils/sendEmail");
 const getClientUrl = require("../utils/getClientUrl");
+const reviewModel = require("../model/reviewModel");
 
 
 const saveUser = async (req, res) => {
@@ -94,10 +95,26 @@ const updateProfile = async (req, res) => {
 
 const getProfile = async (req, res) => {
     try {
-        const profile = await userModel.findById(req.user.id).select("-password");
+        const profile = await userModel.findById(req.user.id).select("-password").lean();
         if (!profile) {
             return res.status(404).json({ message: "Profile not found" })
         }
+
+        // Fetch user reviews
+        const reviews = await reviewModel.find({ reviewedUser: req.user.id })
+            .populate("reviewer", "name profileImage")
+            .sort({ createdAt: -1 });
+
+        let avgRating = 0;
+        if (reviews.length > 0) {
+            const sum = reviews.reduce((acc, curr) => acc + curr.rating, 0);
+            avgRating = (sum / reviews.length).toFixed(1);
+        }
+
+        profile.reviews = reviews;
+        profile.avgRating = parseFloat(avgRating);
+        profile.reviewCount = reviews.length;
+
         return res.status(200).json(profile)
     } catch (error) {
         console.log(error);
