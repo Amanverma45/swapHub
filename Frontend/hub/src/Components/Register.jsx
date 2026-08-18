@@ -13,6 +13,11 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  // OTP States
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [otpLoading, setOtpLoading] = useState(false);
+
   // States to drive interactive animations in InteractiveRegisterPortal
   const [isNameFocused, setIsNameFocused] = useState(false);
   const [isEmailFocused, setIsEmailFocused] = useState(false);
@@ -21,21 +26,57 @@ const Register = () => {
 
   const navigate = useNavigate();
 
+  const handleSendOtp = async (e) => {
+    e.preventDefault();
+    if (!name.trim() || !email.trim() || !password) {
+      toast.error("Please fill all fields");
+      return;
+    }
+    setLoading(true);
+    try {
+      const response = await axios.post("/sendRegistrationOtp", {
+        email: email.trim().toLowerCase(),
+      });
+      toast.success(response.data.message || "OTP sent successfully");
+      setOtpSent(true);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response?.data?.message || "Failed to send OTP");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    setOtpLoading(true);
+    try {
+      const response = await axios.post("/sendRegistrationOtp", {
+        email: email.trim().toLowerCase(),
+      });
+      toast.success(response.data.message || "OTP resent successfully");
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response?.data?.message || "Failed to resend OTP");
+    } finally {
+      setOtpLoading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if (!otp.trim()) {
+      toast.error("Please enter the OTP");
+      return;
+    }
+    setLoading(true);
     try {
-      if (!name || !email || !password) {
-        toast.error("Please fill all fields");
-        return;
-      }
-      setLoading(true);
       const response = await axios.post(
         "/saveUser",
         {
-          name,
-          email,
+          name: name.trim(),
+          email: email.trim().toLowerCase(),
           password,
+          otp: otp.trim(),
         }
       );
       console.log(response.data);
@@ -43,6 +84,8 @@ const Register = () => {
       setName("");
       setEmail("");
       setPassword("");
+      setOtp("");
+      setOtpSent(false);
       navigate('/login');
     } catch (error) {
       console.log(error);
@@ -151,102 +194,154 @@ const Register = () => {
           
           <div className="text-center mb-8">
             <span className="inline-block px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-50 text-[#D97706] border border-amber-200/60 mb-3 shadow-xs">
-              Join the Community
+              {otpSent ? "Email Verification" : "Join the Community"}
             </span>
             <h1 className="text-3xl font-extrabold bg-gradient-to-r from-[#2E7D32] via-[#236327] to-[#1E5621] bg-clip-text text-transparent tracking-tight">
-              Create Account
+              {otpSent ? "Verify OTP" : "Create Account"}
             </h1>
             <p className="text-slate-500 text-sm mt-2 font-medium">
-              Join SwapHub and start exchanging products
+              {otpSent ? `Enter the 6-digit code sent to ${email}` : "Join SwapHub and start exchanging products"}
             </p>
           </div>
 
-          <form className="space-y-5" onSubmit={handleSubmit}>
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
-                Full Name
-              </label>
-              <input
-                onChange={(e) => setName(e.target.value)}
-                value={name}
-                type="text"
-                placeholder="Enter your full name"
-                onFocus={() => setIsNameFocused(true)}
-                onBlur={() => setIsNameFocused(false)}
-                className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-gray-800 text-sm outline-none transition-all duration-200 focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10 placeholder-gray-400"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
-                Email Address
-              </label>
-              <input
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
-                type="email"
-                placeholder="Enter your email"
-                onFocus={() => setIsEmailFocused(true)}
-                onBlur={() => setIsEmailFocused(false)}
-                className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-gray-800 text-sm outline-none transition-all duration-200 focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10 placeholder-gray-400"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
-                Password
-              </label>
-              <div className="relative">
+          {!otpSent ? (
+            <form className="space-y-5" onSubmit={handleSendOtp}>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
+                  Full Name
+                </label>
                 <input
-                  onChange={(e) => setPassword(e.target.value)}
-                  value={password}
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Create a strong password"
-                  onFocus={() => setIsPasswordFocused(true)}
-                  onBlur={() => setIsPasswordFocused(false)}
-                  className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 pr-12 text-gray-800 text-sm outline-none transition-all duration-200 focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10 placeholder-gray-400"
+                  onChange={(e) => setName(e.target.value)}
+                  value={name}
+                  type="text"
+                  placeholder="Enter your full name"
+                  onFocus={() => setIsNameFocused(true)}
+                  onBlur={() => setIsNameFocused(false)}
+                  className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-gray-800 text-sm outline-none transition-all duration-200 focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10 placeholder-gray-400"
                 />
-
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#2E7D32] transition-colors"
-                >
-                  {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
-                </button>
               </div>
-            </div>
 
-            <button
-              disabled={loading}
-              type="submit"
-              onMouseEnter={() => setIsSubmitHovered(true)}
-              onMouseLeave={() => setIsSubmitHovered(false)}
-              className="w-full bg-gradient-to-r from-[#2E7D32] to-[#1E5621] hover:from-[#256728] hover:to-[#164219] text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-[#2E7D32]/25 hover:shadow-xl hover:shadow-[#2E7D32]/35 hover:scale-[1.01] active:scale-[0.98] disabled:opacity-70 transition-all duration-200 text-sm mt-2 cursor-pointer"
-            >
-              {loading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                  Creating Account...
-                </span>
-              ) : (
-                "Create Account"
-              )}
-            </button>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
+                  Email Address
+                </label>
+                <input
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                  type="email"
+                  placeholder="Enter your email"
+                  onFocus={() => setIsEmailFocused(true)}
+                  onBlur={() => setIsEmailFocused(false)}
+                  className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-gray-800 text-sm outline-none transition-all duration-200 focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10 placeholder-gray-400"
+                />
+              </div>
 
-            {/* Divider */}
-            <div className="flex items-center my-4">
-              <div className="flex-grow border-t border-gray-200"></div>
-              <span className="flex-shrink mx-4 text-gray-400 text-xs font-semibold uppercase tracking-wider">Or continue with</span>
-              <div className="flex-grow border-t border-gray-200"></div>
-            </div>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
+                  Password
+                </label>
+                <div className="relative">
+                  <input
+                    onChange={(e) => setPassword(e.target.value)}
+                    value={password}
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Create a strong password"
+                    onFocus={() => setIsPasswordFocused(true)}
+                    onBlur={() => setIsPasswordFocused(false)}
+                    className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 pr-12 text-gray-800 text-sm outline-none transition-all duration-200 focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10 placeholder-gray-400"
+                  />
 
-            {/* Google Sign In Button Container */}
-            <div className="w-full flex justify-center">
-              <div id="googleSignUpButton" className="w-full max-w-[350px] min-h-[44px]"></div>
-            </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#2E7D32] transition-colors"
+                  >
+                    {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                  </button>
+                </div>
+              </div>
 
-          </form>
+              <button
+                disabled={loading}
+                type="submit"
+                onMouseEnter={() => setIsSubmitHovered(true)}
+                onMouseLeave={() => setIsSubmitHovered(false)}
+                className="w-full bg-gradient-to-r from-[#2E7D32] to-[#1E5621] hover:from-[#256728] hover:to-[#164219] text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-[#2E7D32]/25 hover:shadow-xl hover:shadow-[#2E7D32]/35 hover:scale-[1.01] active:scale-[0.98] disabled:opacity-70 transition-all duration-200 text-sm mt-2 cursor-pointer"
+              >
+                {loading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                    <span>Sending OTP...</span>
+                  </span>
+                ) : (
+                  "Send Verification OTP"
+                )}
+              </button>
+
+              {/* Divider */}
+              <div className="flex items-center my-4">
+                <div className="flex-grow border-t border-gray-200"></div>
+                <span className="flex-shrink mx-4 text-gray-400 text-xs font-semibold uppercase tracking-wider">Or continue with</span>
+                <div className="flex-grow border-t border-gray-200"></div>
+              </div>
+
+              {/* Google Sign In Button Container */}
+              <div className="w-full flex justify-center">
+                <div id="googleSignUpButton" className="w-full max-w-[350px] min-h-[44px]"></div>
+              </div>
+            </form>
+          ) : (
+            <form className="space-y-5" onSubmit={handleSubmit}>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
+                  One-Time Password (OTP)
+                </label>
+                <input
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                  value={otp}
+                  type="text"
+                  placeholder="Enter 6-digit OTP"
+                  className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-center text-lg font-bold tracking-[8px] text-gray-800 outline-none transition-all duration-200 focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10 placeholder-gray-400 placeholder:tracking-normal placeholder:font-medium placeholder:text-sm"
+                />
+              </div>
+
+              <div className="flex flex-col gap-3">
+                <button
+                  disabled={loading}
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-[#2E7D32] to-[#1E5621] hover:from-[#256728] hover:to-[#164219] text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-[#2E7D32]/25 hover:shadow-xl hover:shadow-[#2E7D32]/35 hover:scale-[1.01] active:scale-[0.98] disabled:opacity-70 transition-all duration-200 text-sm cursor-pointer"
+                >
+                  {loading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                      <span>Verifying...</span>
+                    </span>
+                  ) : (
+                    "Verify & Register"
+                  )}
+                </button>
+
+                <div className="flex items-center justify-between mt-2 px-1">
+                  <button
+                    type="button"
+                    onClick={() => setOtpSent(false)}
+                    className="text-xs font-bold text-gray-500 hover:text-gray-700 transition"
+                  >
+                    ← Edit Info
+                  </button>
+
+                  <button
+                    disabled={otpLoading}
+                    type="button"
+                    onClick={handleResendOtp}
+                    className="text-xs font-bold text-[#F4A261] hover:text-[#e76f51] transition disabled:opacity-50"
+                  >
+                    {otpLoading ? "Resending..." : "Resend OTP"}
+                  </button>
+                </div>
+              </div>
+            </form>
+          )}
 
           <p className="text-center text-xs sm:text-sm text-gray-600 mt-8 pt-5 border-t border-gray-100 font-medium">
             Already have an account?{" "}

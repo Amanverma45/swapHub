@@ -4,17 +4,28 @@ const jwt = require('jsonwebtoken')
 const sendEmail = require("../utils/sendEmail");
 const getClientUrl = require("../utils/getClientUrl");
 const reviewModel = require("../model/reviewModel");
+const otpModel = require("../model/otpModel.js");
 
 
 const saveUser = async (req, res) => {
     try {
-        let { name, email, password } = req.body;
+        let { name, email, password, otp } = req.body;
+        if (!name || !email || !password || !otp) {
+            return res.status(400).json({ message: "All fields including OTP are required" });
+        }
         email = email.trim().toLowerCase();
         const existingUser = await userModel.findOne({ email });
 
         if (existingUser) {
             return res.status(400).json({ message: "Email already exists", });
         }
+
+        // Verify OTP
+        const otpRecord = await otpModel.findOne({ email });
+        if (!otpRecord || otpRecord.otp !== otp.trim()) {
+            return res.status(400).json({ message: "Invalid or expired OTP" });
+        }
+
         const hashpassword = await bcrypt.hash(password, 10)
 
         const user = new userModel({
@@ -24,7 +35,10 @@ const saveUser = async (req, res) => {
         })
         await user.save()
 
-        res.status(201).json({ message: 'User Created Successfully' })
+        // Delete used OTP record
+        await otpModel.deleteMany({ email });
+
+        return res.status(201).json({ message: 'User Created Successfully' })
     } catch (error) {
         console.log("ERROR:", error)
         return res.status(500).json({
@@ -90,6 +104,55 @@ const updateProfile = async (req, res) => {
         return res.status(500).json({
             message: "Something went wrong",
         });
+    }
+};
+
+const sendRegistrationOtp = async (req, res) => {
+    try {
+        let { email } = req.body;
+        if (!email) {
+            return res.status(400).json({ message: "Email is required" });
+        }
+        email = email.trim().toLowerCase();
+
+        // Check if email already exists
+        const existingUser = await userModel.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ message: "Email already exists" });
+        }
+
+        // Generate 6 digit random numeric OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+        // Save OTP to DB (upsert)
+        await otpModel.findOneAndUpdate(
+            { email },
+            { otp, createdAt: new Date() },
+            { upsert: true, new: true }
+        );
+
+        // Send OTP via email
+        const html = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 8px;">
+                <h2 style="color: #2E7D32; text-align: center;">SwapHub Email Verification</h2>
+                <p>Hello,</p>
+                <p>Thank you for registering on SwapHub. Please use the following 6-digit One-Time Password (OTP) to verify your account registration. This OTP is valid for 5 minutes:</p>
+                <div style="font-size: 24px; font-weight: bold; text-align: center; color: #2E7D32; background-color: #e8f5e9; padding: 15px; border-radius: 4px; letter-spacing: 4px; margin: 20px 0;">
+                    ${otp}
+                </div>
+                <p>If you did not initiate this request, please ignore this email.</p>
+                <br>
+                <p>Best regards,<br>The SwapHub Team</p>
+            </div>
+        `;
+        
+        await sendEmail(email, "SwapHub - Account Registration Verification OTP", html);
+
+        return res.status(200).json({ message: "OTP sent successfully to your email" });
+
+    } catch (error) {
+        console.error("Error sending registration OTP:", error);
+        return res.status(500).json({ message: "Something went wrong" });
     }
 };
 
@@ -325,4 +388,4 @@ const googleLogin = async (req, res) => {
     }
 };
 
-module.exports = { saveUser, loginUser, updateProfile, getProfile, removeProfilePhoto, forgotPassword, resetPassword, googleLogin }
+module.exports = { saveUser, loginUser, updateProfile, getProfile, removeProfilePhoto, forgotPassword, resetPassword, googleLogin, sendRegistrationOtp }
