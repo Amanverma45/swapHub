@@ -3,6 +3,7 @@ import { FaUserCircle, FaArrowLeft, FaCamera, FaTrash, FaLock } from "react-icon
 import { useNavigate } from "react-router-dom";
 import axios from "../utils/axiosInstance";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 const Profile = () => {
   const navigate = useNavigate();
