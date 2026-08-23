@@ -111,14 +111,15 @@ const Register = () => {
       setLoading(true);
       const res = await axios.post("/googleLogin", {
         token: response.credential,
+        mode: "signup",
       });
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
-      toast.success("Login Successfully");
+      toast.success("Account Created & Logged In Successfully");
       navigate("/welcome", { replace: true });
     } catch (err) {
       console.error(err);
-      toast.error(err.response?.data?.message || "Google Login Failed");
+      toast.error(err.response?.data?.message || "Google Sign-Up Failed");
     } finally {
       setLoading(false);
     }

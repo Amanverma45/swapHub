@@ -333,7 +333,7 @@ const resetPassword = async (req, res) => {
 
 const googleLogin = async (req, res) => {
     try {
-        const { token } = req.body;
+        const { token, mode } = req.body;
         if (!token) {
             return res.status(400).json({ message: "Google token is required" });
         }
@@ -352,6 +352,10 @@ const googleLogin = async (req, res) => {
 
         const normalizedEmail = email.toLowerCase().trim();
         let user = await userModel.findOne({ email: normalizedEmail });
+
+        if (mode === "signup" && user) {
+            return res.status(400).json({ message: "Account already exists with this email. Please login instead." });
+        }
 
         if (!user) {
             // Create a randomized secure password placeholder

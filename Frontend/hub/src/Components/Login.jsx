@@ -50,6 +50,7 @@ const Login = () => {
       setLoading(true);
       const res = await axios.post("/googleLogin", {
         token: response.credential,
+        mode: "login",
       });
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
