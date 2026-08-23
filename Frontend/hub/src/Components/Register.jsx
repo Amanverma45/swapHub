@@ -10,6 +10,7 @@ const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -37,8 +38,12 @@ const Register = () => {
 
   const handleSendOtp = async (e) => {
     e.preventDefault();
-    if (!name.trim() || !email.trim() || !password) {
+    if (!name.trim() || !email.trim() || !password || !confirmPassword) {
       toast.error("Please fill all fields");
+      return;
+    }
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match!");
       return;
     }
     setLoading(true);
@@ -95,6 +100,7 @@ const Register = () => {
       setName("");
       setEmail("");
       setPassword("");
+      setConfirmPassword("");
       setOtp("");
       setOtpSent(false);
       navigate('/login');
@@ -270,6 +276,21 @@ const Register = () => {
                   >
                     {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
                   </button>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-2">
+                  Confirm Password
+                </label>
+                <div className="relative">
+                  <input
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    value={confirmPassword}
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Re-enter your password"
+                    className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 pr-12 text-gray-800 text-sm outline-none transition-all duration-200 focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10 placeholder-gray-400"
+                  />
                 </div>
               </div>
 
