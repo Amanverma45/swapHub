@@ -312,7 +312,7 @@ const MySwapRequests = () => {
                     <div>
                       {request.userRating ? (
                         <div className="flex items-center gap-1 bg-amber-50 text-amber-800 border border-amber-200/60 px-3 py-1 rounded-full text-xs font-bold shadow-2xs">
-                          <span>You rated: {"⭐".repeat(request.userRating)}</span>
+                          <span>You rated: {"⭐".repeat(Math.min(5, Math.max(0, Math.floor(Number(request.userRating) || 0))))}</span>
                         </div>
                       ) : (
                         <button

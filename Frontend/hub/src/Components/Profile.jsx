@@ -173,6 +173,21 @@ const Profile = () => {
     );
   }
 
+  if (!profile) {
+    return (
+      <div className="min-h-[70vh] flex flex-col items-center justify-center bg-gradient-to-br from-emerald-50/60 via-slate-50 to-amber-50/50 p-4 text-center">
+        <h2 className="text-xl font-bold text-gray-800 mb-2">Unable to Load Profile</h2>
+        <p className="text-gray-500 text-sm mb-4">Could not fetch user profile details. Please try refreshing or login again.</p>
+        <button
+          onClick={() => navigate(-1)}
+          className="px-5 py-2.5 bg-[#2E7D32] hover:bg-[#1E5621] text-white rounded-full font-bold text-xs shadow-md transition cursor-pointer"
+        >
+          Go Back
+        </button>
+      </div>
+    );
+  }
+
   return (
     <>
       <section className="relative min-h-screen py-10 sm:py-16 px-4 overflow-hidden bg-gradient-to-br from-emerald-50/60 via-slate-50 to-amber-50/50">
@@ -240,7 +255,7 @@ const Profile = () => {
               )}
 
               <h1 className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-[#2E7D32] via-[#236327] to-[#1E5621] bg-clip-text text-transparent mt-4 text-center tracking-tight">
-                {name}
+                {name || profile?.name}
               </h1>
 
               <p className="text-xs sm:text-sm text-gray-500 font-medium text-center mt-1 break-all">
@@ -356,39 +371,50 @@ const Profile = () => {
                 💬 Reviews & Ratings Received ({profile.reviews.length})
               </h2>
               <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2">
-                {profile.reviews.map((rev) => (
-                  <div key={rev._id} className="bg-gray-50/60 border border-gray-200/50 rounded-2xl p-4 sm:p-5 hover:bg-gray-50 transition">
-                    <div className="flex items-center justify-between gap-3 flex-wrap">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-full overflow-hidden bg-emerald-50 border border-[#2E7D32]/10 shrink-0">
-                          {rev.reviewer?.profileImage ? (
-                            <img src={rev.reviewer.profileImage} alt="Reviewer" className="w-full h-full object-cover" />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center text-xs font-bold bg-emerald-50 text-[#2E7D32]">
-                              {rev.reviewer?.name?.charAt(0).toUpperCase() || "U"}
-                            </div>
-                          )}
+                {profile.reviews.map((rev, idx) => {
+                  const ratingCount = Math.min(5, Math.max(0, Math.floor(Number(rev?.rating) || 0)));
+                  const formattedDate = rev?.createdAt && !isNaN(new Date(rev.createdAt).getTime())
+                    ? new Date(rev.createdAt).toLocaleDateString("en-GB")
+                    : "";
+
+                  return (
+                    <div key={rev?._id || idx} className="bg-gray-50/60 border border-gray-200/50 rounded-2xl p-4 sm:p-5 hover:bg-gray-50 transition">
+                      <div className="flex items-center justify-between gap-3 flex-wrap">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-8 h-8 rounded-full overflow-hidden bg-emerald-50 border border-[#2E7D32]/10 shrink-0">
+                            {rev?.reviewer?.profileImage ? (
+                              <img src={rev.reviewer.profileImage} alt="Reviewer" className="w-full h-full object-cover" />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-xs font-bold bg-emerald-50 text-[#2E7D32]">
+                                {rev?.reviewer?.name?.charAt(0).toUpperCase() || "U"}
+                              </div>
+                            )}
+                          </div>
+                          <div>
+                            <h4 className="text-xs sm:text-sm font-bold text-gray-900 leading-none">
+                              {rev?.reviewer?.name || "Anonymous Member"}
+                            </h4>
+                            {formattedDate && (
+                              <span className="text-[10px] text-gray-400 font-semibold mt-0.5 inline-block">
+                                {formattedDate}
+                              </span>
+                            )}
+                          </div>
                         </div>
-                        <div>
-                          <h4 className="text-xs sm:text-sm font-bold text-gray-900 leading-none">
-                            {rev.reviewer?.name || "Anonymous Member"}
-                          </h4>
-                          <span className="text-[10px] text-gray-400 font-semibold mt-0.5 inline-block">
-                            {new Date(rev.createdAt).toLocaleDateString("en-GB")}
-                          </span>
+                        
+                        <div className="flex items-center text-amber-500 font-bold text-xs sm:text-sm bg-amber-50 border border-amber-100 px-2.5 py-0.5 rounded-full shadow-2xs">
+                          {"⭐".repeat(ratingCount)} <span className="ml-1 text-amber-800">{rev?.rating || 0}</span>
                         </div>
                       </div>
                       
-                      <div className="flex items-center text-amber-500 font-bold text-xs sm:text-sm bg-amber-50 border border-amber-100 px-2.5 py-0.5 rounded-full shadow-2xs">
-                        {"⭐".repeat(rev.rating)} <span className="ml-1 text-amber-800">{rev.rating}</span>
-                      </div>
+                      {rev?.reviewText && (
+                        <p className="text-xs sm:text-sm text-gray-600 font-semibold mt-3 italic leading-relaxed">
+                          "{rev.reviewText}"
+                        </p>
+                      )}
                     </div>
-                    
-                    <p className="text-xs sm:text-sm text-gray-600 font-semibold mt-3 italic leading-relaxed">
-                      "{rev.reviewText}"
-                    </p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </motion.div>
           )}
