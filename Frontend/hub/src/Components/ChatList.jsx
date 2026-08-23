@@ -92,16 +92,18 @@ const ChatList = ({ chats, activeChat, onSelectChat, currentUser, onExitChat, on
                     e.stopPropagation();
                     onViewAvatar && onViewAvatar(otherUser.profileImage || null);
                   }}
-                  className={`w-10 h-10 rounded-full shrink-0 flex items-center justify-center bg-gradient-to-br ${gradient} text-white font-bold text-xs shadow-xs hover:scale-105 transition-transform cursor-pointer relative z-10`}
+                  className={`w-10 h-10 rounded-full shrink-0 flex items-center justify-center bg-gradient-to-br ${gradient} text-white font-bold text-xs shadow-xs hover:scale-105 transition-transform cursor-pointer relative z-10 overflow-hidden`}
                 >
-                  {otherUser.profileImage ? (
+                  {initials}
+                  {otherUser.profileImage && (
                     <img
                       src={otherUser.profileImage}
                       alt={otherUser.name}
-                      className="w-full h-full rounded-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.style.display = "none";
+                      }}
+                      className="absolute inset-0 w-full h-full rounded-full object-cover"
                     />
-                  ) : (
-                    initials
                   )}
                 </div>
 

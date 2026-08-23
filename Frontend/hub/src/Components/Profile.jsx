@@ -214,25 +214,25 @@ const Profile = () => {
               <div className="relative w-32 h-32 sm:w-36 sm:h-36">
                 <div
                   onClick={handlePreview}
-                  className="w-full h-full rounded-full overflow-hidden ring-4 ring-[#2E7D32]/25 p-1 bg-white shadow-xl cursor-pointer hover:scale-105 transition-transform duration-300"
+                  className="relative w-full h-full rounded-full overflow-hidden ring-4 ring-[#2E7D32]/25 p-1 bg-white shadow-xl cursor-pointer hover:scale-105 transition-transform duration-300 flex items-center justify-center"
                 >
+                  <div className="w-full h-full rounded-full bg-emerald-50 text-[#2E7D32] flex items-center justify-center">
+                    <FaUserCircle className="w-full h-full p-1" />
+                  </div>
                   {profileImage ? (
                     <img
                       src={URL.createObjectURL(profileImage)}
                       alt="Profile"
-                      className="w-full h-full rounded-full object-cover"
+                      className="absolute inset-0 w-full h-full rounded-full object-cover"
                     />
                   ) : profile?.profileImage ? (
                     <img
                       src={profile.profileImage}
                       alt="Profile"
-                      className="w-full h-full rounded-full object-cover"
+                      onError={(e) => { e.currentTarget.style.display = "none"; }}
+                      className="absolute inset-0 w-full h-full rounded-full object-cover"
                     />
-                  ) : (
-                    <div className="w-full h-full rounded-full bg-emerald-50 text-[#2E7D32] flex items-center justify-center">
-                      <FaUserCircle className="w-full h-full p-1" />
-                    </div>
-                  )}
+                  ) : null}
                 </div>
 
                 <div

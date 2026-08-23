@@ -196,6 +196,7 @@ const VoiceMessagePlayer = ({ msg, isMe, currentUser, otherUser }) => {
           <img
             src={profileImg}
             alt={displayName}
+            onError={(e) => { e.currentTarget.style.display = "none"; }}
             className="w-full h-full object-cover rounded-full"
           />
         ) : (
@@ -1054,17 +1055,15 @@ const ChatWindow = ({
               <FaArrowLeft className="text-base" />
             </button>
           )}
-          <div className="relative">
-            {otherUser.profileImage ? (
+          <div className={`relative w-9 h-9 rounded-full shrink-0 flex items-center justify-center text-white text-xs font-bold bg-gradient-to-br ${gradient} group-hover:scale-105 transition-transform overflow-hidden`}>
+            {initials}
+            {otherUser.profileImage && (
               <img
                 src={otherUser.profileImage}
                 alt={otherUser.name}
-                className="w-9 h-9 rounded-full object-cover border border-gray-100 group-hover:scale-105 transition-transform"
+                onError={(e) => { e.currentTarget.style.display = "none"; }}
+                className="absolute inset-0 w-full h-full rounded-full object-cover border border-gray-100"
               />
-            ) : (
-              <div className={`w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold bg-gradient-to-br ${gradient} group-hover:scale-105 transition-transform`}>
-                {initials}
-              </div>
             )}
           </div>
           <div className="text-left">
@@ -1465,17 +1464,17 @@ const ChatWindow = ({
                   toast.error("No profile photo uploaded by this user");
                 }
               }}>
-                {otherUser.profileImage ? (
-                  <img
-                    src={otherUser.profileImage}
-                    alt={otherUser.name}
-                    className="w-24 h-24 rounded-full object-cover border-2 border-emerald-500 shadow-md group-hover:scale-105 transition-transform duration-300"
-                  />
-                ) : (
-                  <div className={`w-24 h-24 rounded-full flex items-center justify-center text-white text-3xl font-extrabold bg-gradient-to-br ${gradient} shadow-md`}>
-                    {initials}
-                  </div>
-                )}
+                <div className={`relative w-24 h-24 rounded-full flex items-center justify-center text-white text-3xl font-extrabold bg-gradient-to-br ${gradient} shadow-md overflow-hidden`}>
+                  {initials}
+                  {otherUser.profileImage && (
+                    <img
+                      src={otherUser.profileImage}
+                      alt={otherUser.name}
+                      onError={(e) => { e.currentTarget.style.display = "none"; }}
+                      className="absolute inset-0 w-full h-full rounded-full object-cover border-2 border-emerald-500 shadow-md group-hover:scale-105 transition-transform duration-300"
+                    />
+                  )}
+                </div>
                 {otherUser.profileImage && (
                   <div className="absolute inset-0 rounded-full bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold">
                     🔍 View Photo
