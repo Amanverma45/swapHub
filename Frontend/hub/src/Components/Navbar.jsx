@@ -535,6 +535,22 @@ const Navbar = () => {
                   </Link>
                 </div>
 
+                {/* Admin Control Center Button for Mobile */}
+                {(currentUser?.email === "amanarandiya@gmail.com" || currentUser?.role === "admin") && (
+                  <Link
+                    to="/admin"
+                    onClick={() => setIsOpen(false)}
+                    className={`w-full py-2.5 px-4 rounded-2xl font-bold text-sm text-center border transition-all flex items-center justify-center gap-2 ${
+                      isActive("/admin")
+                        ? "bg-purple-600 text-white border-purple-600 shadow-md shadow-purple-600/30"
+                        : "bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100"
+                    }`}
+                  >
+                    <FaShieldAlt className="text-sm text-purple-600" />
+                    <span>Admin Control Center</span>
+                  </Link>
+                )}
+
                 {/* Row 4: Logout Button */}
                 <button
                   onClick={handleLogout}

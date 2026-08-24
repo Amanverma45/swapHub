@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { FaBoxOpen, FaExchangeAlt, FaPlusCircle, FaUserCircle, FaCheckCircle, FaTimesCircle, FaHeart } from "react-icons/fa";
+import { FaBoxOpen, FaExchangeAlt, FaPlusCircle, FaUserCircle, FaCheckCircle, FaTimesCircle, FaHeart, FaShieldAlt } from "react-icons/fa";
 import axios from "../utils/axiosInstance";
 
 const MotionLink = motion(Link);
@@ -276,6 +276,34 @@ const Welcome = () => {
                 </p>
               </div>
             </MotionLink>
+
+            {/* Admin Control Panel (Visible for Admin Users) */}
+            {(user?.email === "amanarandiya@gmail.com" || user?.role === "admin") && (
+              <MotionLink
+                to="/admin"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.05 }}
+                transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+                whileHover={{
+                  y: -10,
+                  boxShadow: "0px 20px 40px rgba(147,51,234,0.2)",
+                }}
+                className="group relative bg-purple-50/50 border border-purple-200 border-t-4 border-t-purple-600 shadow-md transition-colors duration-300 p-4 sm:p-5 rounded-2xl md:rounded-3xl flex flex-col items-center justify-center gap-2 sm:gap-3 text-center h-full min-h-[150px] sm:min-h-[180px] overflow-hidden cursor-pointer"
+              >
+                <div className="p-2.5 sm:p-3.5 rounded-2xl bg-purple-600 text-white shadow-md shadow-purple-600/30 group-hover:scale-110 transition-all duration-300 ease-out">
+                  <FaShieldAlt className="text-2xl sm:text-3xl group-hover:rotate-12 transition-transform duration-300" />
+                </div>
+                <div>
+                  <h3 className="text-sm sm:text-base font-extrabold text-purple-900 leading-tight">
+                    Admin Portal
+                  </h3>
+                  <p className="text-[11px] sm:text-xs text-purple-700 font-semibold mt-0.5 leading-tight">
+                    Reports & Control
+                  </p>
+                </div>
+              </MotionLink>
+            )}
           </div>
         </div>
 
