@@ -441,41 +441,58 @@ const AdminDashboard = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100 font-semibold text-gray-800">
-                  {filteredUsers.map((u) => (
-                    <tr key={u._id} className="hover:bg-gray-50/80 transition">
-                      <td className="py-3.5 px-4 flex items-center gap-3">
-                        {u.profileImage ? (
-                          <img src={u.profileImage} alt={u.name} className="w-8 h-8 rounded-full object-cover" />
-                        ) : (
-                          <div className="w-8 h-8 rounded-full bg-emerald-100 text-[#2E7D32] flex items-center justify-center font-bold text-xs">
-                            {u.name?.slice(0, 2).toUpperCase()}
+                  {users
+                    .filter(
+                      (u) =>
+                        u.name?.toLowerCase().includes(userSearch.toLowerCase()) ||
+                        u.email?.toLowerCase().includes(userSearch.toLowerCase())
+                    )
+                    .sort((a, b) =>
+                      (a.name || "").localeCompare(b.name || "", undefined, { sensitivity: "base" })
+                    )
+                    .map((u) => (
+                      <tr key={u._id} className="hover:bg-gray-50/80 transition">
+                        <td className="py-3.5 px-4 flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-full bg-emerald-100 text-[#2E7D32] flex items-center justify-center font-bold text-xs shrink-0 border border-emerald-200 overflow-hidden relative">
+                            {u.name?.slice(0, 2).toUpperCase() || "US"}
+                            {u.profileImage && (
+                              <img
+                                src={u.profileImage}
+                                alt={u.name}
+                                onError={(e) => {
+                                  e.currentTarget.style.display = "none";
+                                }}
+                                className="absolute inset-0 w-full h-full rounded-full object-cover"
+                              />
+                            )}
                           </div>
-                        )}
-                        <span className="font-bold">{u.name}</span>
-                      </td>
-                      <td className="py-3.5 px-4">{u.email}</td>
-                      <td className="py-3.5 px-4 text-gray-500">{u.phone || "N/A"}</td>
-                      <td className="py-3.5 px-4">
-                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
-                          u.email === "amanarandiya@gmail.com" || u.role === "admin"
-                            ? "bg-purple-100 text-purple-700"
-                            : "bg-emerald-50 text-[#2E7D32]"
-                        }`}>
-                          {u.email === "amanarandiya@gmail.com" || u.role === "admin" ? "ADMIN" : "USER"}
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-4 text-right">
-                        {u.email !== "amanarandiya@gmail.com" && (
-                          <button
-                            onClick={() => handleDeleteUser(u._id)}
-                            className="bg-red-50 hover:bg-red-500 text-red-600 hover:text-white px-3 py-1.5 rounded-xl transition text-xs font-bold cursor-pointer"
+                          <span className="font-bold text-gray-900 whitespace-nowrap">{u.name}</span>
+                        </td>
+                        <td className="py-3.5 px-4 whitespace-nowrap">{u.email}</td>
+                        <td className="py-3.5 px-4 text-gray-500 whitespace-nowrap">{u.phone || "N/A"}</td>
+                        <td className="py-3.5 px-4 whitespace-nowrap">
+                          <span
+                            className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                              u.email === "amanarandiya@gmail.com" || u.role === "admin"
+                                ? "bg-purple-100 text-purple-700"
+                                : "bg-emerald-50 text-[#2E7D32]"
+                            }`}
                           >
-                            <FaTrash />
-                          </button>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
+                            {u.email === "amanarandiya@gmail.com" || u.role === "admin" ? "ADMIN" : "USER"}
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-4 text-right whitespace-nowrap">
+                          {u.email !== "amanarandiya@gmail.com" && (
+                            <button
+                              onClick={() => handleDeleteUser(u._id)}
+                              className="bg-red-50 hover:bg-red-500 text-red-600 hover:text-white px-3 py-1.5 rounded-xl transition text-xs font-bold cursor-pointer"
+                            >
+                              <FaTrash />
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
