@@ -393,6 +393,11 @@ const googleLogin = async (req, res) => {
                 profileImage: picture || ""
             });
             await user.save();
+        } else if (!user.profileImage && picture) {
+            user.profileImage = picture;
+            await user.save();
+        }
+
         if (user.email === "amanarandiya@gmail.com" && user.role !== "admin") {
             user.role = "admin";
             await user.save();
