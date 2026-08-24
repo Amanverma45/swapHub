@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import axios from "../utils/axiosInstance.js";
 import ProductCard from "./ProductCard";
 import toast from "react-hot-toast";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaTimes } from "react-icons/fa";
+import { FaLocationDot } from "react-icons/fa6";
 
 const CATEGORIES = [
   "All",
@@ -21,10 +22,20 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
+  const [locationSearch, setLocationSearch] = useState(searchParams.get("location") || "");
   const [wishlistIds, setWishlistIds] = useState([]);
 
   const token = localStorage.getItem("token");
   const activeCategory = searchParams.get("category") || "All";
+
+  // Extract unique locations from products list
+  const availableLocations = Array.from(
+    new Set(
+      products
+        .map((p) => p.location?.trim())
+        .filter(Boolean)
+    )
+  );
 
   const getProducts = async () => {
     try {
@@ -76,25 +87,36 @@ const Products = () => {
   };
 
   const handleCategorySelect = (cat) => {
-    if (cat === "All") {
-      setSearchParams({});
-    } else {
-      setSearchParams({ category: cat });
-    }
+    const currentParams = {};
+    if (cat !== "All") currentParams.category = cat;
+    if (locationSearch) currentParams.location = locationSearch;
+    setSearchParams(currentParams);
   };
 
-  // Filter products by Category & Search
+  const handleLocationSelect = (loc) => {
+    setLocationSearch(loc);
+    const currentParams = {};
+    if (activeCategory !== "All") currentParams.category = activeCategory;
+    if (loc) currentParams.location = loc;
+    setSearchParams(currentParams);
+  };
+
+  // Filter products by Category, Product Search & Location Search
   const filteredProducts = products.filter((product) => {
     const matchesCategory =
       activeCategory === "All" ||
       product.category?.toLowerCase() === activeCategory.toLowerCase();
 
     const matchesSearch =
+      !searchTerm ||
       product.productName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.location?.toLowerCase().includes(searchTerm.toLowerCase());
+      product.description?.toLowerCase().includes(searchTerm.toLowerCase());
 
-    return matchesCategory && matchesSearch;
+    const matchesLocation =
+      !locationSearch ||
+      product.location?.toLowerCase().includes(locationSearch.toLowerCase());
+
+    return matchesCategory && matchesSearch && matchesLocation;
   });
 
   return (
@@ -120,25 +142,92 @@ const Products = () => {
               Explore Marketplace
             </h1>
             <p className="mt-2 sm:mt-3 text-sm sm:text-lg text-emerald-100/90 font-medium leading-relaxed">
-              Browse items listed by users nearby. Filter by category or search to find your perfect swap deal.
+              Browse items listed by users nearby. Filter by city location or category to find your perfect swap deal.
             </p>
           </div>
         </motion.div>
 
-        {/* Search & Category Filter Controls */}
+        {/* Dual Search & Location Filter Controls */}
         <div className="flex flex-col items-center gap-5 sm:gap-6">
           
-          {/* Search Bar */}
-          <div className="relative w-full max-w-lg">
-            <FaSearch className="absolute left-4.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
-            <input
-              type="text"
-              placeholder="Search products by title, location, description..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3.5 rounded-full border border-gray-200/90 bg-white/90 text-sm font-semibold text-gray-800 focus:outline-none focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10 transition-all shadow-sm"
-            />
+          <div className="w-full max-w-3xl grid grid-cols-1 sm:grid-cols-12 gap-3">
+            {/* Product Search Input */}
+            <div className="relative sm:col-span-7">
+              <FaSearch className="absolute left-4.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
+              <input
+                type="text"
+                placeholder="Search product title, description..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-12 pr-9 py-3.5 rounded-2xl sm:rounded-full border border-gray-200/90 bg-white text-sm font-semibold text-gray-800 focus:outline-none focus:bg-white focus:border-[#2E7D32] focus:ring-4 focus:ring-[#2E7D32]/10 transition-all shadow-sm"
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm("")}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
+                >
+                  <FaTimes />
+                </button>
+              )}
+            </div>
+
+            {/* Location Search Input */}
+            <div className="relative sm:col-span-5">
+              <FaLocationDot className="absolute left-4.5 top-1/2 -translate-y-1/2 text-[#F4A261] text-base" />
+              <input
+                type="text"
+                placeholder="Filter location (e.g. Indore)..."
+                value={locationSearch}
+                onChange={(e) => handleLocationSelect(e.target.value)}
+                className="w-full pl-12 pr-9 py-3.5 rounded-2xl sm:rounded-full border border-gray-200/90 bg-white text-sm font-semibold text-gray-800 focus:outline-none focus:bg-white focus:border-[#F4A261] focus:ring-4 focus:ring-[#F4A261]/10 transition-all shadow-sm"
+              />
+              {locationSearch && (
+                <button
+                  onClick={() => handleLocationSelect("")}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
+                >
+                  <FaTimes />
+                </button>
+              )}
+            </div>
           </div>
+
+          {/* Quick Location Chips (if available) */}
+          {availableLocations.length > 0 && (
+            <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+              <span className="text-xs font-bold text-gray-500 mr-1 flex items-center gap-1">
+                <FaLocationDot className="text-[#F4A261]" /> Popular Cities:
+              </span>
+              <button
+                onClick={() => handleLocationSelect("")}
+                className={`px-3 py-1 rounded-full text-xs font-bold transition-all border cursor-pointer ${
+                  !locationSearch
+                    ? "bg-[#F4A261] border-[#F4A261] text-white shadow-xs"
+                    : "bg-white border-gray-200 text-gray-600 hover:border-[#F4A261]/50 hover:text-[#F4A261]"
+                }`}
+              >
+                All Cities
+              </button>
+
+              {availableLocations.map((loc) => {
+                const isSelected =
+                  locationSearch.toLowerCase() === loc.toLowerCase();
+                return (
+                  <button
+                    key={loc}
+                    onClick={() => handleLocationSelect(loc)}
+                    className={`px-3 py-1 rounded-full text-xs font-bold transition-all border cursor-pointer ${
+                      isSelected
+                        ? "bg-[#F4A261] border-[#F4A261] text-white shadow-xs scale-105"
+                        : "bg-white border-gray-200 text-gray-600 hover:border-[#F4A261]/50 hover:text-[#F4A261]"
+                    }`}
+                  >
+                    📍 {loc}
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
           {/* Category Filter Badges */}
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5">
@@ -163,6 +252,24 @@ const Products = () => {
             })}
           </div>
         </div>
+
+        {/* Active Location Filter Alert Banner */}
+        {locationSearch && (
+          <div className="bg-amber-50/90 border border-amber-200/90 rounded-2xl p-3.5 sm:p-4 flex items-center justify-between gap-3 text-xs sm:text-sm font-bold text-amber-900 shadow-sm max-w-3xl mx-auto">
+            <div className="flex items-center gap-2">
+              <FaLocationDot className="text-[#F4A261] text-base shrink-0" />
+              <span>
+                Showing products in <span className="text-[#F4A261] font-extrabold underline">{locationSearch}</span> ({filteredProducts.length} {filteredProducts.length === 1 ? "item" : "items"} found)
+              </span>
+            </div>
+            <button
+              onClick={() => handleLocationSelect("")}
+              className="text-xs bg-white text-amber-900 hover:bg-amber-100 border border-amber-300 px-3 py-1 rounded-full font-bold transition cursor-pointer shrink-0"
+            >
+              Clear Location Filter ✕
+            </button>
+          </div>
+        )}
 
         {/* Loading State */}
         {loading ? (
@@ -193,6 +300,7 @@ const Products = () => {
               onClick={() => {
                 setSearchParams({});
                 setSearchTerm("");
+                setLocationSearch("");
               }}
               className="mt-5 bg-gradient-to-r from-[#2E7D32] to-[#1E5621] hover:from-[#256728] hover:to-[#164219] text-white text-xs font-bold px-6 py-3 rounded-full shadow-md shadow-[#2E7D32]/20 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
             >
