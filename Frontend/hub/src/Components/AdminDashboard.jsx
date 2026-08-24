@@ -548,12 +548,6 @@ const AdminDashboard = () => {
                   </div>
                 ))}
             </div>
-                    <FaTrash className="text-xs" />
-                    <span>Delete Product</span>
-                  </button>
-                </div>
-              ))}
-            </div>
           </div>
         )}
 
