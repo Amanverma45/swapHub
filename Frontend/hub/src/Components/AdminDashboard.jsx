@@ -516,28 +516,38 @@ const AdminDashboard = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {filteredProducts.map((p) => (
-                <div key={p._id} className="bg-gray-50/80 rounded-2xl p-4 border border-gray-200 flex flex-col justify-between space-y-3">
-                  <div className="relative h-32 rounded-xl overflow-hidden bg-gray-200">
-                    <img src={p.image} alt={p.productName} className="w-full h-full object-cover" />
-                    <span className="absolute top-2 left-2 bg-white/90 px-2 py-0.5 rounded-full text-[10px] font-bold text-[#2E7D32]">
-                      {p.category}
-                    </span>
-                  </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+              {filteredProducts
+                .sort((a, b) =>
+                  (a.productName || "").localeCompare(b.productName || "", undefined, { sensitivity: "base" })
+                )
+                .map((p) => (
+                  <div key={p._id} className="bg-gray-50/80 rounded-2xl p-2.5 sm:p-4 border border-gray-200 flex flex-col justify-between space-y-2 sm:space-y-3">
+                    <div className="relative h-24 sm:h-32 rounded-xl overflow-hidden bg-gray-200">
+                      <img src={p.image} alt={p.productName} className="w-full h-full object-cover" />
+                      <span className="absolute top-1.5 left-1.5 bg-white/90 px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold text-[#2E7D32]">
+                        {p.category}
+                      </span>
+                    </div>
 
-                  <div>
-                    <h3 className="font-extrabold text-sm text-gray-900 truncate">{p.productName}</h3>
-                    <p className="text-xs text-gray-500 truncate flex items-center gap-1 mt-0.5">
-                      <FaLocationDot className="text-[#F4A261]" /> {p.location}
-                    </p>
-                    <p className="text-[11px] text-gray-400 mt-1">Owner: {p.owner?.name || "Unknown"}</p>
-                  </div>
+                    <div>
+                      <h3 className="font-extrabold text-xs sm:text-sm text-gray-900 truncate">{p.productName}</h3>
+                      <p className="text-[11px] sm:text-xs text-gray-500 truncate flex items-center gap-1 mt-0.5">
+                        <FaLocationDot className="text-[#F4A261] shrink-0" /> {p.location}
+                      </p>
+                      <p className="text-[10px] sm:text-[11px] text-gray-400 mt-1 truncate">Owner: {p.owner?.name || "Unknown"}</p>
+                    </div>
 
-                  <button
-                    onClick={() => handleDeleteProduct(p._id)}
-                    className="w-full bg-red-50 hover:bg-red-500 text-red-600 hover:text-white py-2 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1 cursor-pointer"
-                  >
+                    <button
+                      onClick={() => handleDeleteProduct(p._id)}
+                      className="w-full bg-red-50 hover:bg-red-500 text-red-600 hover:text-white py-1.5 sm:py-2 rounded-xl font-bold text-[11px] sm:text-xs transition flex items-center justify-center gap-1 cursor-pointer"
+                    >
+                      <FaTrash className="text-xs" />
+                      <span>Delete</span>
+                    </button>
+                  </div>
+                ))}
+            </div>
                     <FaTrash className="text-xs" />
                     <span>Delete Product</span>
                   </button>
