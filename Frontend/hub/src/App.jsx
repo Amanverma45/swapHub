@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import { FaArrowUp } from 'react-icons/fa'
 import Home from './Components/Home'
 import Navbar from './Components/Navbar'
@@ -100,6 +100,9 @@ const App = () => {
           <Route path="/wishlist" element={<ProtectedRoute><Wishlist /></ProtectedRoute>} />
           <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
           <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+          <Route path="/admindashboard" element={<Navigate to="/admin" replace />} />
+          <Route path="/admin-dashboard" element={<Navigate to="/admin" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         {!isChatPage && <Footer/>}
       </main>
