@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaLocationDot } from "react-icons/fa6";
-import { FaExchangeAlt } from "react-icons/fa";
+import { FaExchangeAlt, FaHeart } from "react-icons/fa";
 
-const ProductCard = ({ product, index }) => {
+const ProductCard = ({ product, index, isWishlisted = false, onToggleWishlist }) => {
   const orangeCategories = ["mobiles", "gaming", "home items"];
   const isOrange = orangeCategories.includes(product.category?.toLowerCase());
   const borderColor = isOrange ? "border-t-[#F4A261]" : "border-t-[#2E7D32]";
@@ -13,6 +13,14 @@ const ProductCard = ({ product, index }) => {
   
   // Staggered delay based on grid column position
   const delay = Math.min((index % 3) * 0.06, 0.18);
+
+  const handleHeartClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onToggleWishlist) {
+      onToggleWishlist(product._id);
+    }
+  };
 
   return (
     <motion.div
@@ -38,6 +46,21 @@ const ProductCard = ({ product, index }) => {
           <span className="absolute top-2.5 left-2.5 bg-white/90 backdrop-blur-md text-[#2E7D32] border border-[#2E7D32]/20 px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold shadow-xs">
             {product.category}
           </span>
+
+          {/* Wishlist Heart Toggle Button */}
+          {onToggleWishlist && (
+            <button
+              onClick={handleHeartClick}
+              className={`absolute top-2.5 right-2.5 p-2.5 rounded-full backdrop-blur-md transition-all duration-300 shadow-md cursor-pointer z-10 ${
+                isWishlisted
+                  ? "bg-red-500 text-white scale-110 shadow-red-500/30"
+                  : "bg-white/80 text-gray-400 hover:text-red-500 hover:bg-white hover:scale-110"
+              }`}
+              title={isWishlisted ? "Remove from Wishlist" : "Save to Wishlist"}
+            >
+              <FaHeart className={`text-xs sm:text-sm transition-transform ${isWishlisted ? "scale-110" : ""}`} />
+            </button>
+          )}
         </div>
 
         {/* Product Info */}

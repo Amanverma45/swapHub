@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { AiOutlineLogout } from "react-icons/ai";
-import { FaBell } from "react-icons/fa";
+import { FaBell, FaHeart } from "react-icons/fa";
 import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
 import axios from "../utils/axiosInstance";
 import { io } from "socket.io-client";
@@ -275,6 +275,17 @@ const Navbar = () => {
                 </Link>
 
                 <Link
+                  to="/wishlist"
+                  className={`px-3.5 py-1.5 rounded-full transition-all duration-200 flex items-center gap-1.5 ${isActive("/wishlist")
+                      ? "text-red-600 bg-red-50 font-bold"
+                      : "text-gray-700 hover:text-red-500 hover:bg-red-50/50"
+                    }`}
+                >
+                  <FaHeart className="text-red-500 text-xs" />
+                  <span>Wishlist</span>
+                </Link>
+
+                <Link
                   to="/chat"
                   className={`px-3.5 py-1.5 rounded-full transition-all duration-200 ${isActive("/chat")
                       ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold"
@@ -467,8 +478,17 @@ const Navbar = () => {
                   </div>
                 </div>
 
-                {/* Row 3: Chat */}
+                {/* Row 3: Wishlist & Chat */}
                 <div className="flex flex-row items-center justify-center gap-3 w-full">
+                  <Link
+                    to="/wishlist"
+                    onClick={() => setIsOpen(false)}
+                    className={`flex-1 py-2.5 px-3 rounded-2xl font-bold text-sm text-center border transition-colors flex items-center justify-center gap-1.5 ${isActive("/wishlist") ? "bg-red-50 border-red-200 text-red-600" : "border-gray-200 text-gray-700 hover:border-red-200"}`}
+                  >
+                    <FaHeart className="text-red-500 text-xs" />
+                    <span>Wishlist</span>
+                  </Link>
+
                   <Link
                     to="/chat"
                     onClick={() => setIsOpen(false)}

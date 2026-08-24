@@ -21,7 +21,14 @@ const userSchema = new mongoose.Schema({
   location: {
     type: String,
     default: ""
-  }
+  },
+
+  wishlist: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "product",
+    },
+  ]
 })
 const User = mongoose.model('user', userSchema)
 module.exports = User;

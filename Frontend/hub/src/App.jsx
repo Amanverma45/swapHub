@@ -19,6 +19,7 @@ import MySwapRequests from './Components/MySwapRequests'
 import ForgotPassword from './Components/ForgotPassword'
 import Chat from './Components/Chat'
 import ResetPassword from './Components/ResetPassword'
+import Wishlist from './Components/Wishlist'
 
 
 const ScrollToTop = () => {
@@ -94,6 +95,7 @@ const App = () => {
           <Route path="/swapRequest" element={<ProtectedRoute><SwapRequests /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/mySwapRequests" element={<ProtectedRoute><MySwapRequests /></ProtectedRoute>} />
+          <Route path="/wishlist" element={<ProtectedRoute><Wishlist /></ProtectedRoute>} />
           <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
         </Routes>
         {!isChatPage && <Footer/>}

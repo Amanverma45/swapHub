@@ -12,7 +12,9 @@ router.post('/sendRegistrationOtp', userController.sendRegistrationOtp)
 router.put("/updateProfile",authMiddleware,upload.single("profileImage"),userController.updateProfile);
 router.get("/getProfile", authMiddleware, userController.getProfile);
 router.put("/removeProfilePhoto", authMiddleware, userController.removeProfilePhoto);
-router.post("/forgotPassword", userController.forgotPassword);
-// NAYA CHANGE: Password Reset URL se aane wali request ko handle karne ke liye route
-router.post("/resetPassword", userController.resetPassword);
+// Wishlist Routes
+router.post("/toggleWishlist/:productId", authMiddleware, userController.toggleWishlist);
+router.get("/getWishlist", authMiddleware, userController.getWishlist);
+router.get("/getWishlistIds", authMiddleware, userController.getWishlistIds);
+
 module.exports = router

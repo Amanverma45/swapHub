@@ -392,4 +392,77 @@ const googleLogin = async (req, res) => {
     }
 };
 
-module.exports = { saveUser, loginUser, updateProfile, getProfile, removeProfilePhoto, forgotPassword, resetPassword, googleLogin, sendRegistrationOtp }
+const toggleWishlist = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const { productId } = req.params;
+
+        const user = await userModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const isAlreadySaved = user.wishlist.some(id => id.toString() === productId);
+
+        if (isAlreadySaved) {
+            user.wishlist.pull(productId);
+            await user.save();
+            return res.status(200).json({
+                isWishlisted: false,
+                message: "Removed from Wishlist",
+                wishlist: user.wishlist
+            });
+        } else {
+            user.wishlist.addToSet(productId);
+            await user.save();
+            return res.status(200).json({
+                isWishlisted: true,
+                message: "Saved to Wishlist",
+                wishlist: user.wishlist
+            });
+        }
+    } catch (error) {
+        console.error("ERROR TOGGLING WISHLIST:", error);
+        return res.status(500).json({ message: "Something went wrong" });
+    }
+};
+
+const getWishlist = async (req, res) => {
+    try {
+        const user = await userModel.findById(req.user.id).populate({
+            path: "wishlist",
+            populate: { path: "owner", select: "name email profileImage" }
+        });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Auto filter out deleted products (where populate returns null)
+        const validProducts = (user.wishlist || []).filter(item => item !== null && item._id);
+
+        if (validProducts.length !== (user.wishlist || []).length) {
+            user.wishlist = validProducts.map(p => p._id);
+            await user.save();
+        }
+
+        return res.status(200).json(validProducts);
+    } catch (error) {
+        console.error("ERROR FETCHING WISHLIST:", error);
+        return res.status(500).json({ message: "Something went wrong" });
+    }
+};
+
+const getWishlistIds = async (req, res) => {
+    try {
+        const user = await userModel.findById(req.user.id).select("wishlist");
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        return res.status(200).json(user.wishlist || []);
+    } catch (error) {
+        return res.status(500).json({ message: "Something went wrong" });
+    }
+};
+
+module.exports = { saveUser, loginUser, updateProfile, getProfile, removeProfilePhoto, forgotPassword, resetPassword, googleLogin, sendRegistrationOtp, toggleWishlist, getWishlist, getWishlistIds }

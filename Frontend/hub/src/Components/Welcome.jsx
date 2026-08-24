@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { FaBoxOpen, FaExchangeAlt, FaPlusCircle, FaUserCircle, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { FaBoxOpen, FaExchangeAlt, FaPlusCircle, FaUserCircle, FaCheckCircle, FaTimesCircle, FaHeart } from "react-icons/fa";
 import axios from "../utils/axiosInstance";
 
 const MotionLink = motion(Link);
@@ -146,7 +146,7 @@ const Welcome = () => {
           <h2 className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-4 sm:mb-6">
             Quick Actions
           </h2>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 md:gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-5">
             {/* Add Product */}
             <MotionLink
               to="/addProduct"
@@ -164,10 +164,10 @@ const Welcome = () => {
                 <FaPlusCircle className="text-2xl sm:text-3xl group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300" />
               </div>
               <div>
-                <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#2E7D32] transition-colors leading-tight">
+                <h3 className="text-sm sm:text-base font-bold text-gray-800 group-hover:text-[#2E7D32] transition-colors leading-tight">
                   Add Product
                 </h3>
-                <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-0.5 leading-tight">
+                <p className="text-[11px] sm:text-xs text-gray-500 mt-0.5 leading-tight">
                   Upload new item
                 </p>
               </div>
@@ -190,10 +190,10 @@ const Welcome = () => {
                 <FaBoxOpen className="text-2xl sm:text-3xl group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300" />
               </div>
               <div>
-                <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#F4A261] transition-colors leading-tight">
+                <h3 className="text-sm sm:text-base font-bold text-gray-800 group-hover:text-[#F4A261] transition-colors leading-tight">
                   My Products
                 </h3>
-                <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-0.5 leading-tight">
+                <p className="text-[11px] sm:text-xs text-gray-500 mt-0.5 leading-tight">
                   Manage listings
                 </p>
               </div>
@@ -216,11 +216,37 @@ const Welcome = () => {
                 <FaExchangeAlt className="text-2xl sm:text-3xl group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300" />
               </div>
               <div>
-                <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#2E7D32] transition-colors leading-tight">
+                <h3 className="text-sm sm:text-base font-bold text-gray-800 group-hover:text-[#2E7D32] transition-colors leading-tight">
                   Swap Requests
                 </h3>
-                <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-0.5 leading-tight">
+                <p className="text-[11px] sm:text-xs text-gray-500 mt-0.5 leading-tight">
                   View requests
+                </p>
+              </div>
+            </MotionLink>
+
+            {/* My Wishlist */}
+            <MotionLink
+              to="/wishlist"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.05 }}
+              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1], delay: 0.12 }}
+              whileHover={{
+                y: -10,
+                boxShadow: hoverShadowRed,
+              }}
+              className="group relative bg-white border border-gray-100 border-t-4 border-t-red-500 shadow-md transition-colors duration-300 p-4 sm:p-5 rounded-2xl md:rounded-3xl flex flex-col items-center justify-center gap-2 sm:gap-3 text-center h-full min-h-[150px] sm:min-h-[180px] overflow-hidden cursor-pointer"
+            >
+              <div className="p-2.5 sm:p-3.5 rounded-2xl bg-red-50 text-red-500 group-hover:bg-red-500 group-hover:text-white transition-all duration-300 ease-out">
+                <FaHeart className="text-2xl sm:text-3xl group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300" />
+              </div>
+              <div>
+                <h3 className="text-sm sm:text-base font-bold text-gray-800 group-hover:text-red-500 transition-colors leading-tight">
+                  My Wishlist
+                </h3>
+                <p className="text-[11px] sm:text-xs text-gray-500 mt-0.5 leading-tight">
+                  Saved items
                 </p>
               </div>
             </MotionLink>
@@ -242,10 +268,10 @@ const Welcome = () => {
                 <FaUserCircle className="text-2xl sm:text-3xl group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300" />
               </div>
               <div>
-                <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 group-hover:text-[#F4A261] transition-colors leading-tight">
+                <h3 className="text-sm sm:text-base font-bold text-gray-800 group-hover:text-[#F4A261] transition-colors leading-tight">
                   Profile
                 </h3>
-                <p className="text-[11px] sm:text-xs md:text-sm text-gray-500 mt-0.5 leading-tight">
+                <p className="text-[11px] sm:text-xs text-gray-500 mt-0.5 leading-tight">
                   Manage account
                 </p>
               </div>

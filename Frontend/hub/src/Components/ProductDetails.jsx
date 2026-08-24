@@ -3,13 +3,14 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "../utils/axiosInstance.js";
 import toast from "react-hot-toast";
-import { FaExchangeAlt, FaArrowLeft, FaRegClock, FaPaperPlane } from "react-icons/fa";
+import { FaExchangeAlt, FaArrowLeft, FaRegClock, FaPaperPlane, FaHeart } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 
 const ProductDetails = () => {
   const [myProducts, setMyProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState("");
   const [previewImage, setPreviewImage] = useState(null);
+  const [isWishlisted, setIsWishlisted] = useState(false);
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -80,10 +81,38 @@ const ProductDetails = () => {
     }
   };
 
+  const checkWishlistStatus = async () => {
+    if (!token || !id) return;
+    try {
+      const response = await axios.get("/getWishlistIds");
+      if (Array.isArray(response.data)) {
+        setIsWishlisted(response.data.includes(id));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleToggleWishlist = async () => {
+    if (!token) {
+      toast.error("Please login to save items to your wishlist!");
+      return;
+    }
+    try {
+      const response = await axios.post(`/toggleWishlist/${id}`);
+      setIsWishlisted(response.data.isWishlisted);
+      toast.success(response.data.message || "Wishlist updated");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update wishlist");
+    }
+  };
+
   useEffect(() => {
     getSingleProduct();
     if (token) {
       getMyProducts();
+      checkWishlistStatus();
     }
   }, [id, token]);
 
@@ -159,6 +188,22 @@ const ProductDetails = () => {
                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center text-white font-bold text-xs sm:text-sm backdrop-blur-xs">
                   🔍 Click to expand image
                 </div>
+
+                {/* Wishlist Button */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleToggleWishlist();
+                  }}
+                  className={`absolute top-4 right-4 p-3 rounded-full backdrop-blur-md transition-all duration-300 shadow-md cursor-pointer z-10 ${
+                    isWishlisted
+                      ? "bg-red-500 text-white scale-110 shadow-red-500/30"
+                      : "bg-white/90 text-gray-400 hover:text-red-500 hover:bg-white hover:scale-110"
+                  }`}
+                  title={isWishlisted ? "Remove from Wishlist" : "Save to Wishlist"}
+                >
+                  <FaHeart className={`text-base sm:text-lg transition-transform ${isWishlisted ? "scale-110" : ""}`} />
+                </button>
               </div>
 
               {/* Right Product Details Info */}

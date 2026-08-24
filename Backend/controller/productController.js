@@ -1,4 +1,5 @@
 const productModel = require('../model/productModel')
+const userModel = require('../model/userModel')
 
 // add product 
 const addProduct = async(req,res)=>{
@@ -36,11 +37,14 @@ const getProduct = async(req,res)=>{
 // delete product 
 const deleteProduct = async(req,res)=>{
     try{
-        const deleteProduct = await productModel.findByIdAndDelete(req.params.id)
-        if(!deleteProduct){
+        const deleteProd = await productModel.findByIdAndDelete(req.params.id)
+        if(!deleteProd){
          return res.status(404).json({message:"Product not found"})
         }
-         
+        
+        // Auto-remove deleted product from all users' wishlists
+        await userModel.updateMany({ wishlist: req.params.id }, { $pull: { wishlist: req.params.id } });
+
         res.status(200).json({message:"Product deleted Successfully"})
     }catch(error){
         console.log(error.message)

@@ -21,7 +21,9 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
+  const [wishlistIds, setWishlistIds] = useState([]);
 
+  const token = localStorage.getItem("token");
   const activeCategory = searchParams.get("category") || "All";
 
   const getProducts = async () => {
@@ -36,9 +38,42 @@ const Products = () => {
     }
   };
 
+  const getWishlistIds = async () => {
+    if (!token) return;
+    try {
+      const response = await axios.get("/getWishlistIds");
+      setWishlistIds(response.data || []);
+    } catch (error) {
+      console.log("Error fetching wishlist IDs:", error);
+    }
+  };
+
   useEffect(() => {
     getProducts();
-  }, []);
+    if (token) {
+      getWishlistIds();
+    }
+  }, [token]);
+
+  const handleToggleWishlist = async (productId) => {
+    if (!token) {
+      toast.error("Please login to save items to your wishlist!");
+      return;
+    }
+    try {
+      const response = await axios.post(`/toggleWishlist/${productId}`);
+      if (response.data.isWishlisted) {
+        setWishlistIds((prev) => [...prev, productId]);
+        toast.success("Saved to Wishlist ❤️");
+      } else {
+        setWishlistIds((prev) => prev.filter((id) => id !== productId));
+        toast.success("Removed from Wishlist");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update wishlist");
+    }
+  };
 
   const handleCategorySelect = (cat) => {
     if (cat === "All") {
@@ -168,7 +203,13 @@ const Products = () => {
           /* Products Grid: 2 columns on Mobile (grid-cols-2) | 3 columns on Desktop (md:grid-cols-3) */
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3.5 sm:gap-6 md:gap-8">
             {filteredProducts.map((product, index) => (
-              <ProductCard key={product._id} product={product} index={index} />
+              <ProductCard
+                key={product._id}
+                product={product}
+                index={index}
+                isWishlisted={wishlistIds.includes(product._id)}
+                onToggleWishlist={token ? handleToggleWishlist : undefined}
+              />
             ))}
           </div>
         )}
