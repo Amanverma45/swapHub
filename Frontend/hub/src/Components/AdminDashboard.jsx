@@ -239,20 +239,20 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Tab Navigation Controls */}
-        <div className="flex items-center justify-center sm:justify-start gap-2 border-b border-gray-200 pb-3">
+        {/* Tab Navigation Controls: 1, 2, 3 vertically stacked on mobile (flex-col), side-by-side on desktop (sm:flex-row) */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-start gap-2.5 sm:gap-3 border-b border-gray-200 pb-3">
           <button
             onClick={() => setActiveTab("reports")}
-            className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all flex items-center gap-2 cursor-pointer ${
+            className={`w-full sm:w-auto px-5 py-3 rounded-2xl sm:rounded-full text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap ${
               activeTab === "reports"
-                ? "bg-red-500 text-white shadow-md shadow-red-500/25 scale-105"
-                : "bg-white text-gray-600 border border-gray-200 hover:border-red-200 hover:text-red-500"
+                ? "bg-red-500 text-white shadow-md shadow-red-500/25 scale-[1.01] sm:scale-105"
+                : "bg-white text-gray-700 border border-gray-200 hover:border-red-200 hover:text-red-500"
             }`}
           >
-            <FaFlag className="text-xs" />
-            <span>Reports Management</span>
+            <FaFlag className="text-xs shrink-0" />
+            <span>1. Reports Management</span>
             {stats.pendingReports > 0 && (
-              <span className="ml-1 bg-white text-red-600 px-2 py-0.5 rounded-full text-[10px] font-extrabold">
+              <span className="ml-1 bg-white text-red-600 px-2 py-0.5 rounded-full text-[10px] font-extrabold shrink-0">
                 {stats.pendingReports}
               </span>
             )}
@@ -260,26 +260,26 @@ const AdminDashboard = () => {
 
           <button
             onClick={() => setActiveTab("users")}
-            className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all flex items-center gap-2 cursor-pointer ${
+            className={`w-full sm:w-auto px-5 py-3 rounded-2xl sm:rounded-full text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap ${
               activeTab === "users"
-                ? "bg-[#2E7D32] text-white shadow-md shadow-[#2E7D32]/25 scale-105"
-                : "bg-white text-gray-600 border border-gray-200 hover:border-[#2E7D32]/30 hover:text-[#2E7D32]"
+                ? "bg-[#2E7D32] text-white shadow-md shadow-[#2E7D32]/25 scale-[1.01] sm:scale-105"
+                : "bg-white text-gray-700 border border-gray-200 hover:border-[#2E7D32]/30 hover:text-[#2E7D32]"
             }`}
           >
-            <FaUsers className="text-xs" />
-            <span>Users List ({users.length})</span>
+            <FaUsers className="text-xs shrink-0" />
+            <span>2. Users List ({users.length})</span>
           </button>
 
           <button
             onClick={() => setActiveTab("products")}
-            className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all flex items-center gap-2 cursor-pointer ${
+            className={`w-full sm:w-auto px-5 py-3 rounded-2xl sm:rounded-full text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap ${
               activeTab === "products"
-                ? "bg-blue-600 text-white shadow-md shadow-blue-600/25 scale-105"
-                : "bg-white text-gray-600 border border-gray-200 hover:border-blue-200 hover:text-blue-600"
+                ? "bg-blue-600 text-white shadow-md shadow-blue-600/25 scale-[1.01] sm:scale-105"
+                : "bg-white text-gray-700 border border-gray-200 hover:border-blue-200 hover:text-blue-600"
             }`}
           >
-            <FaBoxOpen className="text-xs" />
-            <span>Products List ({products.length})</span>
+            <FaBoxOpen className="text-xs shrink-0" />
+            <span>3. Products List ({products.length})</span>
           </button>
         </div>
 
