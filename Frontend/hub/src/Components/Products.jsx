@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "../utils/axiosInstance.js";
 import ProductCard from "./ProductCard";
+import ReportModal from "./ReportModal";
 import toast from "react-hot-toast";
 import { FaSearch, FaTimes } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
@@ -24,6 +25,8 @@ const Products = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [locationSearch, setLocationSearch] = useState(searchParams.get("location") || "");
   const [wishlistIds, setWishlistIds] = useState([]);
+  const [reportedProductIds, setReportedProductIds] = useState([]);
+  const [reportProductModalItem, setReportProductModalItem] = useState(null);
 
   const token = localStorage.getItem("token");
   const activeCategory = searchParams.get("category") || "All";
@@ -76,10 +79,21 @@ const Products = () => {
     }
   };
 
+  const getReportedProductIds = async () => {
+    if (!token) return;
+    try {
+      const response = await axios.get("/getUserReportedProductIds");
+      setReportedProductIds(response.data || []);
+    } catch (error) {
+      console.log("Error fetching reported product IDs:", error);
+    }
+  };
+
   useEffect(() => {
     getProducts();
     if (token) {
       getWishlistIds();
+      getReportedProductIds();
     }
   }, [token]);
 
@@ -334,11 +348,23 @@ const Products = () => {
                 index={index}
                 isWishlisted={wishlistIds.includes(product._id)}
                 onToggleWishlist={token ? handleToggleWishlist : undefined}
+                isReported={reportedProductIds.includes(product._id)}
+                onOpenReportModal={(prod) => setReportProductModalItem(prod)}
               />
             ))}
           </div>
         )}
       </section>
+
+      {/* Report Product Modal */}
+      <ReportModal
+        product={reportProductModalItem}
+        isOpen={!!reportProductModalItem}
+        onClose={() => setReportProductModalItem(null)}
+        onReportSuccess={(prodId) =>
+          setReportedProductIds((prev) => [...prev, prodId])
+        }
+      />
     </div>
   );
 };

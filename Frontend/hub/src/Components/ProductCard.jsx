@@ -1,9 +1,20 @@
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaLocationDot } from "react-icons/fa6";
-import { FaExchangeAlt, FaHeart } from "react-icons/fa";
+import { FaExchangeAlt, FaHeart, FaEllipsisV, FaFlag } from "react-icons/fa";
 
-const ProductCard = ({ product, index, isWishlisted = false, onToggleWishlist }) => {
+const ProductCard = ({
+  product,
+  index,
+  isWishlisted = false,
+  onToggleWishlist,
+  isReported = false,
+  onOpenReportModal,
+}) => {
+  const [showMenu, setShowMenu] = useState(false);
+  const menuRef = useRef(null);
+
   const orangeCategories = ["mobiles", "gaming", "home items"];
   const isOrange = orangeCategories.includes(product.category?.toLowerCase());
   const borderColor = isOrange ? "border-t-[#F4A261]" : "border-t-[#2E7D32]";
@@ -21,6 +32,20 @@ const ProductCard = ({ product, index, isWishlisted = false, onToggleWishlist })
       onToggleWishlist(product._id);
     }
   };
+
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setShowMenu(false);
+      }
+    };
+    if (showMenu) {
+      document.addEventListener("mousedown", handleOutsideClick);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [showMenu]);
 
   return (
     <motion.div
@@ -43,24 +68,67 @@ const ProductCard = ({ product, index, isWishlisted = false, onToggleWishlist })
             className="w-full h-full object-cover transition-transform duration-500 scale-125 hover:scale-100"
             loading="lazy"
           />
-          <span className="absolute top-2.5 left-2.5 bg-white/90 backdrop-blur-md text-[#2E7D32] border border-[#2E7D32]/20 px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold shadow-xs">
+          <span className="absolute top-2.5 left-2.5 bg-white/90 backdrop-blur-md text-[#2E7D32] border border-[#2E7D32]/20 px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold shadow-xs z-10">
             {product.category}
           </span>
 
-          {/* Wishlist Heart Toggle Button */}
-          {onToggleWishlist && (
-            <button
-              onClick={handleHeartClick}
-              className={`absolute top-2.5 right-2.5 p-2.5 rounded-full backdrop-blur-md transition-all duration-300 shadow-md cursor-pointer z-10 ${
-                isWishlisted
-                  ? "bg-red-500 text-white scale-110 shadow-red-500/30"
-                  : "bg-white/80 text-gray-400 hover:text-red-500 hover:bg-white hover:scale-110"
-              }`}
-              title={isWishlisted ? "Remove from Wishlist" : "Save to Wishlist"}
-            >
-              <FaHeart className={`text-xs sm:text-sm transition-transform ${isWishlisted ? "scale-110" : ""}`} />
-            </button>
-          )}
+          <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5 z-20">
+            {/* Wishlist Heart Toggle Button */}
+            {onToggleWishlist && (
+              <button
+                onClick={handleHeartClick}
+                className={`p-2 sm:p-2.5 rounded-full backdrop-blur-md transition-all duration-300 shadow-md cursor-pointer ${
+                  isWishlisted
+                    ? "bg-red-500 text-white scale-110 shadow-red-500/30"
+                    : "bg-white/80 text-gray-400 hover:text-red-500 hover:bg-white hover:scale-110"
+                }`}
+                title={isWishlisted ? "Remove from Wishlist" : "Save to Wishlist"}
+              >
+                <FaHeart className={`text-xs sm:text-sm transition-transform ${isWishlisted ? "scale-110" : ""}`} />
+              </button>
+            )}
+
+            {/* 3-Dots Menu ⋮ Button for Report */}
+            {onOpenReportModal && (
+              <div className="relative" ref={menuRef}>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowMenu(!showMenu);
+                  }}
+                  className="p-2 sm:p-2.5 rounded-full bg-white/80 backdrop-blur-md text-gray-600 hover:text-gray-900 hover:bg-white transition-all duration-300 shadow-md cursor-pointer"
+                  title="More Options"
+                >
+                  <FaEllipsisV className="text-xs sm:text-sm" />
+                </button>
+
+                {showMenu && (
+                  <div className="absolute right-0 top-11 w-44 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-gray-100 p-1.5 z-30 animate-fade-in">
+                    <button
+                      disabled={isReported}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setShowMenu(false);
+                        if (!isReported) {
+                          onOpenReportModal(product);
+                        }
+                      }}
+                      className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-colors ${
+                        isReported
+                          ? "text-amber-600 bg-amber-50 cursor-not-allowed"
+                          : "text-red-600 hover:bg-red-50 cursor-pointer"
+                      }`}
+                    >
+                      <FaFlag className="text-xs" />
+                      <span>{isReported ? "Already Reported ⚠️" : "Report Product"}</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Product Info */}

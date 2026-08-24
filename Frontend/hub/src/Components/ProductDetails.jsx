@@ -3,14 +3,17 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "../utils/axiosInstance.js";
 import toast from "react-hot-toast";
-import { FaExchangeAlt, FaArrowLeft, FaRegClock, FaPaperPlane, FaHeart } from "react-icons/fa";
+import { FaExchangeAlt, FaArrowLeft, FaRegClock, FaPaperPlane, FaHeart, FaFlag } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
+import ReportModal from "./ReportModal";
 
 const ProductDetails = () => {
   const [myProducts, setMyProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState("");
   const [previewImage, setPreviewImage] = useState(null);
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [isReported, setIsReported] = useState(false);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -108,11 +111,24 @@ const ProductDetails = () => {
     }
   };
 
+  const checkReportStatus = async () => {
+    if (!token || !id) return;
+    try {
+      const response = await axios.get("/getUserReportedProductIds");
+      if (Array.isArray(response.data)) {
+        setIsReported(response.data.includes(id));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     getSingleProduct();
     if (token) {
       getMyProducts();
       checkWishlistStatus();
+      checkReportStatus();
     }
   }, [id, token]);
 
@@ -340,6 +356,27 @@ const ProductDetails = () => {
                             <FaExchangeAlt className="rotate-90 text-xs" />
                             <span>Chat with Seller</span>
                           </button>
+
+                          <button
+                            disabled={isReported}
+                            onClick={() => {
+                              if (!token) {
+                                toast.error("Please login to report a product");
+                                return;
+                              }
+                              if (!isReported) {
+                                setIsReportModalOpen(true);
+                              }
+                            }}
+                            className={`mt-3 w-full border font-bold py-3 rounded-2xl transition-all duration-300 ease-out text-xs sm:text-sm flex items-center justify-center gap-2 ${
+                              isReported
+                                ? "bg-amber-50 border-amber-200 text-amber-700 cursor-not-allowed"
+                                : "bg-gray-50 hover:bg-red-50 border-gray-200 hover:border-red-200 text-gray-600 hover:text-red-600 cursor-pointer"
+                            }`}
+                          >
+                            <FaFlag className="text-xs" />
+                            <span>{isReported ? "Already Reported ⚠️" : "Report Product"}</span>
+                          </button>
                         </div>
                       )}
                     </div>
@@ -374,6 +411,14 @@ const ProductDetails = () => {
           />
         </div>
       )}
+
+      {/* Report Modal */}
+      <ReportModal
+        product={product}
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        onReportSuccess={() => setIsReported(true)}
+      />
     </>
   );
 };
