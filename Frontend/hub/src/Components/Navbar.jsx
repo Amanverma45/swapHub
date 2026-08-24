@@ -42,11 +42,26 @@ const Navbar = () => {
     }
   };
 
+  // Wishlist state
+  const [wishlistCount, setWishlistCount] = useState(0);
+
+  const fetchWishlistCount = async () => {
+    try {
+      const response = await axios.get("/getWishlistIds");
+      if (Array.isArray(response.data)) {
+        setWishlistCount(response.data.length);
+      }
+    } catch (error) {
+      console.log("Error fetching wishlist count:", error);
+    }
+  };
+
   useEffect(() => {
     if (token) {
       fetchNotifications();
+      fetchWishlistCount();
     }
-  }, [token]);
+  }, [token, location.pathname]);
 
   // Real-time socket notification listener
   useEffect(() => {
@@ -204,10 +219,10 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Nav Links & Action Buttons Together */}
-          <div className="hidden md:flex items-center gap-6 lg:gap-3 font-semibold text-sm">
+          <div className="hidden md:flex items-center gap-3 lg:gap-4 font-semibold text-sm">
             <Link
               to="/"
-              className={`px-3.5 py-1.5 rounded-full transition-all duration-200 ${isActive("/")
+              className={`px-3 py-1.5 rounded-full whitespace-nowrap transition-all duration-200 ${isActive("/")
                   ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold"
                   : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60"
                 }`}
@@ -217,7 +232,7 @@ const Navbar = () => {
 
             <Link
               to="/products"
-              className={`px-3.5 py-1.5 rounded-full transition-all duration-200 ${isActive("/products")
+              className={`px-3 py-1.5 rounded-full whitespace-nowrap transition-all duration-200 ${isActive("/products")
                   ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold"
                   : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60"
                 }`}
@@ -229,7 +244,7 @@ const Navbar = () => {
               <>
                 <Link
                   to="/login"
-                  className={`px-4 py-2 rounded-full border border-transparent transition-all duration-200 ${isActive("/login")
+                  className={`px-4 py-2 rounded-full whitespace-nowrap border border-transparent transition-all duration-200 ${isActive("/login")
                       ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold border-[#2E7D32]/20"
                       : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/80"
                     }`}
@@ -239,7 +254,7 @@ const Navbar = () => {
 
                 <Link
                   to="/register"
-                  className="bg-[#2E7D32] border-2 border-[#2E7D32] hover:bg-[#236327] hover:border-[#236327] text-white font-bold px-6 py-2 rounded-full shadow-md shadow-[#2E7D32]/25 hover:scale-105 active:scale-95 transition-all duration-200 text-sm"
+                  className="bg-[#2E7D32] border-2 border-[#2E7D32] hover:bg-[#236327] hover:border-[#236327] text-white font-bold px-6 py-2 rounded-full whitespace-nowrap shadow-md shadow-[#2E7D32]/25 hover:scale-105 active:scale-95 transition-all duration-200 text-sm"
                 >
                   Register
                 </Link>
@@ -248,25 +263,27 @@ const Navbar = () => {
               <>
                 <Link
                   to="/addProduct"
-                  className={`px-3.5 py-1.5 rounded-full transition-all duration-200 ${isActive("/addProduct")
+                  className={`px-3 py-1.5 rounded-full whitespace-nowrap transition-all duration-200 ${isActive("/addProduct")
                       ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold"
                       : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60"
                     }`}
                 >
                   Add Product
                 </Link>
+
                 <Link
                   to="/myProducts"
-                  className={`px-3.5 py-1.5 rounded-full transition-all duration-200 ${isActive("/myProducts")
+                  className={`px-3 py-1.5 rounded-full whitespace-nowrap transition-all duration-200 ${isActive("/myProducts")
                       ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold"
                       : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60"
                     }`}
                 >
                   My Products
                 </Link>
+
                 <Link
                   to="/welcome"
-                  className={`px-3.5 py-1.5 rounded-full transition-all duration-200 ${isActive("/welcome")
+                  className={`px-3 py-1.5 rounded-full whitespace-nowrap transition-all duration-200 ${isActive("/welcome")
                       ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold"
                       : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60"
                     }`}
@@ -275,19 +292,8 @@ const Navbar = () => {
                 </Link>
 
                 <Link
-                  to="/wishlist"
-                  className={`px-3.5 py-1.5 rounded-full transition-all duration-200 flex items-center gap-1.5 ${isActive("/wishlist")
-                      ? "text-red-600 bg-red-50 font-bold"
-                      : "text-gray-700 hover:text-red-500 hover:bg-red-50/50"
-                    }`}
-                >
-                  <FaHeart className="text-red-500 text-xs" />
-                  <span>Wishlist</span>
-                </Link>
-
-                <Link
                   to="/chat"
-                  className={`px-3.5 py-1.5 rounded-full transition-all duration-200 ${isActive("/chat")
+                  className={`px-3 py-1.5 rounded-full whitespace-nowrap transition-all duration-200 ${isActive("/chat")
                       ? "text-[#2E7D32] bg-[#2E7D32]/10 font-bold"
                       : "text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60"
                     }`}
@@ -295,6 +301,24 @@ const Navbar = () => {
                   Chat
                 </Link>
 
+                {/* Wishlist Heart Icon Button */}
+                <Link
+                  to="/wishlist"
+                  className={`relative p-2 rounded-full transition-colors flex items-center justify-center cursor-pointer ${isActive("/wishlist")
+                      ? "bg-red-50 text-red-500"
+                      : "text-gray-700 hover:text-red-500 hover:bg-red-50/50"
+                    }`}
+                  title="My Wishlist"
+                >
+                  <FaHeart className="text-xl text-red-500 hover:scale-110 transition-transform" />
+                  {wishlistCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border-2 border-white">
+                      {wishlistCount}
+                    </span>
+                  )}
+                </Link>
+
+                {/* Notifications Bell */}
                 <div
                   onClick={() => setShowNotifDropdown(!showNotifDropdown)}
                   className="relative cursor-pointer p-2 rounded-full text-gray-700 hover:text-[#2E7D32] hover:bg-gray-100/60 transition-colors bell-btn-trigger"
@@ -310,7 +334,7 @@ const Navbar = () => {
 
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-1.5 bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-full text-sm font-semibold shadow-sm hover:shadow-md transition duration-200 cursor-pointer"
+                  className="flex items-center gap-1.5 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full text-xs font-bold shadow-sm hover:shadow-md transition duration-200 cursor-pointer whitespace-nowrap"
                 >
                   <span>Logout</span>
                   <AiOutlineLogout className="text-base" />
