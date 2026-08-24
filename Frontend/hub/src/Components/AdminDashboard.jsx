@@ -286,13 +286,13 @@ const AdminDashboard = () => {
         {/* Tab 1: Reports Management */}
         {activeTab === "reports" && (
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+            <div className="flex flex-row items-center justify-between gap-2 border-b border-gray-100/80 pb-3">
+              <h2 className="text-sm sm:text-lg font-extrabold text-gray-900 flex items-center gap-2 whitespace-nowrap">
                 <span>🚨 User Reported Products</span>
-                <span className="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full font-semibold">
-                  {reports.length} Total Reports
-                </span>
               </h2>
+              <span className="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-bold whitespace-nowrap shrink-0">
+                {reports.length} Total Reports
+              </span>
             </div>
 
             {reports.length === 0 ? (
