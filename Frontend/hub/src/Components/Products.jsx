@@ -28,13 +28,30 @@ const Products = () => {
   const token = localStorage.getItem("token");
   const activeCategory = searchParams.get("category") || "All";
 
-  // Extract unique locations from products list
+  // Helper to format city names cleanly (e.g. "indore" -> "Indore")
+  const formatCityName = (str) => {
+    if (!str) return "";
+    return str
+      .trim()
+      .split(/\s+/)
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+  };
+
+  // Extract unique locations case-insensitively from products list
   const availableLocations = Array.from(
-    new Set(
-      products
-        .map((p) => p.location?.trim())
-        .filter(Boolean)
-    )
+    products
+      .reduce((map, p) => {
+        if (p.location && p.location.trim()) {
+          const formatted = formatCityName(p.location);
+          const key = formatted.toLowerCase();
+          if (!map.has(key)) {
+            map.set(key, formatted);
+          }
+        }
+        return map;
+      }, new Map())
+      .values()
   );
 
   const getProducts = async () => {
