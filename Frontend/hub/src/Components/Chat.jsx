@@ -144,8 +144,10 @@ const Chat = () => {
       setChats((prevChats) =>
         prevChats.map((c) => {
           if (c._id === data.chatId) {
+            const isCurrentActive = activeChatRef.current && activeChatRef.current._id === data.chatId;
+            const msgToAdd = isCurrentActive ? { ...data.message, isRead: true } : data.message;
             const hasMsg = c.messages.some((m) => m._id === data.message._id);
-            const updatedMessages = hasMsg ? c.messages : [...c.messages, data.message];
+            const updatedMessages = hasMsg ? c.messages : [...c.messages, msgToAdd];
             return { ...c, messages: updatedMessages };
           }
           return c;
@@ -360,6 +362,20 @@ const Chat = () => {
     try {
       const response = await axios.get(`/getMessages/${chat._id}?userId=${currentUser._id}`);
       setMessages(response.data);
+
+      // Clear notifications associated with this chat
+      axios.put(`/notifications/read-chat/${chat._id}`).catch((err) => console.error("Error reading chat notifications:", err));
+
+      // Mark messages in local chats state as read so badge count clears immediately
+      setChats((prevChats) =>
+        prevChats.map((c) => {
+          if (c._id === chat._id) {
+            const updatedMessages = c.messages.map((m) => ({ ...m, isRead: true }));
+            return { ...c, messages: updatedMessages };
+          }
+          return c;
+        })
+      );
       
       // Explicitly emit joinRoom on select click for safety
       if (socket.current) {

@@ -150,6 +150,12 @@ const sendMessage = async (req, res) => {
         });
     }
 };
+const getSenderIdStr = (sender) => {
+    if (!sender) return "";
+    if (typeof sender === "object" && sender._id) return sender._id.toString();
+    return sender.toString();
+};
+
 const getMessages = async (req, res) => {
     try {
         const { chatId } = req.params;
@@ -167,7 +173,8 @@ const getMessages = async (req, res) => {
         if (userId) {
             let updated = false;
             chat.messages.forEach((msg) => {
-                if (msg.sender.toString() !== userId && !msg.isRead) {
+                const msgSenderId = getSenderIdStr(msg.sender);
+                if (msgSenderId !== userId.toString() && !msg.isRead) {
                     msg.isRead = true;
                     updated = true;
                 }
@@ -340,7 +347,8 @@ const markMessagesAsRead = async (req, res) => {
 
         let updated = false;
         chat.messages.forEach((msg) => {
-            if (msg.sender.toString() !== userId && !msg.isRead) {
+            const msgSenderId = getSenderIdStr(msg.sender);
+            if (msgSenderId !== userId.toString() && !msg.isRead) {
                 msg.isRead = true;
                 updated = true;
             }

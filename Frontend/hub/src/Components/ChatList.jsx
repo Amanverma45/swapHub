@@ -73,8 +73,19 @@ const ChatList = ({ chats, activeChat, onSelectChat, currentUser, onExitChat, on
             const lastMsg = chat.messages?.[chat.messages.length - 1];
             const isActive = activeChat?._id === chat._id;
             const { initials, gradient } = getInitialsAvatar(otherUser.name);
+
+            const getSenderId = (sender) => {
+              if (!sender) return "";
+              if (typeof sender === "object") return sender._id?.toString() || "";
+              return sender.toString();
+            };
+
             const unreadCount = chat.messages
-              ? chat.messages.filter((msg) => msg.sender !== currentUser?._id && !msg.isRead).length
+              ? chat.messages.filter((msg) => {
+                  const senderId = getSenderId(msg.sender);
+                  const myId = currentUser?._id?.toString();
+                  return senderId !== myId && !msg.isRead;
+                }).length
               : 0;
 
             return (
@@ -130,7 +141,7 @@ const ChatList = ({ chats, activeChat, onSelectChat, currentUser, onExitChat, on
                     <p className="text-xs text-gray-500 font-semibold truncate flex items-center gap-1 min-w-0 flex-1">
                       {lastMsg ? (
                         <>
-                          {lastMsg.sender === currentUser?._id && <span className="text-[#2E7D32] shrink-0">You:</span>}
+                          {getSenderId(lastMsg.sender) === currentUser?._id?.toString() && <span className="text-[#2E7D32] shrink-0">You:</span>}
                           <span className="truncate">{lastMsg.text}</span>
                         </>
                       ) : (

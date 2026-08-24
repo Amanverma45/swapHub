@@ -44,8 +44,23 @@ const markAllAsRead = async (req, res) => {
     }
 };
 
+const markByChatAsRead = async (req, res) => {
+    try {
+        const { chatId } = req.params;
+        await notificationModel.updateMany(
+            { recipient: req.user.id, relatedId: chatId, isRead: false },
+            { isRead: true }
+        );
+        return res.status(200).json({ message: "Chat notifications marked as read" });
+    } catch (error) {
+        console.error("Error marking chat notifications as read:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+};
+
 module.exports = {
     getNotifications,
     markAsRead,
     markAllAsRead,
+    markByChatAsRead,
 };
