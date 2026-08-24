@@ -7,7 +7,10 @@ const adminMiddleware = async (req, res, next) => {
     if (!authHeader) {
       return res.status(401).json({ message: "No token provided" });
     }
-    const token = authHeader.split(" ")[1];
+    const token = authHeader.startsWith("Bearer ")
+      ? authHeader.split(" ")[1]
+      : authHeader;
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const user = await userModel.findById(decoded.id);
@@ -22,6 +25,7 @@ const adminMiddleware = async (req, res, next) => {
 
     return res.status(403).json({ message: "Access denied. Admin privileges required." });
   } catch (error) {
+    console.error("Admin middleware error:", error.message);
     return res.status(401).json({ message: "Invalid or expired token" });
   }
 };
