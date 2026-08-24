@@ -5,7 +5,13 @@ const AdminRoute = ({ children }) => {
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-  const isAdmin = token && (user?.email === "amanarandiya@gmail.com" || user?.role === "admin");
+  // If not logged in at all, redirect immediately to login page without toast
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // If logged in but not admin, show toast and redirect to welcome dashboard
+  const isAdmin = user?.email === "amanarandiya@gmail.com" || user?.role === "admin";
 
   if (!isAdmin) {
     toast.error("Access denied. Admin rights required.");
