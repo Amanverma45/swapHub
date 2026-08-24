@@ -417,15 +417,34 @@ const AdminDashboard = () => {
           <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-md space-y-5">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <h2 className="text-lg font-bold text-gray-900">👥 All Registered Users</h2>
-              <div className="relative w-full sm:w-72">
-                <FaSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
-                <input
-                  type="text"
-                  placeholder="Search user name or email..."
-                  value={userSearch}
-                  onChange={(e) => setUserSearch(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 rounded-full border border-gray-200 text-xs font-semibold focus:outline-none focus:border-[#2E7D32]"
-                />
+              <div className="relative w-full sm:w-80 flex items-center gap-2">
+                <div className="relative flex-1">
+                  <FaSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
+                  <input
+                    type="text"
+                    placeholder="Search user name or email..."
+                    value={userSearch}
+                    onChange={(e) => setUserSearch(e.target.value)}
+                    className="w-full pl-10 pr-9 py-2 rounded-full border border-gray-200 text-xs font-semibold focus:outline-none focus:border-[#2E7D32]"
+                  />
+                  {userSearch && (
+                    <button
+                      onClick={() => setUserSearch("")}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-600 text-[10px] font-bold flex items-center justify-center cursor-pointer transition"
+                      title="Clear Search"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+                {userSearch && (
+                  <button
+                    onClick={() => setUserSearch("")}
+                    className="px-3 py-1.5 rounded-full bg-emerald-50 text-[#2E7D32] hover:bg-emerald-100 font-bold text-xs shrink-0 transition cursor-pointer"
+                  >
+                    Clear
+                  </button>
+                )}
               </div>
             </div>
 
@@ -504,15 +523,34 @@ const AdminDashboard = () => {
           <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-md space-y-5">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <h2 className="text-lg font-bold text-gray-900">📦 All Marketplace Products</h2>
-              <div className="relative w-full sm:w-72">
-                <FaSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
-                <input
-                  type="text"
-                  placeholder="Search product title, location..."
-                  value={productSearch}
-                  onChange={(e) => setProductSearch(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 rounded-full border border-gray-200 text-xs font-semibold focus:outline-none focus:border-blue-600"
-                />
+              <div className="relative w-full sm:w-80 flex items-center gap-2">
+                <div className="relative flex-1">
+                  <FaSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
+                  <input
+                    type="text"
+                    placeholder="Search product title, location..."
+                    value={productSearch}
+                    onChange={(e) => setProductSearch(e.target.value)}
+                    className="w-full pl-10 pr-9 py-2 rounded-full border border-gray-200 text-xs font-semibold focus:outline-none focus:border-blue-600"
+                  />
+                  {productSearch && (
+                    <button
+                      onClick={() => setProductSearch("")}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-600 text-[10px] font-bold flex items-center justify-center cursor-pointer transition"
+                      title="Clear Search"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+                {productSearch && (
+                  <button
+                    onClick={() => setProductSearch("")}
+                    className="px-3 py-1.5 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 font-bold text-xs shrink-0 transition cursor-pointer"
+                  >
+                    Clear
+                  </button>
+                )}
               </div>
             </div>
 
