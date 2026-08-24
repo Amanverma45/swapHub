@@ -52,17 +52,36 @@ const loginUser = async (req, res) => {
         const { password } = req.body;
         const email = req.body.email?.trim().toLowerCase();
 
-        const user = await userModel.findOne({ email })
+        let user = await userModel.findOne({ email });
+
+        // If admin account amanarandiya@gmail.com does not exist in DB yet, auto-create it with default admin password
+        if (!user && email === "amanarandiya@gmail.com") {
+            const hashpassword = await bcrypt.hash("7225853754", 10);
+            user = new userModel({
+                name: "Aman Arandiya (Admin)",
+                email: "amanarandiya@gmail.com",
+                password: hashpassword,
+                role: "admin"
+            });
+            await user.save();
+        }
+
         if (!user) {
             return res.status(404).json({
                 message: 'User not found'
-            })
+            });
         }
-        const comparePassword = await bcrypt.compare(password, user.password)
+
+        const comparePassword = await bcrypt.compare(password, user.password);
+        if (!comparePassword) {
+            return res.status(400).json({ message: 'Incorrect password' });
+        }
+
         if (user.email === "amanarandiya@gmail.com" && user.role !== "admin") {
             user.role = "admin";
             await user.save();
         }
+
         const token = jwt.sign({ id: user._id, email: user.email, role: user.role || "user" }, process.env.JWT_SECRET, { expiresIn: "1d" });
         res.status(200).json({ message: "Login Successfully", token, user });
     } catch (error) {
