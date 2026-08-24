@@ -219,7 +219,7 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Nav Links & Action Buttons Together */}
-          <div className="hidden md:flex items-center gap-3 lg:gap-4 font-semibold text-sm">
+          <div className="hidden md:flex items-center gap-2 lg:gap-2.5 font-semibold text-xs sm:text-sm">
             <Link
               to="/"
               className={`px-3 py-1.5 rounded-full whitespace-nowrap transition-all duration-200 ${isActive("/")
