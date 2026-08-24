@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { AiOutlineLogout } from "react-icons/ai";
-import { FaBell, FaHeart } from "react-icons/fa";
+import { FaBell, FaHeart, FaShieldAlt } from "react-icons/fa";
 import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
 import axios from "../utils/axiosInstance";
 import { io } from "socket.io-client";
@@ -290,6 +290,19 @@ const Navbar = () => {
                 >
                   Dashboard
                 </Link>
+
+                {(currentUser?.email === "amanarandiya@gmail.com" || currentUser?.role === "admin") && (
+                  <Link
+                    to="/admin"
+                    className={`px-3 py-1.5 rounded-full whitespace-nowrap transition-all duration-200 flex items-center gap-1 font-bold ${isActive("/admin")
+                        ? "text-purple-700 bg-purple-100"
+                        : "text-purple-600 hover:bg-purple-50"
+                      }`}
+                  >
+                    <FaShieldAlt className="text-xs" />
+                    <span>Admin</span>
+                  </Link>
+                )}
 
                 <Link
                   to="/chat"

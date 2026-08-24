@@ -20,6 +20,8 @@ import ForgotPassword from './Components/ForgotPassword'
 import Chat from './Components/Chat'
 import ResetPassword from './Components/ResetPassword'
 import Wishlist from './Components/Wishlist'
+import AdminDashboard from './Components/AdminDashboard'
+import AdminRoute from './Components/AdminRoute'
 
 
 const ScrollToTop = () => {
@@ -97,6 +99,7 @@ const App = () => {
           <Route path="/mySwapRequests" element={<ProtectedRoute><MySwapRequests /></ProtectedRoute>} />
           <Route path="/wishlist" element={<ProtectedRoute><Wishlist /></ProtectedRoute>} />
           <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
+          <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
         </Routes>
         {!isChatPage && <Footer/>}
       </main>
